@@ -42,6 +42,11 @@ class InvoiceAdmin(admin.ModelAdmin):
     inlines = [InvoiceEntryInline]
     save_on_top = True
 
+    class Media:
+        css = {
+            'all' : ('adminstyle.css',),
+        }
+
 class CustomerContactInline(admin.TabularInline): 
 	model = CustomerContact
 	extra = 3
@@ -83,6 +88,11 @@ class CustomerAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
     inlines = [CustomerContactInline]
+
+    class Media:
+        css = {
+            'all' : ('adminstyle.css',),
+        }
 
 site_admin = admin.AdminSite()
 site_admin.register(Customer, CustomerAdmin)	

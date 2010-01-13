@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+from settings import URL_PREFIX, MEDIA_ROOT
 
 from admin.models import site_admin
 
@@ -12,4 +13,6 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     (r'^admin/(.*)', site_admin.root),
+
+	(r'^%sstatic/(?P<path>.*)$' % URL_PREFIX, 'django.views.static.serve', {'document_root': MEDIA_ROOT }),
 )

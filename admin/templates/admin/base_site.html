@@ -1,0 +1,14 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% comment %}
+    <link rel="stylesheet" type="text/css" media="handheld" href="/static/adminstyle.css" />
+{% endcomment %}
+
+{% block title %}{{ title }} | {% trans ' Invoice for dummies' %}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans 'Invoice for dummies' %}</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

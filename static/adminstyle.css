@@ -6,3 +6,7 @@ input[readonly] {
 .submit-row {
     padding : 3px 7px; 
 }
+
+textarea {
+    height : 3em;
+}
