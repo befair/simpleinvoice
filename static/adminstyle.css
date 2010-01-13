@@ -1,0 +1,8 @@
+
+input[readonly] {
+    background-color : lightgrey;
+}
+
+.submit-row {
+    padding : 3px 7px; 
+}
