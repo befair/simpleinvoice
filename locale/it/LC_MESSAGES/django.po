@@ -1,0 +1,148 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-01-13 19:33+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin/models.py:63
+msgid "You should write social security or vat number"
+msgstr ""
+
+#: admin/models.py:76
+msgid "More info..."
+msgstr ""
+
+#: invoice/models.py:8
+msgid "name"
+msgstr ""
+
+#: invoice/models.py:10
+msgid "address"
+msgstr ""
+
+#: invoice/models.py:11
+msgid "zipcode"
+msgstr ""
+
+#: invoice/models.py:12
+msgid "city"
+msgstr ""
+
+#: invoice/models.py:13
+msgid "state"
+msgstr ""
+
+#: invoice/models.py:15
+msgid "social security number"
+msgstr ""
+
+#: invoice/models.py:16
+msgid "vat"
+msgstr ""
+
+#: invoice/models.py:18
+msgid "notes"
+msgstr ""
+
+#: invoice/models.py:28
+msgid "customer"
+msgstr ""
+
+#: invoice/models.py:29
+msgid "customers"
+msgstr ""
+
+#: invoice/models.py:37
+msgid "phone"
+msgstr ""
+
+#: invoice/models.py:38
+msgid "fax"
+msgstr ""
+
+#: invoice/models.py:39
+msgid "email"
+msgstr ""
+
+#: invoice/models.py:40
+msgid "other"
+msgstr ""
+
+#: invoice/models.py:51
+msgid "customer contact"
+msgstr ""
+
+#: invoice/models.py:52
+msgid "customer contacts"
+msgstr ""
+
+#: invoice/models.py:66
+msgid "BONIFICO"
+msgstr ""
+
+#: invoice/models.py:67
+msgid "CONTANTI"
+msgstr ""
+
+#: invoice/models.py:68
+msgid "credit card"
+msgstr ""
+
+#: invoice/models.py:71
+msgid "invoice number"
+msgstr ""
+
+#: invoice/models.py:71
+msgid ""
+"Set this value only if you need a specific invoice number. After you save an "
+"invoice with a number you cannot modify it. You can always invalidate and "
+"invoicei though"
+msgstr ""
+
+#: invoice/models.py:73
+msgid "emit date"
+msgstr ""
+
+#: invoice/models.py:74
+msgid "is valid"
+msgstr ""
+
+#: invoice/models.py:74
+msgid "You can invalidate this invoice by unchecking this field"
+msgstr ""
+
+#: invoice/models.py:75
+msgid "pay with"
+msgstr ""
+
+#: invoice/models.py:77
+msgid "when paid"
+msgstr ""
+
+#: invoice/models.py:112
+msgid "invoice"
+msgstr ""
+
+#: invoice/models.py:113
+msgid "invoices"
+msgstr ""
+
+#: invoice/models.py:137
+msgid "invoice entry"
+msgstr ""
+
+#: invoice/models.py:138
+msgid "invoice entries"
+msgstr ""
