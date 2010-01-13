@@ -8,7 +8,7 @@ class Customer(models.Model):
     name = models.CharField(_('name'), max_length=256, blank=False)
 
     address = models.CharField(_('address'), max_length=128, blank=True, null=True, default='')
-    zipcode = models.CharFiled(_('zipcode'), max_length=16, blank=True, null=True, default='')
+    zipcode = models.CharField(_('zipcode'), max_length=16, blank=True, null=True, default='')
     city = models.CharField(_('city'), max_length=64, blank=True, null=True, default='')
     state = models.CharField(_('state'), max_length=64, blank=True, null=True, default='')
 
@@ -26,6 +26,7 @@ class Customer(models.Model):
 
     class Meta:
         verbose_name = _('customer')
+        verbose_name_plural = _("customers")
 
 class CustomerContact(models.Model):
     """Customer contacts: 
@@ -43,8 +44,12 @@ class CustomerContact(models.Model):
     flavour = models.CharField(max_length=32, choices=FLAVOUR_CHOICES, default=FLAVOUR_CHOICES[0][0])
     value = models.CharField(max_length=512)
     
+    def __unicode__(self):
+        return u"%s %s: %s" % (self.customer, self.flavour, self.value)
+
     class Meta:
         verbose_name = _('customer contact')
+        verbose_name_plural = _('customer contacts')
 
 class Invoice(models.Model):
     """Invoice data:
@@ -58,20 +63,63 @@ class Invoice(models.Model):
     In this way it is possible to fix user mistakes.
     """
     PAY_CHOICES = (
-        ('aa', _('BONIFICO')),
-        ('bb', _('CONTANTI')),
+        ('TODOAAAA', _('BONIFICO')),
+        ('TODOBBBB', _('CONTANTI')),
         ('credit card', _('credit card')),
     )
 
-    real_id = models.CharField(_('invoice number'), default='', null=False, blank=True, help_text(_("Set this value only if you need a specific invoice number")), unique=True)
+    real_id = models.CharField(_('invoice number'), max_length=16, default='', null=False, blank=True, help_text=_("Set this value only if you need a specific invoice number. After you save an invoice with a number you cannot modify it. You can always invalidate and invoicei though"), unique=True)
     customer = models.ForeignKey(Customer)
     date = models.DateField(_("emit date"), default=datetime.date.today)	
     is_valid = models.BooleanField(_('is valid'), default=True, help_text=_("You can invalidate this invoice by unchecking this field"))
-    is_paid = models.BooleanField(_('is paid'), default=False, help_text=_("Check this whenever an invoice is paid by a customer"))
-    pay_with = models.CharField(_('pay with'), choices=PAY_CHOICES, default=PAY_CHOICES[0][0])
+    pay_with = models.CharField(_('pay with'), max_length=32, choices=PAY_CHOICES, default=PAY_CHOICES[0][0])
+    # is_paid = models.BooleanField(_('is paid'), default=False, help_text=_("Check this whenever an invoice is paid"))
+    when_paid = models.DateField(_("when paid"), null=True, default=None, blank=True)	
+
+    def __unicode__(self):
+        return u"%s (%s)" % (self.real_id, self.customer)
+
+    @property
+    def amount(self):
+        return self.invoiceentry_set.sum('amount') or 0
+
+    @property
+    def is_paid(self):
+        # TODO: far ritornare immaginina verde o rossa
+        return bool(self.when_paid)
+
+    def save(self):
+        """Manage real_id:
+        * set invoice real_id if not set before
+        * set id (autofield) to a negative value if real id was set
+        ugly: save the same object twice ! 
+        """
+
+        rv = super(Invoice, self).save()
+        if not self.real_id:
+            self.real_id = str(self.id)
+            rv = super(Invoice, self).save()
+        elif self.id > 0 and (str(self.id) != self.real_id):
+            self.delete()
+            if Invoice.objects.filter(id__lt=0).count():
+                self.id = Invoice.objects.filter(id__lt=0).order_by('id')[0].id - 1
+            else:
+                self.id = -1
+            rv = super(Invoice, self).save()
+        return rv    
 
     class Meta:
         verbose_name = _("invoice")
+        verbose_name_plural = _("invoices")
+        ordering = ['date']
+
+class InvoiceEntryManager(models.Manager):
+
+    def sum(self, field_name):
+        rv = 0
+        for x in self.get_query_set().values_list(field_name):
+            rv += x[0]
+        return rv
 
 class InvoiceEntry(models.Model):
     """Invoice single entry"""
@@ -80,6 +128,12 @@ class InvoiceEntry(models.Model):
     amount = models.IntegerField()
     description = models.TextField()
 
+    objects = InvoiceEntryManager()
+
+    def __unicode__(self):
+        return u"%5s: %s" % (self.amount, self.description)
+
     class Meta:
         verbose_name = _("invoice entry")
+        verbose_name_plural = _("invoice entries")
 
