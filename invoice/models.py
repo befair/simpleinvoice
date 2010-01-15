@@ -2,6 +2,20 @@ from django.db import models
 from django.utils.translation import ugettext, ugettext_lazy as _
 import datetime
 
+from django.conf import settings
+
+class Company(object):
+
+    vat_percent = settings.COMPANY_VAT_PERCENT
+    vat_amount = vat_percent*100
+    name = settings.COMPANY_NAME
+    inet_contacts = settings.COMPANY_INTERNET_CONTACTS
+    address = settings.COMPANY_ADDRESS
+    contacts = settings.COMPANY_CONTACTS
+    vat_number = settings.COMPANY_VAT_NUMBER
+
+company = Company()
+
 class Customer(models.Model):
     """Customer to emit the invoice to"""
 
@@ -81,7 +95,15 @@ class Invoice(models.Model):
 
     @property
     def amount(self):
-        return self.invoiceentry_set.sum('amount') or 0
+        return self.entries.sum('amount') or 0
+
+    @property
+    def vat_amount(self):
+        return int(self.amount * company.vat_percent)
+
+    @property
+    def to_pay(self):
+        return self.amount + self.vat_amount
 
     @property
     def is_paid(self):
@@ -124,7 +146,7 @@ class InvoiceEntryManager(models.Manager):
 class InvoiceEntry(models.Model):
     """Invoice single entry"""
 
-    invoice = models.ForeignKey(Invoice)
+    invoice = models.ForeignKey(Invoice, related_name="entries")
     amount = models.IntegerField()
     description = models.TextField()
 

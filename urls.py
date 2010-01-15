@@ -11,8 +11,8 @@ urlpatterns = patterns('',
     # to INSTALLED_APPS to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    # Uncomment the next line to enable the admin:
-    (r'^admin/(.*)', site_admin.root),
+    (r'^%sdisplay/' % URL_PREFIX, 'invoice.views.display'),
+    (r'^%sadmin/(.*)' % URL_PREFIX, site_admin.root),
 
 	(r'^%sstatic/(?P<path>.*)$' % URL_PREFIX, 'django.views.static.serve', {'document_root': MEDIA_ROOT }),
 )

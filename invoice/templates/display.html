@@ -1,0 +1,64 @@
+{% load i18n %}
+
+<div class="invoice">
+    <div class="invoice-header">
+        <ul class="company-info">
+            <li class="company-name">{{ company.name }}</li>
+            {% if company.inet_contacts %}
+                <li>{{ company.inet_contacts }}</li>
+            {% endif %}
+            {% if company.address %}
+                <li>{{ company.address }}</li>
+            {% endif %}
+            {% if company.contacts %}
+                <li>{{ company.contacts }}</li>
+            {% endif %}
+            {% if company.vat_number %}
+                <li>{% trans "VAT" %}: {{ company.vat_number }}</li>
+            {% endif %}
+        </ul>
+    </div>
+    <hr />
+    <div class="invoice-customer">
+        <strong>{% trans "INTESTATARIO" %}</strong>
+        <ul style="list-style-type:none;">
+            <li>{{ invoice.customer.name }}</li>
+            <li>{{ invoice.customer.address }}</li>
+            <li>{{ invoice.customer.zipcode }} {{ invoice.customer.city }} {% if invoice.customer.state %}({{invoice.customer.state}}){% endif %}</li>
+            {% if invoice.customer.ssn %}
+                <li>{% trans "Social Security Number" %}: {{ invoice.customer.ssn }}</li>
+            {% endif %}
+            {% if invoice.customer.vat %}
+                <li>{% trans "VAT Number" %}: {{ invoice.customer.vat }}</li>
+            {% endif %}
+        </ul>
+    </div>
+    <table border="1" cellpadding="3" class="invoice-body">
+        <tr>
+            <td>{% trans 'Description' %}</td>
+            <td class="right">{% trans 'Amount' %}</td>
+        </tr>
+        <tr>
+            <td>{% for entry in invoice.entries.all %}<div class="invoice-entry">{{ entry.description }}</div>{% endfor %}</td>
+            <td class="right">{% for entry in invoice.entries.all %}<div class="invoice-entry">{{ entry.amount }}</div>{% endfor %}</td>
+        </tr>
+        <tr>
+            <td>
+                <div class="invoice-entry">{% trans "Total amount" %}</div>
+                <div class="invoice-entry">{% trans "VAT" %} {{ company.vat_amount }}%</div>
+            </td>
+            <td class="right">
+                <div class="invoice-entry">{{ invoice.amount }}</div>
+                <div class="invoice-entry">{{ invoice.vat_amount }}</div>
+            </td>
+        </tr>
+        <tr>
+            <td>{% trans "Total to pay" %}</td>
+            <td class="right"><strong>{{ invoice.to_pay }}</strong></td>
+        </tr>
+    </table>
+    <ul class="invoice-payment-info">
+        <li>{% trans "Pay with" %}: {{ invoice.pay_with }}</li>
+    </ul>
+</div>
+

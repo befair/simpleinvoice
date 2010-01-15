@@ -3,6 +3,8 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from django.contrib.sites.models import Site
 from django.contrib import admin
 from django import forms
+from django.http import HttpResponseRedirect
+from django.contrib.contenttypes.models import ContentType
 
 from invoice.models import CustomerContact, Invoice, InvoiceEntry, Customer
 
@@ -41,6 +43,18 @@ class InvoiceAdmin(admin.ModelAdmin):
 
     inlines = [InvoiceEntryInline]
     save_on_top = True
+
+    actions = ['make_paid', 'display']
+
+    def make_paid(self, request, queryset):
+        queryset.update(when_paid=datetime.date.today())
+    make_paid.short_description = _("Make selected invoices as paid today")
+
+    def display(self, request, queryset):
+        selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
+        ct = ContentType.objects.get_for_model(queryset.model)
+        return HttpResponseRedirect("/display/?ct=%s&ids=%s" % (ct.pk, ",".join(selected)))
+    display.short_description = _("Display selected invoices")
 
     class Media:
         css = {

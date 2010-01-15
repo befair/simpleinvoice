@@ -1,0 +1,33 @@
+
+.right { text-align : right; }
+
+.company-info {
+    list-style-type:none; 
+    text-align: right;
+}
+
+.company-name {
+    background-color : red;
+    margin-left : 200px;
+}
+
+.invoice {
+    width : 500px;
+}
+
+.invoice-header {
+
+}
+
+.invoice-body {
+    border-collapse: collapse;
+    margin : 1.5em 0.5em;
+}
+
+.invoice-entry {
+}
+
+.invoice-payment-info {
+    list-style-type:none; 
+}
+
