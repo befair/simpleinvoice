@@ -8,17 +8,60 @@ from django.contrib.contenttypes.models import ContentType
 
 from invoice.models import CustomerContact, Invoice, InvoiceEntry, Customer
 
+def disable_field(field):
+    disable_opts = {
+        'readonly' : 'readonly',
+        'disabled' : 'true',
+    }
+    field.widget.attrs.update(disable_opts)
+    field.help_text = ""
+
+#class InvoiceEntryForm(forms.ModelForm):
+#
+#    def __init__(self, *args, **kwargs):
+#        """Some conditions to check at runtime:
+#        * nothing is editable if when_paid is set
+#        """
+#        super(InvoiceEntryForm, self).__init__(*args, **kwargs)
+#        if kwargs.has_key('instance'):
+#            if kwargs['instance'].invoice.when_paid:
+#                map(lambda field : disable_field(field), self.fields.values())
+
 class InvoiceEntryInline(admin.TabularInline):
     model = InvoiceEntry
     extra = 3
+#   form  = InvoiceEntryForm
+
+class InvoiceEntryAdmin(admin.ModelAdmin):
+
+    list_display = ("invoice", "amount", 'description')
+    list_display_links = ('description',)
+
+    def has_change_permission(self, request, obj=None):
+        if obj and obj.invoice.when_paid:
+            return False
+        else:
+            return super(InvoiceEntryAdmin, self).has_change_permission(request, obj)
+
+    def has_delete_permission(self, request, obj=None):
+        if obj and obj.invoice.when_paid:
+            return False
+        else:
+            return super(InvoiceEntryAdmin, self).has_delete_permission(request, obj)
 
 class InvoiceForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
-        """real_id is not editable if set"""
+        """Some conditions to check at runtime:
+        * nothing is editable if when_paid is set
+        * real_id is not editable if set
+        """
         super(InvoiceForm, self).__init__(*args, **kwargs)
-        if kwargs.has_key('instance') and kwargs['instance'].real_id:
-            self.fields['real_id'].widget.attrs['readonly'] = "readonly"
+        if kwargs.has_key('instance'):
+            if kwargs['instance'].real_id:
+                self.fields['real_id'].widget.attrs['readonly'] = "readonly"
+#            if kwargs['instance'].when_paid:
+#                map(lambda field : disable_field(field), self.fields.values())
 
     class Meta:
         model = Invoice
@@ -45,6 +88,12 @@ class InvoiceAdmin(admin.ModelAdmin):
     save_on_top = True
 
     actions = ['make_paid', 'display']
+
+    def has_change_permission(self, request, obj=None):
+        if obj and obj.when_paid:
+            return False
+        else:
+            return super(InvoiceAdmin, self).has_change_permission(request, obj)
 
     def make_paid(self, request, queryset):
         queryset.update(when_paid=datetime.date.today())
@@ -111,4 +160,5 @@ class CustomerAdmin(admin.ModelAdmin):
 site_admin = admin.AdminSite()
 site_admin.register(Customer, CustomerAdmin)	
 site_admin.register(Invoice, InvoiceAdmin)	
+site_admin.register(InvoiceEntry, InvoiceEntryAdmin)	
 

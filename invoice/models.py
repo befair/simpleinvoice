@@ -91,7 +91,7 @@ class Invoice(models.Model):
     when_paid = models.DateField(_("when paid"), null=True, default=None, blank=True)	
 
     def __unicode__(self):
-        return u"%s (%s)" % (self.real_id, self.customer)
+        return u"%s %s %s (%s)" % (self.real_id, _('of'), self.date, self.customer)
 
     @property
     def amount(self):

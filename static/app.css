@@ -21,11 +21,17 @@
 
 .invoice-body {
     border-collapse: collapse;
-    margin : 1.5em 0.5em;
+    margin : 1.5em auto;
+    width : 80%;
+}
+
+.invoice-body td {
+    padding-top : 1em;
 }
 
 .invoice-entry {
 }
+
 
 .invoice-payment-info {
     list-style-type:none; 
