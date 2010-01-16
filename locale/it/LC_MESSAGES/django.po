@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-13 19:33+0100\n"
+"POT-Creation-Date: 2010-01-16 19:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,133 +16,194 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin/models.py:63
+#: admin/models.py:100
+msgid "Make selected invoices as paid today"
+msgstr ""
+
+#: admin/models.py:106
+msgid "Display selected invoices"
+msgstr ""
+
+#: admin/models.py:131
 msgid "You should write social security or vat number"
 msgstr ""
 
-#: admin/models.py:76
+#: admin/models.py:144
 msgid "More info..."
 msgstr ""
 
-#: invoice/models.py:8
+#: admin/templates/admin/base_site.html:8
+#: admin/templates/admin/base_site.html:11
+msgid "Invoice for dummies"
+msgstr ""
+
+#: invoice/models.py:22
 msgid "name"
 msgstr ""
 
-#: invoice/models.py:10
+#: invoice/models.py:24
 msgid "address"
 msgstr ""
 
-#: invoice/models.py:11
+#: invoice/models.py:25
 msgid "zipcode"
 msgstr ""
 
-#: invoice/models.py:12
+#: invoice/models.py:26
 msgid "city"
 msgstr ""
 
-#: invoice/models.py:13
+#: invoice/models.py:27
 msgid "state"
 msgstr ""
 
-#: invoice/models.py:15
+#: invoice/models.py:29
 msgid "social security number"
 msgstr ""
 
-#: invoice/models.py:16
+#: invoice/models.py:30
 msgid "vat"
 msgstr ""
 
-#: invoice/models.py:18
+#: invoice/models.py:32
 msgid "notes"
 msgstr ""
 
-#: invoice/models.py:28
+#: invoice/models.py:42
 msgid "customer"
 msgstr ""
 
-#: invoice/models.py:29
+#: invoice/models.py:43
 msgid "customers"
 msgstr ""
 
-#: invoice/models.py:37
+#: invoice/models.py:51
 msgid "phone"
 msgstr ""
 
-#: invoice/models.py:38
+#: invoice/models.py:52
 msgid "fax"
 msgstr ""
 
-#: invoice/models.py:39
+#: invoice/models.py:53
 msgid "email"
 msgstr ""
 
-#: invoice/models.py:40
+#: invoice/models.py:54
 msgid "other"
 msgstr ""
 
-#: invoice/models.py:51
+#: invoice/models.py:65
 msgid "customer contact"
 msgstr ""
 
-#: invoice/models.py:52
+#: invoice/models.py:66
 msgid "customer contacts"
 msgstr ""
 
-#: invoice/models.py:66
+#: invoice/models.py:80
 msgid "BONIFICO"
 msgstr ""
 
-#: invoice/models.py:67
+#: invoice/models.py:81
 msgid "CONTANTI"
 msgstr ""
 
-#: invoice/models.py:68
+#: invoice/models.py:82
 msgid "credit card"
 msgstr ""
 
-#: invoice/models.py:71
+#: invoice/models.py:85
 msgid "invoice number"
 msgstr ""
 
-#: invoice/models.py:71
+#: invoice/models.py:85
 msgid ""
 "Set this value only if you need a specific invoice number. After you save an "
 "invoice with a number you cannot modify it. You can always invalidate and "
 "invoicei though"
 msgstr ""
 
-#: invoice/models.py:73
+#: invoice/models.py:87
 msgid "emit date"
 msgstr ""
 
-#: invoice/models.py:74
+#: invoice/models.py:88
 msgid "is valid"
 msgstr ""
 
-#: invoice/models.py:74
+#: invoice/models.py:88
 msgid "You can invalidate this invoice by unchecking this field"
 msgstr ""
 
-#: invoice/models.py:75
+#: invoice/models.py:89
 msgid "pay with"
 msgstr ""
 
-#: invoice/models.py:77
+#: invoice/models.py:91
 msgid "when paid"
 msgstr ""
 
-#: invoice/models.py:112
+#: invoice/models.py:94 invoice/templates/display.html:24
+msgid "of"
+msgstr ""
+
+#: invoice/models.py:134
 msgid "invoice"
 msgstr ""
 
-#: invoice/models.py:113
+#: invoice/models.py:135
 msgid "invoices"
 msgstr ""
 
-#: invoice/models.py:137
+#: invoice/models.py:159
 msgid "invoice entry"
 msgstr ""
 
-#: invoice/models.py:138
+#: invoice/models.py:160
 msgid "invoice entries"
+msgstr ""
+
+#: invoice/templates/display.html:17 invoice/templates/display.html.py:49
+msgid "VAT"
+msgstr ""
+
+#: invoice/templates/display.html:23
+msgid "Invoice n."
+msgstr ""
+
+#: invoice/templates/display.html:30
+msgid "Social Security Number"
+msgstr ""
+
+#: invoice/templates/display.html:33
+msgid "VAT Number"
+msgstr ""
+
+#: invoice/templates/display.html:39
+msgid "Description"
+msgstr ""
+
+#: invoice/templates/display.html:40
+msgid "Amount"
+msgstr ""
+
+#: invoice/templates/display.html:48
+msgid "Total amount"
+msgstr ""
+
+#: invoice/templates/display.html:57
+msgid "Total to pay"
+msgstr ""
+
+#: invoice/templates/display.html:62
+msgid "Pay with"
+msgstr ""
+
+#: invoice/templates/display.html:64
+msgid "Paid on"
+msgstr ""
+
+#: invoice/templates/display_many.html:13
+msgid "Invoice 4 dummies"
 msgstr ""
