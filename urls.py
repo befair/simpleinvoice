@@ -5,7 +5,7 @@ from admin.models import site_admin
 
 urlpatterns = patterns('',
     # Example:
-    # (r'^invoice4dummies/', include('invoice4dummies.foo.urls')),
+    # (r'^simpleinvoice/', include('simpleinvoice.foo.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

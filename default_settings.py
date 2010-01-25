@@ -1,4 +1,4 @@
-# Django settings for invoice4dummies project.
+# Django settings for simpleinvoice project.
 
 import os
 
@@ -77,7 +77,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
-ROOT_URLCONF = 'invoice4dummies.urls'
+ROOT_URLCONF = 'simpleinvoice.urls'
 
 TEMPLATE_DIRS = (
 	BASE_DIR + '/admin/templates',
