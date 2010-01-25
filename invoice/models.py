@@ -34,9 +34,9 @@ class Customer(models.Model):
     def __unicode__(self):
         return self.name
 
-    @property
     def is_debtor(self):
-        return self.invoice_set.filter(is_paid=False).count()
+        return self.invoice_set.filter(when_paid__isnull=True).count()
+    is_debtor.boolean = True
 
     class Meta:
         verbose_name = _('customer')
@@ -87,7 +87,7 @@ class Invoice(models.Model):
     date = models.DateField(_("emit date"), default=datetime.date.today)	
     is_valid = models.BooleanField(_('is valid'), default=True, help_text=_("You can invalidate this invoice by unchecking this field"))
     pay_with = models.CharField(_('pay with'), max_length=32, choices=PAY_CHOICES, default=PAY_CHOICES[0][0])
-    # is_paid = models.BooleanField(_('is paid'), default=False, help_text=_("Check this whenever an invoice is paid"))
+    # redundant.. is_paid = models.BooleanField(_('is paid'), default=False, help_text=_("Check this whenever an invoice is paid"))
     when_paid = models.DateField(_("when paid"), null=True, default=None, blank=True)	
 
     def __unicode__(self):
@@ -102,13 +102,12 @@ class Invoice(models.Model):
         return int(self.amount * company.vat_percent)
 
     @property
-    def to_pay(self):
+    def tot_to_pay(self):
         return self.amount + self.vat_amount
 
-    @property
     def is_paid(self):
-        # TODO: far ritornare immaginina verde o rossa
         return bool(self.when_paid)
+    is_paid.boolean = True
 
     def save(self):
         """Manage real_id:

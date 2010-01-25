@@ -160,5 +160,5 @@ class CustomerAdmin(admin.ModelAdmin):
 site_admin = admin.AdminSite()
 site_admin.register(Customer, CustomerAdmin)	
 site_admin.register(Invoice, InvoiceAdmin)	
-site_admin.register(InvoiceEntry, InvoiceEntryAdmin)	
+#site_admin.register(InvoiceEntry, InvoiceEntryAdmin)	
 
