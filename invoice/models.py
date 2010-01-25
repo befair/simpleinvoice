@@ -65,6 +65,14 @@ class CustomerContact(models.Model):
         verbose_name = _('customer contact')
         verbose_name_plural = _('customer contacts')
 
+class InvoiceSequence(models.Model):
+    """This is a sequence used simply to provide a right default value
+    for new invoice id, avoiding the ugly save-twice algorithm
+    used in previous Invoice.save() implementation"""
+
+    # TODO
+    pass
+
 class Invoice(models.Model):
     """Invoice data:
 
