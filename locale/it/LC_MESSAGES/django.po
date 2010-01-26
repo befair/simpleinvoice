@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-16 19:07+0100\n"
+"POT-Creation-Date: 2010-01-26 15:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,7 @@ msgstr ""
 
 #: admin/templates/admin/base_site.html:8
 #: admin/templates/admin/base_site.html:11
-msgid "Invoice for dummies"
+msgid "Simple invoice"
 msgstr ""
 
 #: invoice/models.py:22
@@ -101,66 +101,66 @@ msgstr ""
 msgid "customer contacts"
 msgstr ""
 
-#: invoice/models.py:80
+#: invoice/models.py:88
 msgid "BONIFICO"
 msgstr ""
 
-#: invoice/models.py:81
+#: invoice/models.py:89
 msgid "CONTANTI"
 msgstr ""
 
-#: invoice/models.py:82
+#: invoice/models.py:90
 msgid "credit card"
 msgstr ""
 
-#: invoice/models.py:85
+#: invoice/models.py:93
 msgid "invoice number"
 msgstr ""
 
-#: invoice/models.py:85
+#: invoice/models.py:93
 msgid ""
 "Set this value only if you need a specific invoice number. After you save an "
 "invoice with a number you cannot modify it. You can always invalidate and "
 "invoicei though"
 msgstr ""
 
-#: invoice/models.py:87
+#: invoice/models.py:95
 msgid "emit date"
 msgstr ""
 
-#: invoice/models.py:88
+#: invoice/models.py:96
 msgid "is valid"
 msgstr ""
 
-#: invoice/models.py:88
+#: invoice/models.py:96
 msgid "You can invalidate this invoice by unchecking this field"
 msgstr ""
 
-#: invoice/models.py:89
+#: invoice/models.py:97
 msgid "pay with"
 msgstr ""
 
-#: invoice/models.py:91
+#: invoice/models.py:99
 msgid "when paid"
 msgstr ""
 
-#: invoice/models.py:94 invoice/templates/display.html:24
+#: invoice/models.py:102 invoice/templates/display.html:24
 msgid "of"
 msgstr ""
 
-#: invoice/models.py:134
+#: invoice/models.py:141
 msgid "invoice"
 msgstr ""
 
-#: invoice/models.py:135
+#: invoice/models.py:142
 msgid "invoices"
 msgstr ""
 
-#: invoice/models.py:159
+#: invoice/models.py:166
 msgid "invoice entry"
 msgstr ""
 
-#: invoice/models.py:160
+#: invoice/models.py:167
 msgid "invoice entries"
 msgstr ""
 
