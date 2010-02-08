@@ -85,12 +85,12 @@ class Invoice(models.Model):
     In this way it is possible to fix user mistakes.
     """
     PAY_CHOICES = (
-        ('TODOAAAA', _('BONIFICO')),
-        ('TODOBBBB', _('CONTANTI')),
+        ('money transfer', _('money transfer')),
+        ('cash', _('cash')),
         ('credit card', _('credit card')),
     )
 
-    real_id = models.CharField(_('invoice number'), max_length=16, default='', null=False, blank=True, help_text=_("Set this value only if you need a specific invoice number. After you save an invoice with a number you cannot modify it. You can always invalidate and invoicei though"), unique=True)
+    real_id = models.CharField(_('invoice number'), max_length=16, default='', null=False, blank=True, help_text=_("Set this value only if you need a specific invoice number. After you save an invoice with a number you cannot modify it. You can always invalidate the invoice though"), unique=True)
     customer = models.ForeignKey(Customer)
     date = models.DateField(_("emit date"), default=datetime.date.today)	
     is_valid = models.BooleanField(_('is valid'), default=True, help_text=_("You can invalidate this invoice by unchecking this field"))
