@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: simpleinvoice 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-26 15:42+0100\n"
+"POT-Creation-Date: 2010-02-08 17:20+0100\n"
 "PO-Revision-Date: 2010-02-04 22:49+0100\n"
 "Last-Translator: Francesca <frannylore@gmail.com>\n"
 "Language-Team: Italian <info@befair.it>\n"
@@ -117,10 +117,15 @@ msgstr "carta di credito"
 msgid "invoice number"
 msgstr "numero di fattura"
 
-# Manca un pezzo
 #: invoice/models.py:93
-msgid "Set this value only if you need a specific invoice number. After you save an invoice with a number you cannot modify it. You can always invalidate the invoice though"
-msgstr "Imposta questo valore solo se desideri un particolare numero di fattura. Dopo aver salvato una fattura con un numero non potrai modificarlo. Puoi sempre invalidare la fattura"
+msgid ""
+"Set this value only if you need a specific invoice number. After you save an "
+"invoice with a number you cannot modify it. You can always invalidate the "
+"invoice though"
+msgstr ""
+"Imposta questo valore solo se desideri un particolare numero di fattura. "
+"Dopo aver salvato una fattura con un numero non potrai modificarlo. Puoi "
+"sempre invalidare la fattura"
 
 #: invoice/models.py:95
 msgid "emit date"
@@ -142,8 +147,7 @@ msgstr "paga con"
 msgid "when paid"
 msgstr "pagata il"
 
-#: invoice/models.py:102
-#: invoice/templates/display.html:24
+#: invoice/models.py:102 invoice/templates/display.html:24
 msgid "of"
 msgstr "di"
 
@@ -163,9 +167,10 @@ msgstr "voce di fatturazione"
 msgid "invoice entries"
 msgstr "voci di fatturazione"
 
-#: invoice/templates/display.html.py:49
-msgid "VAT"
-msgstr "IVA"
+#: invoice/templates/display.html:17
+#: invoice/templates/display.html:33
+msgid "VAT number"
+msgstr "Partita IVA"
 
 #: invoice/templates/display.html:23
 msgid "Invoice n."
@@ -174,10 +179,6 @@ msgstr "Fattura n."
 #: invoice/templates/display.html:30
 msgid "Social Security Number"
 msgstr "Codice fiscale"
-
-#: invoice/templates/display.html:33
-msgid "VAT Number"
-msgstr "Partita IVA"
 
 #: invoice/templates/display.html:39
 msgid "Description"
@@ -191,6 +192,10 @@ msgstr "Costo"
 msgid "Total amount"
 msgstr "Totale"
 
+#: invoice/templates/display.html:49
+msgid "VAT"
+msgstr "IVA"
+
 #: invoice/templates/display.html:57
 msgid "Total to pay"
 msgstr "Totale da pagare"
@@ -202,4 +207,3 @@ msgstr "Pagamento con"
 #: invoice/templates/display.html:64
 msgid "Paid on"
 msgstr "Pagato il"
-
