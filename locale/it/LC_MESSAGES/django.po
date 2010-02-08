@@ -33,6 +33,7 @@ msgstr "Altre informazioni"
 
 #: admin/templates/admin/base_site.html:8
 #: admin/templates/admin/base_site.html:11
+#: invoice/templates/display_many.html:13
 msgid "Simple invoice"
 msgstr "Fattura semplice"
 
@@ -201,8 +202,4 @@ msgstr "Pagamento con"
 #: invoice/templates/display.html:64
 msgid "Paid on"
 msgstr "Pagato il"
-
-#: invoice/templates/display_many.html:13
-msgid "Simple invoice"
-msgstr "Fattura facile"
 
