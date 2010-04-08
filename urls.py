@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 from settings import URL_PREFIX, MEDIA_ROOT
 
-from admin.models import site_admin
+from simpleinvoice.admin.models import site_admin
 
 urlpatterns = patterns('',
     # Example:

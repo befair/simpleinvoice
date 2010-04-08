@@ -6,7 +6,7 @@ from django import forms
 from django.http import HttpResponseRedirect
 from django.contrib.contenttypes.models import ContentType
 
-from invoice.models import CustomerContact, Invoice, InvoiceEntry, Customer
+from simpleinvoice.invoice.models import CustomerContact, Invoice, InvoiceEntry, Customer
 
 def disable_field(field):
     disable_opts = {
