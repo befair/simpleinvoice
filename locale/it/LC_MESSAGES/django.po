@@ -25,7 +25,7 @@ msgstr "Mostra le fatture selezionate"
 
 #: admin/models.py:131
 msgid "You should write social security or vat number"
-msgstr "Dovresti inserire il tuo codice fiscale o partita IVA"
+msgstr "Dovresti inserire il codice fiscale o la partita IVA"
 
 #: admin/models.py:144
 msgid "More info..."
@@ -115,17 +115,17 @@ msgstr "carta di credito"
 
 #: invoice/models.py:93
 msgid "invoice number"
-msgstr "numero di fattura"
+msgstr "fattura numero"
 
 #: invoice/models.py:93
 msgid ""
 "Set this value only if you need a specific invoice number. After you save an "
 "invoice with a number you cannot modify it. You can always invalidate the "
-"invoice though"
+"invoice though."
 msgstr ""
-"Imposta questo valore solo se desideri un particolare numero di fattura. "
+"Compila questo campo solo se desideri impostare un particolare numero di fattura. "
 "Dopo aver salvato una fattura con un numero non potrai modificarlo. Puoi "
-"sempre invalidare la fattura"
+"sempre invalidare la fattura."
 
 #: invoice/models.py:95
 msgid "emit date"
@@ -133,11 +133,11 @@ msgstr "data di emissione"
 
 #: invoice/models.py:96
 msgid "is valid"
-msgstr "è valido"
+msgstr "è valida"
 
 #: invoice/models.py:96
-msgid "You can invalidate this invoice by unchecking this field"
-msgstr "Puoi annullare questa fattura deselezionando questo campo"
+msgid "You can invalidate this invoice by unchecking this field."
+msgstr "Puoi annullare questa fattura deselezionando questo campo."
 
 #: invoice/models.py:97
 msgid "pay with"

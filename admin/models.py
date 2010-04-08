@@ -79,8 +79,8 @@ class InvoiceAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('id', 'real_id', 'date', 'customer', 'is_paid', 'is_valid', 'amount')
-    list_display_links = ('id', 'real_id',)
+    list_display = ('real_id', 'date', 'customer', 'is_paid', 'is_valid', 'amount')
+    list_display_links = ('real_id',)
     list_filter = ['customer','is_valid','when_paid']
     search_fields = ['real_id', 'customer', 'date']
 
