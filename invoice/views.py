@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from invoice.models import company
+from simpleinvoice.invoice.models import company
 
 def display(request):
 
