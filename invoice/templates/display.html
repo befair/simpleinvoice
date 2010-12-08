@@ -41,7 +41,7 @@
         </tr>
         <tr>
             <td>{% for entry in invoice.entries.all %}<div class="invoice-entry">{{ entry.description }}</div>{% endfor %}</td>
-            <td class="right">{% for entry in invoice.entries.all %}<div class="invoice-entry">{{ entry.amount }}</div>{% endfor %}</td>
+            <td class="right">{% for entry in invoice.entries.all %}<div class="invoice-entry">{{ entry.amount|floatformat:2 }}</div>{% endfor %}</td>
         </tr>
         <tr>
             <td>
@@ -49,13 +49,13 @@
                 <div class="invoice-entry">{% trans "VAT" %} {{ company.vat_amount }}%</div>
             </td>
             <td class="right">
-                <div class="invoice-entry">{{ invoice.amount }}</div>
-                <div class="invoice-entry">{{ invoice.vat_amount }}</div>
+                <div class="invoice-entry">{{ invoice.amount|floatformat:2 }}</div>
+                <div class="invoice-entry">{{ invoice.vat_amount|floatformat:2 }}</div>
             </td>
         </tr>
         <tr>
             <td>{% trans "Total to pay" %}</td>
-            <td class="right"><strong>{{ invoice.tot_to_pay }}</strong></td>
+            <td class="right"><strong>{{ invoice.tot_to_pay|floatformat:2 }}</strong></td>
         </tr>
     </table>
     <ul class="invoice-payment-info">

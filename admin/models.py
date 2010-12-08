@@ -102,7 +102,7 @@ class InvoiceAdmin(admin.ModelAdmin):
     def display(self, request, queryset):
         selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
         ct = ContentType.objects.get_for_model(queryset.model)
-        return HttpResponseRedirect("/display/?ct=%s&ids=%s" % (ct.pk, ",".join(selected)))
+        return HttpResponseRedirect("/simpleinvoice/display/?ct=%s&ids=%s" % (ct.pk, ",".join(selected)))
     display.short_description = _("Display selected invoices")
 
     class Media:

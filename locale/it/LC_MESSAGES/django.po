@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: simpleinvoice 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-08 17:20+0100\n"
+"POT-Creation-Date: 2010-11-18 06:56+0100\n"
 "PO-Revision-Date: 2010-02-04 22:49+0100\n"
 "Last-Translator: Francesca <frannylore@gmail.com>\n"
 "Language-Team: Italian <info@befair.it>\n"
@@ -123,9 +123,9 @@ msgid ""
 "invoice with a number you cannot modify it. You can always invalidate the "
 "invoice though."
 msgstr ""
-"Compila questo campo solo se desideri impostare un particolare numero di fattura. "
-"Dopo aver salvato una fattura con un numero non potrai modificarlo. Puoi "
-"sempre invalidare la fattura."
+"Compila questo campo solo se desideri impostare un particolare numero di "
+"fattura. Dopo aver salvato una fattura con un numero non potrai modificarlo. "
+"Puoi sempre invalidare la fattura."
 
 #: invoice/models.py:95
 msgid "emit date"
@@ -167,8 +167,7 @@ msgstr "voce di fatturazione"
 msgid "invoice entries"
 msgstr "voci di fatturazione"
 
-#: invoice/templates/display.html:17
-#: invoice/templates/display.html:33
+#: invoice/templates/display.html:17 invoice/templates/display.html.py:33
 msgid "VAT number"
 msgstr "Partita IVA"
 
