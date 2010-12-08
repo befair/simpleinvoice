@@ -7,10 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: simpleinvoice 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-18 06:56+0100\n"
+"POT-Creation-Date: 2010-12-08 05:32+0100\n"
 "PO-Revision-Date: 2010-02-04 22:49+0100\n"
 "Last-Translator: Francesca <frannylore@gmail.com>\n"
 "Language-Team: Italian <info@befair.it>\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -132,38 +133,42 @@ msgid "emit date"
 msgstr "data di emissione"
 
 #: invoice/models.py:96
+msgid "discount"
+msgstr ""
+
+#: invoice/models.py:97
 msgid "is valid"
 msgstr "è valida"
 
-#: invoice/models.py:96
+#: invoice/models.py:97
 msgid "You can invalidate this invoice by unchecking this field."
 msgstr "Puoi annullare questa fattura deselezionando questo campo."
 
-#: invoice/models.py:97
+#: invoice/models.py:98
 msgid "pay with"
 msgstr "paga con"
 
-#: invoice/models.py:99
+#: invoice/models.py:100
 msgid "when paid"
 msgstr "pagata il"
 
-#: invoice/models.py:102 invoice/templates/display.html:24
+#: invoice/models.py:103 invoice/templates/display.html:24
 msgid "of"
-msgstr "di"
+msgstr "del"
 
-#: invoice/models.py:141
+#: invoice/models.py:146
 msgid "invoice"
 msgstr "fattura"
 
-#: invoice/models.py:142
+#: invoice/models.py:147
 msgid "invoices"
 msgstr "fatture"
 
-#: invoice/models.py:166
+#: invoice/models.py:171
 msgid "invoice entry"
 msgstr "voce di fatturazione"
 
-#: invoice/models.py:167
+#: invoice/models.py:172
 msgid "invoice entries"
 msgstr "voci di fatturazione"
 
@@ -187,22 +192,26 @@ msgstr "Descrizione"
 msgid "Amount"
 msgstr "Costo"
 
-#: invoice/templates/display.html:48
+#: invoice/templates/display.html:49 invoice/templates/display.html.py:52
 msgid "Total amount"
 msgstr "Totale"
 
-#: invoice/templates/display.html:49
+#: invoice/templates/display.html:50
+msgid "Discount"
+msgstr "Sconto"
+
+#: invoice/templates/display.html:53
 msgid "VAT"
 msgstr "IVA"
 
-#: invoice/templates/display.html:57
+#: invoice/templates/display.html:65
 msgid "Total to pay"
 msgstr "Totale da pagare"
 
-#: invoice/templates/display.html:62
+#: invoice/templates/display.html:70
 msgid "Payment by"
 msgstr "Pagamento con"
 
-#: invoice/templates/display.html:64
+#: invoice/templates/display.html:72
 msgid "Paid on"
 msgstr "Pagato il"

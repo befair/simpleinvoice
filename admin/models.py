@@ -73,7 +73,7 @@ class InvoiceAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields' : ('real_id', 
-                        ('customer','date'),
+                        ('customer','date', 'discount'),
                         'is_valid', ('pay_with', 'when_paid')
             )
         }),
