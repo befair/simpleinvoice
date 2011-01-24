@@ -126,7 +126,7 @@ class Invoice(models.Model):
         ('credit card', _('credit card')),
     )
 
-    real_id = models.CharField(_('invoice number'), max_length=16, default='', null=False, blank=True, help_text=_("Set this value only if you need a specific invoice number. After you save an invoice with a number you cannot modify it. You can always invalidate the invoice though."), unique=True)
+    real_id = models.CharField(_('invoice number'), max_length=16, default='', null=False, blank=True, help_text=_("Set this value only if you need a specific invoice number."), unique_for_year=True)
     customer = models.ForeignKey(Customer)
     date = models.DateField(_("emit date"), default=datetime.date.today)	
     discount = models.FloatField(_("discount"), default=0)

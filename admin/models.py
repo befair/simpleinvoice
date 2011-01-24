@@ -68,7 +68,7 @@ class InvoiceForm(forms.ModelForm):
 
 class InvoiceAdmin(admin.ModelAdmin):
 
-    form = InvoiceForm
+    #form = InvoiceForm
 
     fieldsets = (
         (None, {
