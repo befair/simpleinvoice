@@ -67,20 +67,56 @@ class CustomerContact(models.Model):
 
 class InvoiceSequence(models.Model):
     """This is a sequence used simply to provide a right default value
-    for new invoice id, avoiding the ugly save-twice algorithm
-    used in previous Invoice.save() implementation"""
+    for new invoice id, when an invoice is saved, 
+    its real_id is checked and, if its integer part is equal or greater than next_invoice_id
+    this value is updated"""
 
-    # TODO
-    pass
+    next_invoice_id = models.PositiveIntegerField()
+
+    def get(cls, date):
+        """Get next sequence id and increment.
+        When new year comes, cycle id and start by 1 again"""
+        seq = cls.objects.get(pk=1)
+        
+        try:
+            last_invoice_date = Invoice.objects.latest().date
+        except Invoice.DoesNotExist:
+            last_invoice_date = datetime.datetime.today()
+
+        if date.year - last_invoice_date.year >= 1:
+            rv = 1
+        else:
+            rv = seq.next_invoice_id
+
+        seq.next_invoice_id = rv + 1
+        seq.save()
+        return rv
+
+    def update(cls, real_id):
+        """Update next_invoice_id if necessary"""
+        i = 1
+        int_real_id = 0
+        while i <= len(real_id):
+            try:
+                int_real_id = int(real_id[:i])
+            except ValueError:
+                "Ok int part retrieved"
+                pass
+
+        if int_real_id >= cls.objects.get(pk=1).next_invoice_id:
+            cls.get()
+
+        return True
+            
+    def __unicode__(self):
+        return _("Next invoice id is %s") % self.next_invoice_id
 
 class Invoice(models.Model):
     """Invoice data:
 
     real_id is the invoice id given by the user. 
-    If blank given, its default value is the corresponding auto id field. 
+    If blank given, its default value is get from InvoiceSequence
     It can be changed to an older id with /A /B etc. 
-    If so, corresponding auto_id field is set to a negative value like
-    -1000xx for xx/A , -2000xx for xx/B , -3000xx for xx/C and so on.
 
     In this way it is possible to fix user mistakes.
     """
@@ -98,6 +134,12 @@ class Invoice(models.Model):
     pay_with = models.CharField(_('pay with'), max_length=32, choices=PAY_CHOICES, default=PAY_CHOICES[0][0])
     # redundant.. is_paid = models.BooleanField(_('is paid'), default=False, help_text=_("Check this whenever an invoice is paid"))
     when_paid = models.DateField(_("when paid"), null=True, default=None, blank=True)	
+
+    class Meta:
+        verbose_name = _("invoice")
+        verbose_name_plural = _("invoices")
+        ordering = ['date']
+        get_latest_by = "date"
 
     def __unicode__(self):
         return u"%s %s %s (%s)" % (self.real_id, _('of'), self.date, self.customer)
@@ -124,28 +166,16 @@ class Invoice(models.Model):
 
     def save(self):
         """Manage real_id:
-        * set invoice real_id if not set before
-        * set id (autofield) to a negative value if real id was set
-        ugly: save the same object twice ! 
+        * if not set: get from InvoiceSequence
+        * if set: update InvoiceSequence if needed
         """
 
-        rv = super(Invoice, self).save()
         if not self.real_id:
-            self.real_id = str(self.id)
-            rv = super(Invoice, self).save()
-        elif self.id > 0 and (str(self.id) != self.real_id):
-            self.delete()
-            if Invoice.objects.filter(id__lt=0).count():
-                self.id = Invoice.objects.filter(id__lt=0).order_by('id')[0].id - 1
-            else:
-                self.id = -1
-            rv = super(Invoice, self).save()
-        return rv    
-
-    class Meta:
-        verbose_name = _("invoice")
-        verbose_name_plural = _("invoices")
-        ordering = ['date']
+           self.real_id = str(InvoiceSequence.get(self.date or datetime.datetime.today()))
+        else:
+           InvoiceSequence.update(self.real_id)
+        
+        return super(Invoice, self).save()
 
 class InvoiceEntryManager(models.Manager):
 
