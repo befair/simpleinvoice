@@ -73,9 +73,11 @@ class InvoiceSequence(models.Model):
 
     next_invoice_id = models.PositiveIntegerField()
 
-    def get(cls, date):
+    @classmethod
+    def get(cls, invoice):
         """Get next sequence id and increment.
         When new year comes, cycle id and start by 1 again"""
+        date = invoice.date
         seq = cls.objects.get(pk=1)
         
         try:
@@ -92,19 +94,22 @@ class InvoiceSequence(models.Model):
         seq.save()
         return rv
 
-    def update(cls, real_id):
+    @classmethod
+    def update(cls, invoice):
         """Update next_invoice_id if necessary"""
+        real_id = invoice.real_id
         i = 1
         int_real_id = 0
         while i <= len(real_id):
             try:
                 int_real_id = int(real_id[:i])
+                i += 1
             except ValueError:
                 "Ok int part retrieved"
-                pass
+                break
 
         if int_real_id >= cls.objects.get(pk=1).next_invoice_id:
-            cls.get()
+            cls.get(invoice)
 
         return True
             
@@ -126,7 +131,7 @@ class Invoice(models.Model):
         ('credit card', _('credit card')),
     )
 
-    real_id = models.CharField(_('invoice number'), max_length=16, default='', null=False, blank=True, help_text=_("Set this value only if you need a specific invoice number."), unique_for_year=True)
+    real_id = models.CharField(_('invoice number'), max_length=16, default='', null=False, blank=True, help_text=_("Set this value only if you need a specific invoice number."), unique_for_year="date")
     customer = models.ForeignKey(Customer)
     date = models.DateField(_("emit date"), default=datetime.date.today)	
     discount = models.FloatField(_("discount"), default=0)
@@ -171,9 +176,9 @@ class Invoice(models.Model):
         """
 
         if not self.real_id:
-           self.real_id = str(InvoiceSequence.get(self.date or datetime.datetime.today()))
+           self.real_id = str(InvoiceSequence.get(self))
         else:
-           InvoiceSequence.update(self.real_id)
+           InvoiceSequence.update(self)
         
         return super(Invoice, self).save()
 

@@ -27,7 +27,7 @@
 .invoice-body {
     border-collapse: collapse;
     margin : 1.5em auto;
-    width : 80%;
+    width : 95%;
 }
 
 .invoice-body td {
@@ -36,6 +36,7 @@
 
 .invoice-entry {
 }
+.price { text-align : right; white-space:nowrap;}
 
 
 .invoice-payment-info {
