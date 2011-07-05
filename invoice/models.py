@@ -13,6 +13,7 @@ class Company(object):
     address = settings.COMPANY_ADDRESS
     contacts = settings.COMPANY_CONTACTS
     vat_number = settings.COMPANY_VAT_NUMBER
+    iban = settings.COMPANY_IBAN
 
 company = Company()
 

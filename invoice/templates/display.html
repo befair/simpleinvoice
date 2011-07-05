@@ -67,10 +67,9 @@
         </tr>
     </table>
     <ul class="invoice-payment-info">
-        <li>{% trans "Payment by" %}: {% trans invoice.pay_with %}</li>
-        {% if invoice.when_paid %}
-            <li>{% trans "Paid on" %} {{ invoice.when_paid|date:"d M Y" }}</li>
-        {% endif %}
+        <li>{% trans "Payment by" %}: {% trans invoice.pay_with %}
+        {% ifequal invoice.pay_with "money transfer" %} {% trans "on IBAN" %}: {{ company.iban }} {% endifequal %}
+        </li>
     </ul>
 </div>
 
