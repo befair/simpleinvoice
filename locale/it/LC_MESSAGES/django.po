@@ -209,7 +209,7 @@ msgstr "Totale da pagare"
 
 #: invoice/templates/display.html:71
 msgid "Money transfer can be done on IBAN"
-msgstr "I bonifici sono da effettuare al codice IBAN"
+msgstr "Codice IBAN"
 
 #~ msgid ""
 #~ "Set this value only if you need a specific invoice number. After you save "
