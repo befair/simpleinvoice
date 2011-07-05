@@ -16,9 +16,6 @@
             {% if company.vat_number %}
                 <li>{% trans "VAT number" %}: {{ company.vat_number }}</li>
             {% endif %}
-            {% if company.iban %}
-                <li>IBAN: {{ company.iban }}</li>
-            {% endif %}
         </ul>
     </div>
     <hr />
@@ -69,8 +66,9 @@
             <td class="price"><strong>&#8364; {{ invoice.tot_to_pay|floatformat:2 }}</strong></td>
         </tr>
     </table>
-    <ul class="invoice-payment-info">
-        <li>{% trans "Payment by" %}: {% trans invoice.pay_with %} </li>
-    </ul>
+    <p>Pagamento con: bonifico</p>
+    <div style="white-space: nowrap; font-size:small;">
+        {% trans "Money transfer can be done on IBAN" %}: {{ company.iban }}
+    </div>
 </div>
 
