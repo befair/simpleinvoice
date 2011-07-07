@@ -40,28 +40,30 @@
             <th>{% trans 'Amount' %}</th>
         </tr>
             {% for entry in invoice.entries.all %}
-            <tr>
-              <td class="invoice-entry">{{ entry.description }}</td>
-              <td class="price invoice-entry">&#8364; {{ entry.amount|floatformat:2 }}</td>
+            <tr class="invoice-entry">
+              <td>{{ entry.description }}</td>
+              <td class="price">&#8364; {{ entry.amount|floatformat:2 }}</td>
             </tr>
             {% endfor %}
-        <tr>
-            <td>
-                {% if invoice.discount %}
-                    <div class="invoice-entry">{% trans "Total amount" %}</div>
-                    <div class="invoice-entry">{% trans "Discount" %}</div>
-                {% endif %}
-                <div class="invoice-entry">{% trans "Total amount" %}</div>
-                <div class="invoice-entry">{% trans "VAT" %} {{ company.vat_amount }}%</div>
-            </td>
-            <td class="price">
-                {% if invoice.discount %}
-                    <div class="invoice-entry">&#8364; {{ invoice.pre_amount|floatformat:2 }}</div>
-                    <div class="invoice-entry">{{ invoice.discount|percent }}</div>
-                {% endif %}
-                <div class="invoice-entry">&#8364; {{ invoice.amount|floatformat:2 }}</div>
-                <div class="invoice-entry">&#8364; {{ invoice.vat_amount|floatformat:2 }}</div>
-            </td>
+
+        {% if invoice.discount %}
+        <tr class="invoice-entry no-bb">
+            <td>{% trans "Total amount" %}</td>
+            <td class="price">&#8364; {{ invoice.pre_amount|floatformat:2 }}</td>
+        </tr>
+        <tr class="invoice-entry">
+            <td>{% trans "Discount" %}</div>
+            <td class="price">{{ invoice.discount|percent }}</div>
+        </tr>
+        {% endif %}
+
+        <tr class="invoice-entry no-bb">
+            <td>{% trans "Total amount" %}</td>
+            <td class="price">&#8364; {{ invoice.amount|floatformat:2 }}</td>
+        </tr>
+        <tr class="invoice-entry no-bb">
+            <td>{% trans "VAT" %} {{ company.vat_amount }}%</div>
+            <td class="price">&#8364; {{ invoice.vat_amount|floatformat:2 }}</td>
         </tr>
         <tr>
             <td>{% trans "Total to pay" %}</td>

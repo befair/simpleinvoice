@@ -1,5 +1,6 @@
 
 .right { text-align : right; }
+.no-bb { border-bottom: 0px solid lightgrey; }
 
 .company-info {
     list-style-type:none; 
@@ -35,7 +36,11 @@
 }
 
 .invoice-entry {
+  border-bottom: 1px solid lightgrey;
+  font-size: 0.9em;
+  vertical-align: bottom;
 }
+
 .price { text-align : right; white-space:nowrap;}
 
 
