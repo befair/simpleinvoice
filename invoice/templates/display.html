@@ -39,10 +39,12 @@
             <th>{% trans 'Description' %}</th>
             <th>{% trans 'Amount' %}</th>
         </tr>
-        <tr>
-            <td>{% for entry in invoice.entries.all %}<div class="invoice-entry">{{ entry.description }}</div>{% endfor %}</td>
-            <td class="price">{% for entry in invoice.entries.all %}<div class="invoice-entry">&#8364; {{ entry.amount|floatformat:2 }}</div>{% endfor %}</td>
-        </tr>
+            {% for entry in invoice.entries.all %}
+            <tr>
+              <td class="invoice-entry">{{ entry.description }}</td>
+              <td class="price invoice-entry">&#8364; {{ entry.amount|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
         <tr>
             <td>
                 {% if invoice.discount %}
