@@ -58,12 +58,12 @@
         {% endif %}
 
         <tr class="invoice-entry no-bb">
-            <td>{% trans "Total amount" %}</td>
-            <td class="price">&#8364; {{ invoice.amount|floatformat:2 }}</td>
-        </tr>
-        <tr class="invoice-entry no-bb">
-            <td>{% trans "VAT" %} {{ company.vat_amount }}%</div>
-            <td class="price">&#8364; {{ invoice.vat_amount|floatformat:2 }}</td>
+            <td>{% trans "Total amount" %}<br />
+                {% trans "VAT" %} {{ company.vat_amount }}%
+            </td>
+            <td class="price">&#8364; {{ invoice.amount|floatformat:2 }}<br />
+                &#8364; {{ invoice.vat_amount|floatformat:2 }}
+            </td>
         </tr>
         <tr>
             <td>{% trans "Total to pay" %}</td>

@@ -1,6 +1,5 @@
 
 .right { text-align : right; }
-.no-bb { border-bottom: 0px solid lightgrey; }
 
 .company-info {
     list-style-type:none; 
@@ -31,7 +30,7 @@
     width : 95%;
 }
 
-.invoice-body td {
+.invoice-body tr {
     padding-top : 1em;
 }
 
@@ -48,3 +47,4 @@
     list-style-type:none; 
 }
 
+.no-bb { border-bottom: 0px solid lightgrey; }

@@ -5,6 +5,7 @@ from django.contrib import admin
 from django import forms
 from django.http import HttpResponseRedirect
 from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import reverse
 
 from simpleinvoice.invoice.models import CustomerContact, Invoice, InvoiceEntry, Customer
 
@@ -102,7 +103,8 @@ class InvoiceAdmin(admin.ModelAdmin):
     def display(self, request, queryset):
         selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
         ct = ContentType.objects.get_for_model(queryset.model)
-        return HttpResponseRedirect("/display/?ct=%s&ids=%s" % (ct.pk, ",".join(selected)))
+        query_string = "ct=%s&ids=%s" % (ct.pk, ",".join(selected))
+        return HttpResponseRedirect("%s?%s" % (reverse("display-multiple"), query_string))
     display.short_description = _("Display selected invoices")
 
     class Media:
