@@ -1,7 +1,8 @@
 from django.conf.urls.defaults import *
 from settings import URL_PREFIX, MEDIA_ROOT
 
-from simpleinvoice.admin.models import site_admin
+from django.contrib import admin
+admin.autodiscover()
 
 urlpatterns = patterns('',
     # Example:
@@ -12,7 +13,7 @@ urlpatterns = patterns('',
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     url(r'^%sdisplay/' % URL_PREFIX, 'simpleinvoice.invoice.views.display', name="display-multiple"),
-    (r'^%sadmin/(.*)' % URL_PREFIX, site_admin.root),
+    (r'^%sadmin/' % URL_PREFIX, include(admin.site.urls)),
 
 	(r'^%sstatic/(?P<path>.*)$' % URL_PREFIX, 'django.views.static.serve', {'document_root': MEDIA_ROOT }),
 )

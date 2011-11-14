@@ -163,7 +163,8 @@ class Invoice(models.Model):
 
     @property
     def tot_to_pay(self):
-        return self.amount + self.vat_amount
+        rv = self.amount + float(self.vat_amount)
+        return rv
 
     def is_paid(self):
         return bool(self.when_paid)
