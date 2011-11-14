@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: simpleinvoice 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-05 19:04+0200\n"
+"POT-Creation-Date: 2011-11-14 17:10+0100\n"
 "PO-Revision-Date: 2010-02-04 22:49+0100\n"
 "Last-Translator: Francesca <frannylore@gmail.com>\n"
 "Language-Team: Italian <info@befair.it>\n"
@@ -16,19 +16,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin/models.py:100
+#: admin/models.py:101
 msgid "Make selected invoices as paid today"
 msgstr "Indica la fattura selezionata come pagata oggi"
 
-#: admin/models.py:106
+#: admin/models.py:108
 msgid "Display selected invoices"
 msgstr "Mostra le fatture selezionate"
 
-#: admin/models.py:131
+#: admin/models.py:133
 msgid "You should write social security or vat number"
 msgstr "Dovresti inserire il codice fiscale o la partita IVA"
 
-#: admin/models.py:144
+#: admin/models.py:146
 msgid "More info..."
 msgstr "Altre informazioni"
 
@@ -159,55 +159,59 @@ msgstr "fattura"
 msgid "invoices"
 msgstr "fatture"
 
-#: invoice/models.py:151 invoice/templates/display.html:24
+#: invoice/models.py:151 invoice/templates/display.html:27
 msgid "of"
 msgstr "del"
 
-#: invoice/models.py:207
+#: invoice/models.py:220
 msgid "invoice entry"
 msgstr "voce di fatturazione"
 
-#: invoice/models.py:208
+#: invoice/models.py:221
 msgid "invoice entries"
 msgstr "voci di fatturazione"
 
-#: invoice/templates/display.html:17 invoice/templates/display.html.py:33
+#: invoice/templates/display.html:17 invoice/templates/display.html.py:36
 msgid "VAT number"
 msgstr "Partita IVA"
 
-#: invoice/templates/display.html:23
+#: invoice/templates/display.html:20
+msgid "SSN"
+msgstr "C.F."
+
+#: invoice/templates/display.html:26
 msgid "Invoice n."
 msgstr "Fattura n."
 
-#: invoice/templates/display.html:30
+#: invoice/templates/display.html:33
 msgid "Social Security Number"
 msgstr "Codice fiscale"
 
-#: invoice/templates/display.html:39
+#: invoice/templates/display.html:42
 msgid "Description"
 msgstr "Descrizione"
 
-#: invoice/templates/display.html:40
+#: invoice/templates/display.html:43
 msgid "Amount"
 msgstr "Costo"
 
-#: invoice/templates/display.html:49 invoice/templates/display.html.py:52
+#: invoice/templates/display.html:54 invoice/templates/display.html.py:64
 msgid "Total amount"
 msgstr "Totale"
 
-#: invoice/templates/display.html:50
+#: invoice/templates/display.html:58
 msgid "Discount"
 msgstr "Sconto"
 
-#: invoice/templates/display.html:53
+#: invoice/templates/display.html:66
 msgid "VAT"
 msgstr "IVA"
 
-#: invoice/templates/display.html:65
+#: invoice/templates/display.html:73
 msgid "Total to pay"
 msgstr "Totale da pagare"
 
-#: invoice/templates/display.html:71
+#: invoice/templates/display.html:79
 msgid "Money transfer can be done on IBAN"
 msgstr "Codice IBAN"
 

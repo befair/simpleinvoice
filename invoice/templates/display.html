@@ -16,6 +16,9 @@
             {% if company.vat_number %}
                 <li>{% trans "VAT number" %}: {{ company.vat_number }}</li>
             {% endif %}
+            {% if company.ssn %}
+                <li>{% trans "SSN" %}: {{ company.ssn }}</li>
+            {% endif %}
         </ul>
     </div>
     <hr />
