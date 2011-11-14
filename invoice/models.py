@@ -204,7 +204,7 @@ class InvoiceEntry(models.Model):
     invoice = models.ForeignKey(Invoice, related_name="entries")
     amount = models.IntegerField()
     description = models.TextField()
-    #vat_percent = models.DecimalField(max_digits=3, decimal_places=2, default=settings.DEFAULT_VAT_PERCENT)
+    vat_percent = models.DecimalField(max_digits=3, decimal_places=2, default=settings.DEFAULT_VAT_PERCENT)
 
     objects = InvoiceEntryManager()
 
