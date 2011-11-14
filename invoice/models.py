@@ -3,6 +3,7 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 import datetime
 
 from django.conf import settings
+from decimal import Decimal
 
 class Company(object):
 
@@ -204,7 +205,9 @@ class InvoiceEntry(models.Model):
     invoice = models.ForeignKey(Invoice, related_name="entries")
     amount = models.IntegerField()
     description = models.TextField()
-    vat_percent = models.DecimalField(max_digits=3, decimal_places=2, default=settings.DEFAULT_VAT_PERCENT)
+    vat_percent = models.DecimalField(max_digits=3, decimal_places=2, 
+        default=Decimal(settings.DEFAULT_VAT_PERCENT)
+    )
 
     objects = InvoiceEntryManager()
 
