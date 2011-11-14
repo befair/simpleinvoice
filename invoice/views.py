@@ -18,6 +18,15 @@ def display(request):
     model = ContentType.objects.get(pk=ct).model_class()
     qs = model.objects.filter(pk__in=id_list)
 
+    for invoice in qs:
+        first_entry = invoice.entries.all()[0]
+        if invoice.entries.all().count() == \
+            invoice.entries.filter(vat_percent=first_entry.vat_percent).count():
+
+            raise ValueError("Fatture con prodotti a diversa IVA non supportate")
+
+            
+
     return render_to_response("display_many.html", 
                               { "objs" : qs, "company" : company }, 
                               context_instance=RequestContext(request)

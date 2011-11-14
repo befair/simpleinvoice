@@ -35,7 +35,7 @@ class InvoiceEntryInline(admin.TabularInline):
 
 class InvoiceEntryAdmin(admin.ModelAdmin):
 
-    list_display = ("invoice", "amount", 'description')
+    list_display = ("invoice", "amount", 'description', "vat_percent")
     list_display_links = ('description',)
 
     def has_change_permission(self, request, obj=None):

@@ -6,8 +6,6 @@ from django.conf import settings
 
 class Company(object):
 
-    vat_percent = settings.COMPANY_VAT_PERCENT
-    vat_amount = vat_percent*100
     name = settings.COMPANY_NAME
     inet_contacts = settings.COMPANY_INTERNET_CONTACTS
     address = settings.COMPANY_ADDRESS
@@ -160,7 +158,7 @@ class Invoice(models.Model):
 
     @property
     def vat_amount(self):
-        return int(self.amount * company.vat_percent)
+        return self.entries.vat_amount()
 
     @property
     def tot_to_pay(self):
@@ -191,12 +189,22 @@ class InvoiceEntryManager(models.Manager):
             rv += x[0]
         return rv
 
+    def amount(self):
+        return self.sum('amount')
+
+    def vat_amount(self):
+        rv = 0
+        for x in self.get_query_set().values_list('amount', 'vat_percent'):
+            rv += x[0]*x[1]
+        return rv
+
 class InvoiceEntry(models.Model):
     """Invoice single entry"""
 
     invoice = models.ForeignKey(Invoice, related_name="entries")
     amount = models.IntegerField()
     description = models.TextField()
+    #vat_percent = models.DecimalField(max_digits=3, decimal_places=2, default=settings.DEFAULT_VAT_PERCENT)
 
     objects = InvoiceEntryManager()
 

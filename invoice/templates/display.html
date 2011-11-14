@@ -59,7 +59,8 @@
 
         <tr class="invoice-entry no-bb">
             <td>{% trans "Total amount" %}<br />
-                {% trans "VAT" %} {{ company.vat_amount }}%
+                {# TODO: support for invoice that include products of different VATs #}
+                {% trans "VAT" %} {{ invoice.entries.0.vat_percent }}%
             </td>
             <td class="price">&#8364; {{ invoice.amount|floatformat:2 }}<br />
                 &#8364; {{ invoice.vat_amount|floatformat:2 }}
