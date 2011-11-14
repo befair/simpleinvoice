@@ -206,7 +206,7 @@ class InvoiceEntry(models.Model):
     amount = models.IntegerField()
     description = models.TextField()
     vat_percent = models.DecimalField(max_digits=3, decimal_places=2, 
-        default=Decimal(settings.DEFAULT_VAT_PERCENT)
+        default=Decimal(str(settings.DEFAULT_VAT_PERCENT))
     )
 
     objects = InvoiceEntryManager()
