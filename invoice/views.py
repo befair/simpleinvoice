@@ -20,7 +20,7 @@ def display(request):
 
     for invoice in qs:
         first_entry = invoice.entries.all()[0]
-        if invoice.entries.all().count() == \
+        if invoice.entries.all().count() != \
             invoice.entries.filter(vat_percent=first_entry.vat_percent).count():
 
             raise ValueError("Fatture con prodotti a diversa IVA non supportate")
