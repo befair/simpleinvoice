@@ -135,7 +135,7 @@ class Invoice(models.Model):
     real_id = models.CharField(_('invoice number'), max_length=16, default='', null=False, blank=True, help_text=_("Set this value only if you need a specific invoice number."), unique_for_year="date")
     customer = models.ForeignKey(Customer)
     date = models.DateField(_("emit date"), default=datetime.date.today)	
-    discount = models.FloatField(_("discount"), default=0)
+    discount = models.DecimalField(_("discount"), default=0, max_digits=3, decimal_places=2)
     is_valid = models.BooleanField(_('is valid'), default=True, help_text=_("You can invalidate this invoice by unchecking this field."))
     pay_with = models.CharField(_('pay with'), max_length=32, choices=PAY_CHOICES, default=PAY_CHOICES[0][0])
     # redundant.. is_paid = models.BooleanField(_('is paid'), default=False, help_text=_("Check this whenever an invoice is paid"))
@@ -164,7 +164,7 @@ class Invoice(models.Model):
 
     @property
     def tot_to_pay(self):
-        rv = self.amount + float(self.vat_amount)
+        rv = self.amount + self.vat_amount
         return rv
 
     def is_paid(self):
@@ -205,7 +205,7 @@ class InvoiceEntry(models.Model):
     """Invoice single entry"""
 
     invoice = models.ForeignKey(Invoice, related_name="entries")
-    amount = models.IntegerField()
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
     description = models.TextField()
     vat_percent = models.DecimalField(max_digits=3, decimal_places=2, 
         default=Decimal(str(settings.DEFAULT_VAT_PERCENT))
