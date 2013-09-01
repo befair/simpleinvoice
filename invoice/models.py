@@ -144,7 +144,7 @@ class Invoice(models.Model):
     class Meta:
         verbose_name = _("invoice")
         verbose_name_plural = _("invoices")
-        ordering = ['date']
+        ordering = ['-date']
         get_latest_by = "date"
 
     def __unicode__(self):
