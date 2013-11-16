@@ -60,6 +60,7 @@
         </tr>
         {% endif %}
 
+        {% if invoice.vat_amount %}
         <tr class="invoice-entry no-bb">
             <td>{% trans "Total amount" %}<br />
                 {# TODO: support for invoice that include products of different VATs #}
@@ -69,14 +70,19 @@
                 &#8364; {{ invoice.vat_amount|floatformat:2 }}
             </td>
         </tr>
+        {% endif %}
         <tr>
             <td>{% trans "Total to pay" %}</td>
             <td class="price"><strong>&#8364; {{ invoice.tot_to_pay|floatformat:2 }}</strong></td>
         </tr>
     </table>
-    <p>Pagamento con: bonifico</p>
+    {% if invoice.vat_amount == 0 %}
     <div style="white-space: nowrap; font-size:small;">
+    Esclusione IVA ex art 7-ter D.P.R.633/72</div>
+    {% endif %}
+    <p><div style="white-space: nowrap; font-size:small;">
+        Pagamento con: bonifico<br />
         {% trans "Money transfer can be done on IBAN" %}: {{ company.iban }}
-    </div>
+    </div></p>
 </div>
 
