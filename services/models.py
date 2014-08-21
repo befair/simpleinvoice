@@ -102,7 +102,16 @@ class ServiceSubscription(models.Model):
 
     @property
     def next_payment_due(self):
+        #raise NotImplementedError("TBD")
+        difference = (datetime.datetime.now() - self.last_paid_on.replace(tzinfo=None)).total_seconds()
+        if self.service.period_unit_raw == UNIT_MONTHS:
+            return (difference / 2592000) > self.last_paid_for
+        elif self.service.period_unit_raw == UNIT_HOURS:
+            return (difference / 3600) > self.last_paid_for
+        elif self.service.period_unit_raw == UNIT_SECONDS:
+            return difference > self.last_paid_for
         raise NotImplementedError("TBD")
+        
 
 class ServiceSubscriptionPayments(models.Model):
     """
