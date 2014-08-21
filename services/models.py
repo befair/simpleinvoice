@@ -1,0 +1,134 @@
+from django.db import models
+from django.utils.translation import ugettext, ugettext_lazy as _
+
+from invoice.models import Customer
+
+from django.conf import settings
+from decimal import Decimal
+import datetime
+from functools import partial
+
+#--------------------------------------------------------------------------------
+# Measures units constants.
+# note: other UNIT_ could be Gigabytes, Terabytes
+
+UNIT_MONTHS = 'months'
+UNIT_HOURS = 'hours'
+UNIT_SECONDS = 'seconds'
+UNIT_CHOICES = (
+    #(UNIT_SECONDS, _('Seconds')),
+    (UNIT_MONTHS, _('Months')),
+    (UNIT_HOURS, _('Hours')),
+)
+
+# Conversion table map. Use "partial" because we cannot lambda (":") in dict values
+
+CONVERSION_UNIT_MAP = {
+    (UNIT_HOURS, UNIT_MONTHS): partial(lambda x : x/720),
+    (UNIT_SECONDS, UNIT_MONTHS): partial(lambda x : x/2592000),
+}
+#--------------------------------------------------------------------------------
+
+
+class Service(models.Model):
+    """
+    Kind of periodic service offered. I.e:
+
+    * Quota annuale associativa
+    * Quota annuale mailing-list    
+
+    but it could be also:
+
+    * N gigabytes of traffic
+    
+    """
+
+    abbreviation = models.CharField(max_length=32) 
+    name = models.CharField(max_length=256, db_index=True)
+    description = models.TextField()
+    period = models.IntegerField(null=True, blank=True,
+        help_text=_('indicator of a period by raw units.')
+    )
+    period_unit_raw = models.CharField(max_length=16, default=UNIT_HOURS, choices=UNIT_CHOICES, verbose_name=_("raw unit"))
+    period_unit_display = models.CharField(max_length=16,
+        blank=True, help_text=_('display measure unit for period'),
+        choices=UNIT_CHOICES, default=UNIT_MONTHS
+    )
+    period_unit_source = models.CharField(max_length=32, default="epoch_now")
+
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    default_vat_percent = models.DecimalField(max_digits=3, decimal_places=2, 
+        default=Decimal(str(settings.DEFAULT_VAT_PERCENT))
+    )
+
+class ServiceSubscription(models.Model):
+    """
+    Map services offered to customers specifying subscription period,
+    and some attributes specific to this subscription like discount or
+    custom vat_percent.
+
+    It is used by ServiceSubscriptionPayments as template for payment.
+    """
+
+    customer = models.ForeignKey(Customer)
+    service = models.ForeignKey(Service)
+
+    vat_percent = models.DecimalField(max_digits=3, decimal_places=2, 
+        default=Decimal(str(settings.DEFAULT_VAT_PERCENT))
+    )
+
+    discount = models.DecimalField(_("discount"), default=0, max_digits=3, decimal_places=2)
+
+    invoice_period = models.IntegerField(null=True, blank=True,
+        help_text=_('how many period lasts before creating an invoice?'),
+        default=1
+    )
+
+    subscribed_on = models.DateTimeField(null=True)
+    subscribed_until = models.DateTimeField(null=True) 
+
+    note = models.TextField(blank=True)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    last_update_on = models.DateTimeField(auto_now=True)
+
+    # last paid on and last_paid_for
+    # could be also properties get by ServiceSubscriptionPayments model
+    last_paid_on = models.DateTimeField(null=True) 
+    last_paid_for = models.IntegerField(help_text=_("For what has he paid? (incremental value)")) 
+
+    class Meta:
+        unique_together = (('customer', 'service', 'subscribed_on'),)
+
+    @property
+    def next_payment_due(self):
+        raise NotImplementedError("TBD")
+
+class ServiceSubscriptionPayments(models.Model):
+    """
+    """
+
+    customer = models.ForeignKey(Customer)
+    service = models.ForeignKey(Service)
+
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    vat_percent = models.DecimalField(max_digits=3, decimal_places=2, 
+        default=Decimal(str(settings.DEFAULT_VAT_PERCENT))
+    )
+
+    discount = models.DecimalField(_("discount"), default=0, max_digits=3, decimal_places=2)
+
+    paid_on = models.DateTimeField(auto_now_add=True, help_text=_('When has it been paid?')) 
+    paid_for = models.IntegerField(help_text=_("For what has he paid? (incremental value)")) 
+
+    note = models.TextField(blank=True)
+
+    class Meta:
+        unique_together = (('customer', 'service', 'paid_for'),)
+
+    @property
+    def paid_for_display(self):
+        unit_raw = self.service.period_unit_raw
+        unit_display = self.service.period_unit_display
+        return CONVERSION_UNIT_MAP[(unit_raw, unit_display)](self.paid_for)
+
