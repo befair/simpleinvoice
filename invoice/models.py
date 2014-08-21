@@ -20,7 +20,7 @@ company = Company()
 class Customer(models.Model):
     """Customer to emit the invoice to"""
 
-    name = models.CharField(_('name'), max_length=256, blank=False)
+    name = models.CharField(_('name'), max_length=256, blank=False, db_index=True)
 
     address = models.CharField(_('address'), max_length=128, blank=True, null=True, default='')
     zipcode = models.CharField(_('zipcode'), max_length=16, blank=True, null=True, default='')
@@ -132,14 +132,14 @@ class Invoice(models.Model):
         ('credit card', _('credit card')),
     )
 
-    real_id = models.CharField(_('invoice number'), max_length=16, default='', null=False, blank=True, help_text=_("Set this value only if you need a specific invoice number."), unique_for_year="date")
-    customer = models.ForeignKey(Customer)
-    date = models.DateField(_("emit date"), default=datetime.date.today)	
+    real_id = models.CharField(_('invoice number'), max_length=16, default='', null=False, blank=True, help_text=_("Set this value only if you need a specific invoice number."), unique_for_year="date", db_index=True)
+    customer = models.ForeignKey(Customer, db_index=True)
+    date = models.DateField(_("emit date"), default=datetime.date.today, db_index=True)	
     discount = models.DecimalField(_("discount"), default=0, max_digits=3, decimal_places=2)
     is_valid = models.BooleanField(_('is valid'), default=True, help_text=_("You can invalidate this invoice by unchecking this field."))
     pay_with = models.CharField(_('pay with'), max_length=32, choices=PAY_CHOICES, default=PAY_CHOICES[0][0])
     # redundant.. is_paid = models.BooleanField(_('is paid'), default=False, help_text=_("Check this whenever an invoice is paid"))
-    when_paid = models.DateField(_("when paid"), null=True, default=None, blank=True)	
+    when_paid = models.DateField(_("when paid"), null=True, default=None, blank=True, db_index=True)	
 
     class Meta:
         verbose_name = _("invoice")
