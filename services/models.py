@@ -61,6 +61,9 @@ class Service(models.Model):
         default=Decimal(str(settings.DEFAULT_VAT_PERCENT))
     )
 
+    def __unicode__(self):
+        return self.name
+
 class ServiceSubscription(models.Model):
     """
     Map services offered to customers specifying subscription period,
@@ -128,7 +131,7 @@ class ServiceSubscriptionPayments(models.Model):
     discount = models.DecimalField(_("discount"), default=0, max_digits=3, decimal_places=2)
 
     paid_on = models.DateTimeField(auto_now_add=True, help_text=_('When has it been paid?')) 
-    paid_for = models.IntegerField(help_text=_("For what has he paid? (incremental value)")) 
+    paid_for = models.IntegerField(help_text=_("For what has he paid? (incremental value). Leave 0 to use default")) 
 
     note = models.TextField(blank=True)
 

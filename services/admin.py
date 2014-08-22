@@ -2,17 +2,14 @@ from django.contrib import admin
 from django.db import models
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.core.mail import send_mail
-from services.models import Service, ServiceSubscription
-from django.contrib.contenttypes.models import ContentType
+from services import models as services
+from services.models import Service, ServiceSubscription, ServiceSubscriptionPayments
+from django import forms
 
 class ServiceAdmin(admin.ModelAdmin): 
 
     list_display = ('name', 'description', 'period_unit_display', 'amount')
-    #list_display_links = ('name',)
-    #list_filter = []
     search_fields = ['name']
-
-    #inlines = [CustomerContactInline]
 
     class Media:
         css = {
@@ -22,21 +19,20 @@ class ServiceAdmin(admin.ModelAdmin):
 class ServiceSubscriptionAdmin(admin.ModelAdmin): 
 
     list_display = ('customer', 'service', 'subscribed_on', 'subscribed_until', 'note')
-    #list_display_links = ('name',)
-    #list_filter = []
     search_fields = ['customer']
-
-    #inlines = [CustomerContactInline]
 
     actions = ['check_payement']
 
     def check_payement(self, request, queryset):
-        #print queryset
-        #selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
-        #ct = ContentType.objects.get_for_model(queryset.model)
-        #print ct
-        #query_string = "ct=%s&ids=%s" % (ct.pk, ",".join(selected))
-        #print query_string
+        """
+        Check if the selected subscriptions fees have already been payed.
+
+        The subscription last payement date (or quantity) is compared with
+        the current time (or consumed quantity) and if the difference is 
+        higher than the next period (or period quantity) then a remind 
+        mail is sent to the corresponding customer 
+        
+        """
 
         for obj in queryset:
             if obj.next_payment_due is True:
@@ -52,5 +48,49 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
             'all' : ('adminstyle.css',),
         }
 
+class PayementForm(forms.ModelForm):
+    """
+    This customized form values the ServiceSubscriptionPayement 'paid_for'
+    field: if this field is not changed with a custom value, the default 
+    Service period is used instead.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super(PayementForm, self).__init__(*args, **kwargs)
+        self.fields['paid_for'].initial = '0'
+
+    def save(self, commit=True):
+        instance = super(PayementForm, self).save(commit=False)
+        if self.cleaned_data['paid_for'] is 0:
+            service = self.cleaned_data['service']
+            instance = self.instance
+            if service.period_unit_raw == services.UNIT_MONTHS:
+                instance.paid_for = 1
+            elif service.period_unit_raw == services.UNIT_HOURS:
+                instance.paid_for = 720
+            elif service.period_unit_raw == services.UNIT_SECONDS:
+                instance.paid_for = 2592000
+        if commit:
+            instance.save()
+        return instance
+
+
+    class Meta:
+        model = ServiceSubscriptionPayments
+
+class ServiceSubscriptionPayementsAdmin(admin.ModelAdmin): 
+
+    form = PayementForm
+    
+    list_display = ('customer', 'service', 'amount', 'paid_on','note')
+    search_fields = ['customer','service']
+
+
+    class Media:
+        css = {
+            'all' : ('adminstyle.css',),
+        }
+
 admin.site.register(Service, ServiceAdmin)	
 admin.site.register(ServiceSubscription, ServiceSubscriptionAdmin)	
+admin.site.register(ServiceSubscriptionPayments, ServiceSubscriptionPayementsAdmin)	
