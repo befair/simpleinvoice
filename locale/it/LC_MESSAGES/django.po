@@ -235,10 +235,8 @@ msgid "abbreviation"
 msgstr "abbreviazione"
 
 #: services/models.py:48
-#, fuzzy
-#| msgid "Description"
 msgid "description"
-msgstr "Descrizione"
+msgstr "descrizione"
 
 #: services/models.py:50
 msgid "indicator of a period by raw units."
@@ -275,7 +273,7 @@ msgstr "inizio del periodo"
 #: services/models.py:60
 #| msgid "Amount"
 msgid "amount"
-msgstr "Quantità"
+msgstr "Costo"
 
 #: services/models.py:62
 msgid "default vat percentage"
