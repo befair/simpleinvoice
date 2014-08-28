@@ -152,10 +152,10 @@ class ServiceSubscriptionPayments(models.Model):
 
     @property
     def get_subscription(self):
-    """
-    Return the sunscripion linked to this payment trough this
-    payement customer and service
-    """
+        """
+        Return the sunscripion linked to this payment trough this
+        payement customer and service
+        """
 
         obj = None
 
