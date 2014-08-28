@@ -46,13 +46,18 @@ class Service(models.Model):
     abbreviation = models.CharField(max_length=32,verbose_name=_("abbreviation")) 
     name = models.CharField(max_length=256, db_index=True,verbose_name=_("name"))
     description = models.TextField(verbose_name=_("description"))
-    period = models.IntegerField(null=True, blank=True,
-        help_text=_('indicator of a period by raw units.'),verbose_name=_("period")
+    period = models.IntegerField(help_text=_('indicator of a period by raw units.'),
+        verbose_name=_("period")
     )
-    period_deadline_modifier=models.IntegerField(null=True,blank=True,help_text=_('indicator to modify the periodic payement deadline'),verbose_name=_("period deadline modifier")) 
-    period_unit_raw = models.CharField(max_length=16, default=UNIT_HOURS, choices=UNIT_CHOICES, verbose_name=_("raw unit"))
-    period_unit_display = models.CharField(max_length=16,
-        blank=True, help_text=_('display measure unit for period'),
+    period_deadline_modifier=models.IntegerField(blank=True,
+        help_text=_('indicator to modify the periodic payement deadline'),
+        verbose_name=_("period deadline modifier")
+    ) 
+    period_unit_raw = models.CharField(max_length=16, default=UNIT_HOURS, 
+        choices=UNIT_CHOICES, verbose_name=_("raw unit")
+    )
+    period_unit_display = models.CharField(null=False,max_length=16,
+        help_text=_('display measure unit for period'),
         choices=UNIT_CHOICES, default=UNIT_MONTHS,verbose_name=_("period measure of unit")
     )
     period_unit_source = models.CharField(max_length=32, default="epoch_now",verbose_name=_("period start"))
