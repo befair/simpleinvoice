@@ -60,7 +60,7 @@ class Service(models.Model):
         help_text=_('display measure unit for period'),
         choices=UNIT_CHOICES, default=UNIT_MONTHS,verbose_name=_("period measure of unit")
     )
-    period_unit_source = models.CharField(max_length=32, default="epoch_now",verbose_name=_("period start"))
+    period_unit_source = models.CharField(max_length=32, default="epoch_now",verbose_name=_("period unit source"))
 
     amount = models.DecimalField(max_digits=12, decimal_places=2, verbose_name=_("amount"))
     default_vat_percent = models.DecimalField(max_digits=3, decimal_places=2, 

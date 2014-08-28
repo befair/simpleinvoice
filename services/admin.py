@@ -11,6 +11,8 @@ class ServiceAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'period_unit_display', 'amount')
     search_fields = ['name']
 
+    exclude = ('period_unit_source',)
+
     class Media:
         css = {
             'all' : ('adminstyle.css',),
