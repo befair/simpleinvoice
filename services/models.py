@@ -43,22 +43,23 @@ class Service(models.Model):
     
     """
 
-    abbreviation = models.CharField(max_length=32) 
-    name = models.CharField(max_length=256, db_index=True)
-    description = models.TextField()
+    abbreviation = models.CharField(max_length=32,verbose_name=_("abbreviation")) 
+    name = models.CharField(max_length=256, db_index=True,verbose_name=_("name"))
+    description = models.TextField(verbose_name=_("description"))
     period = models.IntegerField(null=True, blank=True,
-        help_text=_('indicator of a period by raw units.')
+        help_text=_('indicator of a period by raw units.'),verbose_name=_("period")
     )
+    period_deadline_modifier=models.IntegerField(null=True,blank=True,help_text=_('indicator to modify the periodic payement deadline'),verbose_name=_("period deadline modifier")) 
     period_unit_raw = models.CharField(max_length=16, default=UNIT_HOURS, choices=UNIT_CHOICES, verbose_name=_("raw unit"))
     period_unit_display = models.CharField(max_length=16,
         blank=True, help_text=_('display measure unit for period'),
-        choices=UNIT_CHOICES, default=UNIT_MONTHS
+        choices=UNIT_CHOICES, default=UNIT_MONTHS,verbose_name=_("period measure of unit")
     )
-    period_unit_source = models.CharField(max_length=32, default="epoch_now")
+    period_unit_source = models.CharField(max_length=32, default="epoch_now",verbose_name=_("period start"))
 
-    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    amount = models.DecimalField(max_digits=12, decimal_places=2, verbose_name=_("amount"))
     default_vat_percent = models.DecimalField(max_digits=3, decimal_places=2, 
-        default=Decimal(str(settings.DEFAULT_VAT_PERCENT))
+        default=Decimal(str(settings.DEFAULT_VAT_PERCENT)), verbose_name=_("default vat percentage")
     )
 
     def __unicode__(self):
@@ -108,11 +109,11 @@ class ServiceSubscription(models.Model):
         #raise NotImplementedError("TBD")
         difference = (datetime.datetime.now() - self.last_paid_on.replace(tzinfo=None)).total_seconds()
         if self.service.period_unit_raw == UNIT_MONTHS:
-            return (difference / 2592000) > self.last_paid_for
+            return ((difference / 2592000) + self.service.period_deadline_modifier ) > self.last_paid_for
         elif self.service.period_unit_raw == UNIT_HOURS:
-            return (difference / 3600) > self.last_paid_for
+            return ((difference / 3600) + self.service.period_deadline_modifier) > self.last_paid_for
         elif self.service.period_unit_raw == UNIT_SECONDS:
-            return difference > self.last_paid_for
+            return (difference + self.service.period_deadline_modifier ) > self.last_paid_for
         raise NotImplementedError("TBD")
         
 

@@ -1,5 +1,7 @@
 from default_settings import *
 
+import locale
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'g8@_)2o_9i^c-g%+^2f%=rr=vd023i^(0=4o(5(=@pr-ed2e+o'
 
@@ -36,6 +38,11 @@ COMPANY_SSN = "FRRLCU80B17D451Y"
 COMPANY_LOGO = ""
 COMPANY_IBAN = "IT 47 P 08883 36670 CC0280282342"
 DEFAULT_VAT_PERCENT = 0.21
+
+locale.setlocale(locale.LC_ALL, 'it_IT.UTF8')
+LOCALE_PATHS = ( 
+    os.path.join(BASE_DIR, 'locale',
+)
 
 #PREFIX = "simpleinvoice/"
 #URL_PREFIX = ""
