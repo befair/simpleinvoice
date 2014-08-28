@@ -103,8 +103,8 @@ class ServiceSubscription(models.Model):
 
     # last paid on and last_paid_for
     # could be also properties get by ServiceSubscriptionPayments model
-    last_paid_on = models.DateTimeField(null=True) 
-    last_paid_for = models.IntegerField(help_text=_("For what has he paid? (incremental value)")) 
+    last_paid_on = models.DateTimeField(null=True,blank=True) 
+    last_paid_for = models.IntegerField(null=True,blank=True) 
 
     class Meta:
         unique_together = (('customer', 'service', 'subscribed_on'),)
