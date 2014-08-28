@@ -150,3 +150,20 @@ class ServiceSubscriptionPayments(models.Model):
         unit_display = self.service.period_unit_display
         return CONVERSION_UNIT_MAP[(unit_raw, unit_display)](self.paid_for)
 
+    @property
+    def get_subscription(self):
+    """
+    Return the sunscripion linked to this payment trough this
+    payement customer and service
+    """
+
+        obj = None
+
+        if(self.customer and self.service):
+            obj = ServiceSubscription.objects.get(
+                customer=self.customer, 
+                service=self.service
+            )
+            
+        return obj
+

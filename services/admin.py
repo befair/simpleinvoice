@@ -73,9 +73,18 @@ class PayementForm(forms.ModelForm):
             elif service.period_unit_raw == services.UNIT_HOURS:
                 instance.paid_for = 720
             elif service.period_unit_raw == services.UNIT_SECONDS:
-                instance.paid_for = 2592000
-        if commit:
+                instance.paid_for = 259200
+        if instance:
             instance.save()
+
+            subscription = instance.get_subscription
+
+            subscription.last_paid_on = instance.paid_on
+            subscription.last_paid_for = instance.paid_for
+
+            subscription.save()
+
+
         return instance
 
 
