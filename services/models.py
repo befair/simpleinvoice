@@ -94,7 +94,7 @@ class ServiceSubscription(models.Model):
     )
 
     subscribed_on = models.DateTimeField(null=True)
-    subscribed_until = models.DateTimeField(null=True) 
+    subscribed_until = models.DateTimeField(null=True,blank=True) 
 
     note = models.TextField(blank=True)
 

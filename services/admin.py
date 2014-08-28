@@ -24,6 +24,8 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
     search_fields = ['customer']
 
     actions = ['check_payement']
+    
+    exclude = ('last_paid_on','last_paid_for')
 
     def check_payement(self, request, queryset):
         """
