@@ -27,6 +27,9 @@ CONVERSION_UNIT_MAP = {
     (UNIT_HOURS, UNIT_MONTHS): partial(lambda x : x/720),
     (UNIT_SECONDS, UNIT_MONTHS): partial(lambda x : x/2592000),
 }
+
+SOURCES_EPOCH_NOW  = 'epoch_now'
+
 #--------------------------------------------------------------------------------
 
 
@@ -111,14 +114,25 @@ class ServiceSubscription(models.Model):
 
     @property
     def next_payment_due(self):
-        #raise NotImplementedError("TBD")
-        difference = (datetime.datetime.now() - self.last_paid_on.replace(tzinfo=None)).total_seconds()
-        if self.service.period_unit_raw == UNIT_MONTHS:
-            return (difference / 2592000) > (self.last_paid_for + self.service.period_deadline_modifier)
-        elif self.service.period_unit_raw == UNIT_HOURS:
-            return (difference / 3600) > (self.last_paid_for + self.service.period_deadline_modifier)
-        elif self.service.period_unit_raw == UNIT_SECONDS:
-            return difference  > (self.last_paid_for + self.service.period_deadline_modifier)
+        """
+        Check if a subscription has been regularly payed, basing on the
+        last payement registered into the subscription.
+
+        There has not been any payement for the subscription, 
+        """
+
+        if self.service.period_unit_source == SOURCES_EPOCH_NOW:
+            difference = (datetime.datetime.now() - self.last_paid_on.replace(tzinfo=None)).total_seconds()
+            if self.last_paid_for:
+                deadline = self.last_paid_for
+            else:
+                deadline = self.service.period
+            if self.service.period_unit_raw == UNIT_MONTHS:
+                return (difference / 2592000) > (deadline + self.service.period_deadline_modifier)
+            elif self.service.period_unit_raw == UNIT_HOURS:
+                return (difference / 3600) > (deadline + self.service.period_deadline_modifier)
+            elif self.service.period_unit_raw == UNIT_SECONDS:
+                return difference  > (deadline + self.service.period_deadline_modifier)
         raise NotImplementedError("TBD")
         
 
