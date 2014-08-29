@@ -104,6 +104,8 @@ class ServiceSubscriptionPayementsAdmin(admin.ModelAdmin):
             'all' : ('adminstyle.css',),
         }
 
+        js = ("admin_customization.js",)
+
 admin.site.register(Service, ServiceAdmin)	
 admin.site.register(ServiceSubscription, ServiceSubscriptionAdmin)	
 admin.site.register(ServiceSubscriptionPayments, ServiceSubscriptionPayementsAdmin)	

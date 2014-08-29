@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
+from django.contrib.admin.views.decorators import staff_member_required
 
 from services.models import ServiceSubscription, Service
 from invoice.models import Customer
@@ -21,7 +22,7 @@ def get_services(request, customer_id):
     customer = get_object_or_404(Customer, pk=customer_id)
 
     for sub in ServiceSubscription.objects.filter(customer=customer):
-        response[sub.id] = {
+        response[sub.service.id] = {
             'service_id': sub.service.id,
             'service_name': sub.service.name,
             'amount': str(sub.service.amount),
