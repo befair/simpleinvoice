@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-28 15:24+0200\n"
+"POT-Creation-Date: 2014-08-29 12:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,7 @@ msgstr "Dovresti scrivere il codice fiscale o la partita IVA"
 msgid "More info..."
 msgstr "Altre informazioni..."
 
-#: invoice/models.py:23 services/models.py:47
+#: invoice/models.py:23 services/models.py:51
 msgid "name"
 msgstr "nome"
 
@@ -66,7 +66,7 @@ msgstr "Partita IVA"
 msgid "notes"
 msgstr "note"
 
-#: invoice/models.py:43
+#: invoice/models.py:43 services/models.py:86 services/models.py:157
 msgid "customer"
 msgstr "cliente"
 
@@ -129,7 +129,7 @@ msgstr ""
 msgid "emit date"
 msgstr "data di emissione"
 
-#: invoice/models.py:138 services/models.py:89 services/models.py:137
+#: invoice/models.py:138 services/models.py:93 services/models.py:165
 msgid "discount"
 msgstr "sconto"
 
@@ -218,81 +218,121 @@ msgstr "Il trasferimento di denaro puo essere fatto tramite IBAN"
 msgid "Simple invoice"
 msgstr "Fattura semplificata"
 
-#: services/admin.py:46
+#: services/admin.py:48
 msgid "Check if selected subscription are paid"
 msgstr "Controlla se le sottoscrizioni selezionate sono state pagate"
 
-#: services/models.py:20
+#: services/models.py:21
 msgid "Months"
 msgstr "Mesi"
 
-#: services/models.py:21
+#: services/models.py:22
 msgid "Hours"
 msgstr "Ore"
 
-#: services/models.py:46
+#: services/models.py:50
 msgid "abbreviation"
 msgstr "abbreviazione"
 
-#: services/models.py:48
+#: services/models.py:52
 msgid "description"
 msgstr "descrizione"
 
-#: services/models.py:49
+#: services/models.py:53
 msgid "indicator of a period by raw units."
 msgstr "indicatore del periodo in unità grezze"
 
-#: services/models.py:50
+#: services/models.py:54 services/models.py:97
 msgid "period"
 msgstr "periodo"
 
-#: services/models.py:53
+#: services/models.py:57
 msgid "indicator to modify the periodic payement deadline"
 msgstr "indicatore per la modifica della scadenza del pagamento periodico"
 
-#: services/models.py:54
+#: services/models.py:58
 msgid "period deadline modifier"
 msgstr "modificatore per la scadenza periodica"
 
-#: services/models.py:57
+#: services/models.py:61
 msgid "raw unit"
 msgstr "unità grezza"
 
-#: services/models.py:60
+#: services/models.py:64
 msgid "display measure unit for period"
 msgstr "mostra l'unità di misura del periodo"
 
-#: services/models.py:61
+#: services/models.py:65
 msgid "period measure of unit"
 msgstr "unità di misura del periodo"
 
-#: services/models.py:63
-#| msgid "period start"
+#: services/models.py:67
 msgid "period unit source"
 msgstr "fonte unità di misura"
 
-#: services/models.py:65
+#: services/models.py:69
 msgid "amount"
 msgstr "Costo"
 
-#: services/models.py:67
+#: services/models.py:71
 msgid "default vat percentage"
 msgstr "percentuale predefinita di IVA"
 
-#: services/models.py:92
+#: services/models.py:87 services/models.py:158
+msgid "service"
+msgstr "Servizio"
+
+#: services/models.py:90 services/models.py:162
+#| msgid "default vat percentage"
+msgid "VAT percentage"
+msgstr "percentuale predefinita di IVA"
+
+#: services/models.py:96
 msgid "how many period lasts before creating an invoice?"
 msgstr "periodi che devono passare prima della creazione di una fattura"
 
-#: services/models.py:107
-msgid "For what has he paid? (incremental value)"
-msgstr "Quanto manca al prossimo pagamento? (valore incrementale)"
+#: services/models.py:100
+msgid "subscribed on"
+msgstr "sottoscritta il"
 
-#: services/models.py:139
+#: services/models.py:101
+msgid "subscribed until"
+msgstr "sottoscritta fino a"
+
+#: services/models.py:103 services/models.py:170
+#| msgid "notes"
+msgid "note"
+msgstr "note"
+
+#: services/models.py:105
+msgid "created on"
+msgstr "creata il"
+
+#: services/models.py:106
+msgid "updated on"
+msgstr "aggiornato il"
+
+#: services/models.py:110 services/models.py:167
+msgid "paid on"
+msgstr "pagato il"
+
+#: services/models.py:111 services/models.py:168
+msgid "paid for"
+msgstr "pagato per"
+
+#: services/models.py:160
+msgid "cost"
+msgstr "costo"
+
+#: services/models.py:167
 msgid "When has it been paid?"
 msgstr "Quando è stato pagato?"
 
-#: services/models.py:140
+#: services/models.py:168
 msgid "For what has he paid? (incremental value). Leave 0 to use default"
 msgstr ""
 "Per cosa ha pagato? (valore incrementale). Lasciare a 0 per utilizzare il "
 "valore predefinito"
+
+#~ msgid "For what has he paid? (incremental value)"
+#~ msgstr "Quanto manca al prossimo pagamento? (valore incrementale)"
