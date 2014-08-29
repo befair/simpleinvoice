@@ -5,8 +5,9 @@ from invoice.models import Customer
 
 from django.conf import settings
 from decimal import Decimal
-import datetime
+#import datetime
 from functools import partial
+from django.utils import timezone
 
 #--------------------------------------------------------------------------------
 # Measures units constants.
@@ -113,6 +114,15 @@ class ServiceSubscription(models.Model):
         unique_together = (('customer', 'service', 'subscribed_on'),)
 
     @property
+    def expired(self):
+        """
+        Check if the subscription expiration date is prior to 
+        the current date
+        """
+
+        return self.subscribed_until <= timezone.now()
+
+    @property
     def next_payment_due(self):
         """
         Check if a subscription has been regularly payed, basing on the
@@ -122,7 +132,8 @@ class ServiceSubscription(models.Model):
         """
 
         if self.service.period_unit_source == SOURCES_EPOCH_NOW:
-            difference = (datetime.datetime.now() - self.last_paid_on.replace(tzinfo=None)).total_seconds()
+            #WAS: difference = (datetime.datetime.now() - self.last_paid_on.replace(tzinfo=None)).total_seconds()
+            difference = (timezone.now() - self.last_paid_on).total_seconds()
             if self.last_paid_for:
                 deadline = self.last_paid_for
             else:
