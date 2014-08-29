@@ -83,32 +83,32 @@ class ServiceSubscription(models.Model):
     It is used by ServiceSubscriptionPayments as template for payment.
     """
 
-    customer = models.ForeignKey(Customer)
-    service = models.ForeignKey(Service)
+    customer = models.ForeignKey(Customer,verbose_name=_("customer"))
+    service = models.ForeignKey(Service,verbose_name=_("service"))
 
     vat_percent = models.DecimalField(max_digits=3, decimal_places=2, 
-        default=Decimal(str(settings.DEFAULT_VAT_PERCENT))
+        default=Decimal(str(settings.DEFAULT_VAT_PERCENT)),verbose_name=_("VAT percentage")
     )
 
     discount = models.DecimalField(_("discount"), default=0, max_digits=3, decimal_places=2)
 
     invoice_period = models.IntegerField(null=True, blank=True,
         help_text=_('how many period lasts before creating an invoice?'),
-        default=1
+        default=1,verbose_name=_("period")
     )
 
-    subscribed_on = models.DateTimeField(null=True)
-    subscribed_until = models.DateTimeField(null=True,blank=True) 
+    subscribed_on = models.DateTimeField(null=True,verbose_name=_("subscribed on"))
+    subscribed_until = models.DateTimeField(null=True,blank=True,verbose_name=_("subscribed until")) 
 
-    note = models.TextField(blank=True)
+    note = models.TextField(blank=True,verbose_name=_("note"))
 
-    created_on = models.DateTimeField(auto_now_add=True)
-    last_update_on = models.DateTimeField(auto_now=True)
+    created_on = models.DateTimeField(auto_now_add=True,verbose_name=_("created on"))
+    last_update_on = models.DateTimeField(auto_now=True,verbose_name=_("updated on"))
 
     # last paid on and last_paid_for
     # could be also properties get by ServiceSubscriptionPayments model
-    last_paid_on = models.DateTimeField(null=True,blank=True) 
-    last_paid_for = models.IntegerField(null=True,blank=True) 
+    last_paid_on = models.DateTimeField(null=True,blank=True,verbose_name=_("paid on")) 
+    last_paid_for = models.IntegerField(null=True,blank=True,verbose_name=_("paid for")) 
 
     class Meta:
         unique_together = (('customer', 'service', 'subscribed_on'),)
@@ -120,8 +120,7 @@ class ServiceSubscription(models.Model):
         the current date
         """
         if self.subscribed_until:
-            return self.subscribed_until <= timezone.now()
-        return False
+            return self.subscribed_until <= timezone.now
 
     @property
     def next_payment_due(self):
@@ -155,20 +154,20 @@ class ServiceSubscriptionPayments(models.Model):
     """
     """
 
-    customer = models.ForeignKey(Customer)
-    service = models.ForeignKey(Service)
+    customer = models.ForeignKey(Customer,verbose_name=_("customer"))
+    service = models.ForeignKey(Service,verbose_name=_("service"))
 
-    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    amount = models.DecimalField(max_digits=12, decimal_places=2,verbose_name=_("cost"))
     vat_percent = models.DecimalField(max_digits=3, decimal_places=2, 
-        default=Decimal(str(settings.DEFAULT_VAT_PERCENT))
+        default=Decimal(str(settings.DEFAULT_VAT_PERCENT)),verbose_name=_("VAT percentage")
     )
 
     discount = models.DecimalField(_("discount"), default=0, max_digits=3, decimal_places=2)
 
-    paid_on = models.DateTimeField(auto_now_add=True, help_text=_('When has it been paid?')) 
-    paid_for = models.IntegerField(help_text=_("For what has he paid? (incremental value). Leave 0 to use default")) 
+    paid_on = models.DateTimeField(auto_now_add=True, help_text=_('When has it been paid?'),verbose_name=_("paid on")) 
+    paid_for = models.IntegerField(help_text=_("For what has he paid? (incremental value). Leave 0 to use default"),verbose_name=_("paid for")) 
 
-    note = models.TextField(blank=True)
+    note = models.TextField(blank=True,verbose_name=_("note"))
 
     class Meta:
         unique_together = (('customer', 'service', 'paid_for'),)
