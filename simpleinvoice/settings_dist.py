@@ -50,6 +50,7 @@ locale.setlocale(locale.LC_ALL, 'it_IT.UTF8')
 LOCALE_PATHS = ( 
     os.path.join(BASE_DIR, 'locale',
 )
+)
 
 #PREFIX = "simpleinvoice/"
 #URL_PREFIX = ""
