@@ -1,0 +1,34 @@
+[
+{
+    "fields": {
+        "name": "Iscrizione Soci persone fisiche REESMarche",
+        "period_unit_raw": "months",
+        "period_deadline_modifier": 0,
+        "period": 12,
+        "period_unit_source": "epoch_now",
+        "abbreviation": "IscrFisREES",
+        "period_unit_display": "months",
+        "amount": "10",
+        "default_vat_percent": "0.21",
+        "description": "Servizio di iscrizione al gruppo REESMarche per le persone fisiche"
+    },
+    "model": "services.service",
+    "pk": 1
+},
+{
+    "fields": {
+        "name": "Iscrizione Soci persone giuridiche REESMarche",
+        "period_unit_raw": "months",
+        "period_deadline_modifier": 0,
+        "period": 12,
+        "period_unit_source": "epoch_now",
+        "abbreviation": "IscrGiurREES",
+        "period_unit_display": "months",
+        "amount": "25",
+        "default_vat_percent": "0.21",
+        "description": "Servizio di iscrizione al gruppo REESMarche per le persone giuridiche"
+    },
+    "model": "services.service",
+    "pk": 2
+}
+]

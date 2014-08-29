@@ -1,0 +1,40 @@
+[
+{
+    "fields": {
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "is_active": true,
+        "is_superuser": true,
+        "is_staff": true,
+        "last_login": "2014-08-29T08:44:37.668Z",
+        "groups": [],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$12000$KfVtOrl46qYV$NIajj2CSYAOtNZuXNMunm2MVCRtwfLTlpXtwN089zrw=",
+        "email": "",
+        "date_joined": "2014-08-29T08:39:05.972Z"
+    },
+    "model": "auth.user",
+    "pk": 1
+},
+{
+    "fields": {
+        "username": "ReferenteREESMarche",
+        "first_name": "",
+        "last_name": "",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": true,
+        "last_login": "2014-08-29T08:44:18.676Z",
+        "groups": [
+            1
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$12000$kiBbNAsAo3Rd$l1B+ojvaIyDVxUba0X2MRhx5iIO/ajE4Vv1D4OnbHG0=",
+        "email": "",
+        "date_joined": "2014-08-29T08:43:13Z"
+    },
+    "model": "auth.user",
+    "pk": 2
+}
+]
