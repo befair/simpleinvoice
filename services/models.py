@@ -119,8 +119,9 @@ class ServiceSubscription(models.Model):
         Check if the subscription expiration date is prior to 
         the current date
         """
-
-        return self.subscribed_until <= timezone.now()
+        if self.subscribed_until:
+            return self.subscribed_until <= timezone.now()
+        return False
 
     @property
     def next_payment_due(self):
@@ -130,6 +131,9 @@ class ServiceSubscription(models.Model):
 
         There has not been any payement for the subscription, 
         """
+
+        if self.expired:
+            return False
 
         if self.service.period_unit_source == SOURCES_EPOCH_NOW:
             #WAS: difference = (datetime.datetime.now() - self.last_paid_on.replace(tzinfo=None)).total_seconds()
