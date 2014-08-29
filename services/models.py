@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from invoice.models import Customer
+from services.managers import ServiceSubscriptionManager
 
 from django.conf import settings
 from decimal import Decimal
@@ -110,6 +111,19 @@ class ServiceSubscription(models.Model):
     last_paid_on = models.DateTimeField(null=True,blank=True,verbose_name=_("paid on")) 
     last_paid_for = models.IntegerField(null=True,blank=True,verbose_name=_("paid for")) 
 
+    #If the subscription is deleted:
+    #
+    #    * the subscription will not be shown to the users
+    #    * it will not be possible to create payements related to the subscription 
+    #    service 
+    is_deleted = models.BooleanField(default=False,verbose_name=("is deleted"))
+    when_deleted = models.DateTimeField(null=True,blank=True,verbose_name=_("when deleted"))
+
+
+    all_objects = models.Manager()
+
+    objects = ServiceSubscriptionManager()
+
     class Meta:
         unique_together = (('customer', 'service', 'subscribed_on'),)
 
@@ -154,8 +168,7 @@ class ServiceSubscriptionPayments(models.Model):
     """
     """
 
-    customer = models.ForeignKey(Customer,verbose_name=_("customer"))
-    service = models.ForeignKey(Service,verbose_name=_("service"))
+    subscription = models.ForeignKey(ServiceSubscription,verbose_name=_("subscription"))
 
     amount = models.DecimalField(max_digits=12, decimal_places=2,verbose_name=_("cost"))
     vat_percent = models.DecimalField(max_digits=3, decimal_places=2, 
@@ -170,28 +183,10 @@ class ServiceSubscriptionPayments(models.Model):
     note = models.TextField(blank=True,verbose_name=_("note"))
 
     class Meta:
-        unique_together = (('customer', 'service', 'paid_for'),)
+        unique_together = (('subscription', 'paid_for'),)
 
     @property
     def paid_for_display(self):
-        unit_raw = self.service.period_unit_raw
-        unit_display = self.service.period_unit_display
+        unit_raw = self.subscription.service.period_unit_raw
+        unit_display = self.subscription.service.period_unit_display
         return CONVERSION_UNIT_MAP[(unit_raw, unit_display)](self.paid_for)
-
-    @property
-    def get_subscription(self):
-        """
-        Return the sunscripion linked to this payment trough this
-        payement customer and service
-        """
-
-        obj = None
-
-        if(self.customer and self.service):
-            obj = ServiceSubscription.objects.get(
-                customer=self.customer, 
-                service=self.service
-            )
-            
-        return obj
-

@@ -20,7 +20,7 @@ class ServiceAdmin(admin.ModelAdmin):
 
 class ServiceSubscriptionAdmin(admin.ModelAdmin): 
 
-    list_display = ('customer', 'service', 'subscribed_on', 'subscribed_until', 'note')
+    list_display = ('customer', 'service', 'subscribed_on', 'subscribed_until', 'note','is_deleted')
     search_fields = ['customer']
 
     actions = ['check_payement']
@@ -66,7 +66,7 @@ class PayementForm(forms.ModelForm):
     def save(self, commit=True):
         instance = super(PayementForm, self).save(commit=False)
         if self.cleaned_data['paid_for'] is 0:
-            service = self.cleaned_data['service']
+            service = self.cleaned_data['subscription'].service
             instance = self.instance
             if service.period_unit_raw == services.UNIT_MONTHS:
                 instance.paid_for = 1
@@ -77,7 +77,7 @@ class PayementForm(forms.ModelForm):
         if instance:
             instance.save()
 
-            subscription = instance.get_subscription
+            subscription = instance.subscription
 
             subscription.last_paid_on = instance.paid_on
             subscription.last_paid_for = instance.paid_for
@@ -95,8 +95,8 @@ class ServiceSubscriptionPayementsAdmin(admin.ModelAdmin):
 
     form = PayementForm
     
-    list_display = ('customer', 'service', 'amount', 'paid_on','note')
-    search_fields = ['customer','service']
+    list_display = ('subscription', 'amount', 'paid_on','note')
+    search_fields = ['subscription']
 
 
     class Media:
