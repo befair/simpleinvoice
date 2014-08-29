@@ -8,6 +8,7 @@ from django.conf import settings
 from decimal import Decimal
 #import datetime
 from functools import partial
+import datetime
 from django.utils import timezone
 
 #--------------------------------------------------------------------------------
@@ -21,6 +22,30 @@ UNIT_CHOICES = (
     #(UNIT_SECONDS, _('Seconds')),
     (UNIT_MONTHS, _('Months')),
     (UNIT_HOURS, _('Hours')),
+)
+
+DATE_CHOICES = (
+    (datetime.date(2015,1,1), '01/01/2015'),
+    (datetime.date(2016,1,1), '01/01/2016'),
+    (datetime.date(2017,1,1), '01/01/2017'),
+    (datetime.date(2018,1,1), '01/01/2018'),
+    (datetime.date(2019,1,1), '01/01/2019'),
+    (datetime.date(2020,1,1), '01/01/2020'),
+    (datetime.date(2021,1,1), '01/01/2021'),
+    (datetime.date(2022,1,1), '01/01/2022'),
+    (datetime.date(2023,1,1), '01/01/2023'),
+    (datetime.date(2024,1,1), '01/01/2024'),
+    (datetime.date(2025,1,1), '01/01/2025'),
+    (datetime.date(2026,1,1), '01/01/2026'),
+    (datetime.date(2027,1,1), '01/01/2027'),
+    (datetime.date(2028,1,1), '01/01/2028'),
+    (datetime.date(2029,1,1), '01/01/2029'),
+    (datetime.date(2030,1,1), '01/01/2030'),
+    (datetime.date(2031,1,1), '01/01/2031'),
+    (datetime.date(2032,1,1), '01/01/2032'),
+    (datetime.date(2033,1,1), '01/01/2033'),
+    (datetime.date(2034,1,1), '01/01/2034'),
+    (datetime.date(2035,1,1), '01/01/2035'),
 )
 
 # Conversion table map. Use "partial" because we cannot lambda (":") in dict values
@@ -99,7 +124,7 @@ class ServiceSubscription(models.Model):
     )
 
     subscribed_on = models.DateTimeField(null=True,verbose_name=_("subscribed on"))
-    subscribed_until = models.DateTimeField(null=True,blank=True,verbose_name=_("subscribed until")) 
+    subscribed_until = models.DateTimeField(null=True,blank=True,choices=DATE_CHOICES,verbose_name=_("subscribed until")) 
 
     note = models.TextField(blank=True,verbose_name=_("note"))
 
