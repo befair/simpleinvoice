@@ -25,27 +25,27 @@ UNIT_CHOICES = (
 )
 
 DATE_CHOICES = (
-    (datetime.date(2015,1,1), '01/01/2015'),
-    (datetime.date(2016,1,1), '01/01/2016'),
-    (datetime.date(2017,1,1), '01/01/2017'),
-    (datetime.date(2018,1,1), '01/01/2018'),
-    (datetime.date(2019,1,1), '01/01/2019'),
-    (datetime.date(2020,1,1), '01/01/2020'),
-    (datetime.date(2021,1,1), '01/01/2021'),
-    (datetime.date(2022,1,1), '01/01/2022'),
-    (datetime.date(2023,1,1), '01/01/2023'),
-    (datetime.date(2024,1,1), '01/01/2024'),
-    (datetime.date(2025,1,1), '01/01/2025'),
-    (datetime.date(2026,1,1), '01/01/2026'),
-    (datetime.date(2027,1,1), '01/01/2027'),
-    (datetime.date(2028,1,1), '01/01/2028'),
-    (datetime.date(2029,1,1), '01/01/2029'),
-    (datetime.date(2030,1,1), '01/01/2030'),
-    (datetime.date(2031,1,1), '01/01/2031'),
-    (datetime.date(2032,1,1), '01/01/2032'),
-    (datetime.date(2033,1,1), '01/01/2033'),
-    (datetime.date(2034,1,1), '01/01/2034'),
-    (datetime.date(2035,1,1), '01/01/2035'),
+    (datetime.datetime(2015,1,1), '01/01/2015'),
+    (datetime.datetime(2016,1,1), '01/01/2016'),
+    (datetime.datetime(2017,1,1), '01/01/2017'),
+    (datetime.datetime(2018,1,1), '01/01/2018'),
+    (datetime.datetime(2019,1,1), '01/01/2019'),
+    (datetime.datetime(2020,1,1), '01/01/2020'),
+    (datetime.datetime(2021,1,1), '01/01/2021'),
+    (datetime.datetime(2022,1,1), '01/01/2022'),
+    (datetime.datetime(2023,1,1), '01/01/2023'),
+    (datetime.datetime(2024,1,1), '01/01/2024'),
+    (datetime.datetime(2025,1,1), '01/01/2025'),
+    (datetime.datetime(2026,1,1), '01/01/2026'),
+    (datetime.datetime(2027,1,1), '01/01/2027'),
+    (datetime.datetime(2028,1,1), '01/01/2028'),
+    (datetime.datetime(2029,1,1), '01/01/2029'),
+    (datetime.datetime(2030,1,1), '01/01/2030'),
+    (datetime.datetime(2031,1,1), '01/01/2031'),
+    (datetime.datetime(2032,1,1), '01/01/2032'),
+    (datetime.datetime(2033,1,1), '01/01/2033'),
+    (datetime.datetime(2034,1,1), '01/01/2034'),
+    (datetime.datetime(2035,1,1), '01/01/2035'),
 )
 
 # Conversion table map. Use "partial" because we cannot lambda (":") in dict values
@@ -134,7 +134,7 @@ class ServiceSubscription(models.Model):
     # last paid on and last_paid_for
     # could be also properties get by ServiceSubscriptionPayments model
     last_paid_on = models.DateTimeField(null=True,blank=True,verbose_name=_("paid on")) 
-    last_paid_for = models.IntegerField(null=True,blank=True,verbose_name=_("paid for")) 
+    last_paid_for = models.DateTimeField(null=True,blank=True,verbose_name=_("paid for")) 
 
     #If the subscription is deleted:
     #
@@ -170,22 +170,22 @@ class ServiceSubscription(models.Model):
         There has not been any payement for the subscription, 
         """
 
-        if self.expired:
+        if self.expired or self.is_deleted:
+            return False
+
+        if not self.last_paid_on:
             return False
 
         if self.service.period_unit_source == SOURCES_EPOCH_NOW:
-            #WAS: difference = (datetime.datetime.now() - self.last_paid_on.replace(tzinfo=None)).total_seconds()
-            difference = (timezone.now() - self.last_paid_on).total_seconds()
-            if self.last_paid_for:
-                deadline = self.last_paid_for
-            else:
-                deadline = self.service.period
+            sec_elapsed = (timezone.now() - self.last_paid_on).total_seconds()
+            tot_sec = (self.last_paid_for - self.last_paid_on).total_seconds()
+
             if self.service.period_unit_raw == UNIT_MONTHS:
-                return (difference / 2592000) > (deadline + self.service.period_deadline_modifier)
+                return  sec_elapsed > (tot_sec + (self.service.period_deadline_modifier * 30*24*60*60 ))
             elif self.service.period_unit_raw == UNIT_HOURS:
-                return (difference / 3600) > (deadline + self.service.period_deadline_modifier)
+                return  sec_elapsed > (tot_sec + (self.service.period_deadline_modifier * 60*60))
             elif self.service.period_unit_raw == UNIT_SECONDS:
-                return difference  > (deadline + self.service.period_deadline_modifier)
+                return  sec_elapsed > (tot_sec + self.service.period_deadline_modifier)
         raise NotImplementedError("TBD")
         
 
@@ -203,7 +203,8 @@ class ServiceSubscriptionPayments(models.Model):
     discount = models.DecimalField(_("discount"), default=0, max_digits=3, decimal_places=2)
 
     paid_on = models.DateTimeField(auto_now_add=True, help_text=_('When has it been paid?'),verbose_name=_("paid on")) 
-    paid_for = models.IntegerField(help_text=_("For what has he paid? (incremental value). Leave 0 to use default"),verbose_name=_("paid for")) 
+    #WAS: paid_for = models.IntegerField(help_text=_("For what has he paid? (incremental value). Leave 0 to use default"),verbose_name=_("paid for"))
+    paid_for = models.DateTimeField(choices=DATE_CHOICES,help_text=_("For what has he paid? (incremental value). Leave 0 to use default"),verbose_name=_("paid for")) 
 
     note = models.TextField(blank=True,verbose_name=_("note"))
 
