@@ -153,6 +153,16 @@ class ServiceSubscription(models.Model):
         unique_together = (('customer', 'service', 'subscribed_on'),)
 
     @property
+    def discounted_price(self):
+        """
+        Compute discounted subscription quote.
+
+        Discount is a percentage.
+        """
+        
+        return self.service.amount * (1 - self.discount)
+
+    @property
     def expired(self):
         """
         Check if the subscription expiration date is prior to 
@@ -210,6 +220,16 @@ class ServiceSubscriptionPayments(models.Model):
 
     class Meta:
         unique_together = (('subscription', 'paid_for'),)
+
+    @property
+    def discounted_price(self):
+        """
+        Compute discounted subscription quote.
+
+        Discount is a percentage.
+        """
+        
+        return self.amount * (1 - self.discount)
 
     @property
     def paid_for_display(self):
