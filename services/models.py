@@ -156,6 +156,9 @@ class ServiceSubscription(models.Model):
     class Meta:
         unique_together = (('customer', 'service', 'subscribed_on'),)
 
+    def __unicode__(self):
+        return _("Subscription of %s to service %s") % (self.customer, self.service)
+
     @property
     def discounted_price(self):
         """
