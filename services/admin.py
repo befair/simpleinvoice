@@ -138,7 +138,7 @@ class ServiceSubscriptionPaymentsAdmin(admin.ModelAdmin):
 
     form = PaymentForm
     
-    list_display = ('subscription', 'amount', 'paid_on','note')
+    list_display = ('subscription', 'paid_on', 'amount', 'note')
     search_fields = ['subscription']
 
 
