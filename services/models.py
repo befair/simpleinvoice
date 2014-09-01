@@ -55,7 +55,11 @@ CONVERSION_UNIT_MAP = {
     (UNIT_SECONDS, UNIT_MONTHS): partial(lambda x : x/2592000),
 }
 
-SOURCES_EPOCH_NOW  = 'epoch_now'
+# A source define the unite of measure chose for a subsription (time, MB, etc. )
+
+SOURCES = {
+    'TIME' : 'epoch_now',
+}
 
 #--------------------------------------------------------------------------------
 
@@ -186,7 +190,7 @@ class ServiceSubscription(models.Model):
         if not self.last_paid_on:
             return False
 
-        if self.service.period_unit_source == SOURCES_EPOCH_NOW:
+        if self.service.period_unit_source == SOURCES['TIME']:
             sec_elapsed = (timezone.now() - self.last_paid_on).total_seconds()
             tot_sec = (self.last_paid_for - self.last_paid_on).total_seconds()
 
