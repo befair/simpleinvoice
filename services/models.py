@@ -104,6 +104,11 @@ class Service(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+
+        verbose_name = _("Service")
+        verbose_name_plural = _("Services")
+
 class ServiceSubscription(models.Model):
     """
     Map services offered to customers specifying subscription period,
@@ -155,9 +160,14 @@ class ServiceSubscription(models.Model):
 
     class Meta:
         unique_together = (('customer', 'service', 'subscribed_on'),)
+        verbose_name = _("Service subscription")
+        verbose_name_plural = _("Service subscriptions")
 
     def __unicode__(self):
-        return _("Subscription of %s to service %s") % (self.customer, self.service)
+        return _("Subscription of %(customer)s to service %(service)s") % {
+            'customer' : self.customer,
+            'service' : self.service
+        }
 
     @property
     def discounted_price(self):
@@ -204,7 +214,6 @@ class ServiceSubscription(models.Model):
             elif self.service.period_unit_raw == UNIT_SECONDS:
                 return  sec_elapsed > (tot_sec + self.service.period_deadline_modifier)
         raise NotImplementedError("TBD")
-        
 
 class ServiceSubscriptionPayments(models.Model):
     """
@@ -221,12 +230,14 @@ class ServiceSubscriptionPayments(models.Model):
 
     paid_on = models.DateTimeField(auto_now_add=True, help_text=_('When has it been paid?'),verbose_name=_("paid on")) 
     #WAS: paid_for = models.IntegerField(help_text=_("For what has he paid? (incremental value). Leave 0 to use default"),verbose_name=_("paid for"))
-    paid_for = models.DateTimeField(choices=DATE_CHOICES,help_text=_("For what has he paid? (incremental value). Leave 0 to use default"),verbose_name=_("paid for")) 
+    paid_for = models.DateTimeField(choices=DATE_CHOICES,help_text=_("What date has he paid until?"),verbose_name=_("paid for")) 
 
     note = models.TextField(blank=True,verbose_name=_("note"))
 
     class Meta:
         unique_together = (('subscription', 'paid_for'),)
+        verbose_name = _("Service subscription payment")
+        verbose_name_plural = _("Service subscription payments")
 
     @property
     def discounted_price(self):

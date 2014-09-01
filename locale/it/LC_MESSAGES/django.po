@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-29 12:37+0200\n"
+"POT-Creation-Date: 2014-09-01 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,7 @@ msgstr "Dovresti scrivere il codice fiscale o la partita IVA"
 msgid "More info..."
 msgstr "Altre informazioni..."
 
-#: invoice/models.py:23 services/models.py:51
+#: invoice/models.py:23 services/models.py:81
 msgid "name"
 msgstr "nome"
 
@@ -66,7 +66,7 @@ msgstr "Partita IVA"
 msgid "notes"
 msgstr "note"
 
-#: invoice/models.py:43 services/models.py:86 services/models.py:157
+#: invoice/models.py:43 services/models.py:121
 msgid "customer"
 msgstr "cliente"
 
@@ -129,9 +129,9 @@ msgstr ""
 msgid "emit date"
 msgstr "data di emissione"
 
-#: invoice/models.py:138 services/models.py:93 services/models.py:165
+#: invoice/models.py:138 services/models.py:128 services/models.py:229
 msgid "discount"
-msgstr "sconto"
+msgstr "sconto in percentuale"
 
 #: invoice/models.py:139
 msgid "is valid"
@@ -222,117 +222,155 @@ msgstr "Fattura semplificata"
 msgid "Check if selected subscription are paid"
 msgstr "Controlla se le sottoscrizioni selezionate sono state pagate"
 
-#: services/models.py:21
+#: services/models.py:23
 msgid "Months"
 msgstr "Mesi"
 
-#: services/models.py:22
+#: services/models.py:24
 msgid "Hours"
 msgstr "Ore"
 
-#: services/models.py:50
+#: services/models.py:80
 msgid "abbreviation"
 msgstr "abbreviazione"
 
-#: services/models.py:52
+#: services/models.py:82
 msgid "description"
 msgstr "descrizione"
 
-#: services/models.py:53
+#: services/models.py:83
 msgid "indicator of a period by raw units."
 msgstr "indicatore del periodo in unità grezze"
 
-#: services/models.py:54 services/models.py:97
+#: services/models.py:84 services/models.py:132
 msgid "period"
 msgstr "periodo"
 
-#: services/models.py:57
+#: services/models.py:87
 msgid "indicator to modify the periodic payement deadline"
 msgstr "indicatore per la modifica della scadenza del pagamento periodico"
 
-#: services/models.py:58
+#: services/models.py:88
 msgid "period deadline modifier"
 msgstr "modificatore per la scadenza periodica"
 
-#: services/models.py:61
+#: services/models.py:91
 msgid "raw unit"
 msgstr "unità grezza"
 
-#: services/models.py:64
+#: services/models.py:94
 msgid "display measure unit for period"
 msgstr "mostra l'unità di misura del periodo"
 
-#: services/models.py:65
+#: services/models.py:95
 msgid "period measure of unit"
 msgstr "unità di misura del periodo"
 
-#: services/models.py:67
+#: services/models.py:97
 msgid "period unit source"
 msgstr "fonte unità di misura"
 
-#: services/models.py:69
+#: services/models.py:99
 msgid "amount"
 msgstr "Costo"
 
-#: services/models.py:71
+#: services/models.py:101
 msgid "default vat percentage"
-msgstr "percentuale predefinita di IVA"
+msgstr "IVA predefinita in percentuale"
 
-#: services/models.py:87 services/models.py:158
+#: services/models.py:109
+msgid "Service"
+msgstr "Servizio"
+
+#: services/models.py:110
+msgid "Services"
+msgstr "Servizi"
+
+#: services/models.py:122
 msgid "service"
 msgstr "Servizio"
 
-#: services/models.py:90 services/models.py:162
-#| msgid "default vat percentage"
+#: services/models.py:125 services/models.py:226
 msgid "VAT percentage"
-msgstr "percentuale predefinita di IVA"
+msgstr "IVA in percentuale"
 
-#: services/models.py:96
+#: services/models.py:131
 msgid "how many period lasts before creating an invoice?"
 msgstr "periodi che devono passare prima della creazione di una fattura"
 
-#: services/models.py:100
+#: services/models.py:135
 msgid "subscribed on"
 msgstr "sottoscritta il"
 
-#: services/models.py:101
+#: services/models.py:136
 msgid "subscribed until"
 msgstr "sottoscritta fino a"
 
-#: services/models.py:103 services/models.py:170
-#| msgid "notes"
+#: services/models.py:138 services/models.py:235
 msgid "note"
 msgstr "note"
 
-#: services/models.py:105
+#: services/models.py:140
 msgid "created on"
 msgstr "creata il"
 
-#: services/models.py:106
+#: services/models.py:141
 msgid "updated on"
 msgstr "aggiornato il"
 
-#: services/models.py:110 services/models.py:167
+#: services/models.py:145 services/models.py:231
 msgid "paid on"
 msgstr "pagato il"
 
-#: services/models.py:111 services/models.py:168
+#: services/models.py:146 services/models.py:233
 msgid "paid for"
-msgstr "pagato per"
+msgstr "pagato fino al"
 
-#: services/models.py:160
+#: services/models.py:154
+msgid "when deleted"
+msgstr ""
+
+#: services/models.py:163
+msgid "Service subscription"
+msgstr "Sottoscrizione a servizio"
+
+#: services/models.py:164
+msgid "Service subscriptions"
+msgstr "Sottoscrizioni a servizio"
+
+#: services/models.py:167
+msgid "Subscription of %(customer) to service %(service)"
+msgstr "Sottoscrizione di %(customer) al servizio %(service)"
+
+#: services/models.py:222
+msgid "subscription"
+msgstr "sottoscrizione"
+
+#: services/models.py:224
 msgid "cost"
 msgstr "costo"
 
-#: services/models.py:167
+#: services/models.py:231
 msgid "When has it been paid?"
 msgstr "Quando è stato pagato?"
 
-#: services/models.py:168
-msgid "For what has he paid? (incremental value). Leave 0 to use default"
-msgstr ""
-"Per cosa ha pagato? (valore incrementale). Lasciare a 0 per utilizzare il "
-"valore predefinito"
+#: services/models.py:233
+#| msgid "When has it been paid?"
+msgid "What date has he paid until?"
+msgstr "Fino a quando è stato pagato?"
+
+#: services/models.py:239
+msgid "Service subscription payment"
+msgstr "Pagamento di sottoscrizione a servizio"
+
+#: services/models.py:240
+msgid "Service subscription payments"
+msgstr "Pagamenti di sottoscrizione a servizio"
+
+#~ msgid "For what has he paid? (incremental value). Leave 0 to use default"
+#~ msgstr ""
+#~ "Per cosa ha pagato? (valore incrementale). Lasciare a 0 per utilizzare il "
+#~ "valore predefinito"
 
 #~ msgid "For what has he paid? (incremental value)"
 #~ msgstr "Quanto manca al prossimo pagamento? (valore incrementale)"
