@@ -150,6 +150,7 @@ class ServiceSubscription(models.Model):
 
 
     all_objects = models.Manager()
+        print "%s" % (cleaned_data)
 
     objects = ServiceSubscriptionManager()
 

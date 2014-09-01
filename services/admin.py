@@ -94,7 +94,6 @@ class PaymentForm(forms.ModelForm):
 
     def clean(self):
    
-        print (self.data['paid_for'])
         if self.data['paid_for'] == "":
             if self.cleaned_data.get('service'):
                 service = self.cleaned_data['service']
@@ -111,7 +110,6 @@ class PaymentForm(forms.ModelForm):
         
         cleaned_data=super(PaymentForm, self).clean()
 
-        print "%s" % (cleaned_data)
         return cleaned_data
 
     def save(self, commit=True):
