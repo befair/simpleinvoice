@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-01 12:18+0200\n"
+"POT-Creation-Date: 2014-09-01 15:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,19 +18,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: invoice/admin.py:101
+#: invoice/admin.py:102
 msgid "Make selected invoices as paid today"
 msgstr "Segna le fatture selezionate come pagate oggi"
 
-#: invoice/admin.py:108
+#: invoice/admin.py:109
 msgid "Display selected invoices"
 msgstr "Mostra le fatture selezionate"
 
+#: invoice/admin.py:132
+msgid "SSN number must be inserted if customer is a natural person"
+msgstr "Inserire il Codice Fiscale se il cliente è una persona fisica"
+
 #: invoice/admin.py:133
+msgid "VAT number must be inserted if customer is a legal person"
+msgstr "Inserire la Partita IVA se il cliente è una persona giuridica"
+
+#: invoice/admin.py:139
 msgid "You should write social security or vat number"
 msgstr "Dovresti scrivere il codice fiscale o la partita IVA"
 
-#: invoice/admin.py:146
+#: invoice/admin.py:152
 msgid "More info..."
 msgstr "Altre informazioni..."
 
@@ -121,9 +129,7 @@ msgstr "numero di fattura"
 
 #: invoice/models.py:135
 msgid "Set this value only if you need a specific invoice number."
-msgstr ""
-"Inserisci questo valore solo se si necessita di uno specifico numero di "
-"fattura"
+msgstr "Inserisci questo valore solo se si necessita di uno specifico numero di fattura"
 
 #: invoice/models.py:137
 msgid "emit date"
@@ -328,7 +334,7 @@ msgstr "pagato fino al"
 
 #: services/models.py:154
 msgid "when deleted"
-msgstr ""
+msgstr "data di cancellazione"
 
 #: services/models.py:163
 msgid "Service subscription"
@@ -339,8 +345,10 @@ msgid "Service subscriptions"
 msgstr "Sottoscrizioni a servizio"
 
 #: services/models.py:167
-msgid "Subscription of %(customer) to service %(service)"
-msgstr "Sottoscrizione di %(customer) al servizio %(service)"
+#, python-format
+#| msgid "Subscription of %(customer) to service %(service)"
+msgid "Subscription of %(customer)s to service %(service)s"
+msgstr "Sottoscrizione di %(customer)s al servizio %(service)s"
 
 #: services/models.py:222
 msgid "subscription"
@@ -355,7 +363,6 @@ msgid "When has it been paid?"
 msgstr "Quando è stato pagato?"
 
 #: services/models.py:233
-#| msgid "When has it been paid?"
 msgid "What date has he paid until?"
 msgstr "Fino a quando è stato pagato?"
 
