@@ -25,6 +25,11 @@ UNIT_CHOICES = (
 )
 
 DATE_CHOICES = (
+    (datetime.datetime(2010,1,1), '01/01/2010'),
+    (datetime.datetime(2011,1,1), '01/01/2011'),
+    (datetime.datetime(2012,1,1), '01/01/2012'),
+    (datetime.datetime(2013,1,1), '01/01/2013'),
+    (datetime.datetime(2014,1,1), '01/01/2014'),
     (datetime.datetime(2015,1,1), '01/01/2015'),
     (datetime.datetime(2016,1,1), '01/01/2016'),
     (datetime.datetime(2017,1,1), '01/01/2017'),
@@ -153,10 +158,9 @@ class ServiceSubscription(models.Model):
     is_deleted = models.BooleanField(default=False,verbose_name=("is deleted"))
     when_deleted = models.DateTimeField(null=True,blank=True,verbose_name=_("when deleted"))
 
+    objects = ServiceSubscriptionManager()
 
     all_objects = models.Manager()
-
-    objects = ServiceSubscriptionManager()
 
     class Meta:
         unique_together = (('customer', 'service', 'subscribed_on'),)
@@ -192,27 +196,23 @@ class ServiceSubscription(models.Model):
     def next_payment_due(self):
         """
         Check if a subscription has been regularly payed, basing on the
-        last payement registered into the subscription.
-
-        There has not been any payement for the subscription, 
+        last payement expiry date registered into the subscription.
         """
 
         if self.expired or self.is_deleted:
             return False
 
-        if not self.last_paid_on:
-            return False
-
         if self.service.period_unit_source == SOURCES['TIME']:
-            sec_elapsed = (timezone.now() - self.last_paid_on).total_seconds()
-            tot_sec = (self.last_paid_for - self.last_paid_on).total_seconds()
+            #WAS sec_elapsed = (timezone.now() - self.last_paid_on).total_seconds()
+            #WAS tot_sec = (self.last_paid_for - self.last_paid_on).total_seconds()
 
-            if self.service.period_unit_raw == UNIT_MONTHS:
-                return  sec_elapsed > (tot_sec + (self.service.period_deadline_modifier * 30*24*60*60 ))
-            elif self.service.period_unit_raw == UNIT_HOURS:
-                return  sec_elapsed > (tot_sec + (self.service.period_deadline_modifier * 60*60))
-            elif self.service.period_unit_raw == UNIT_SECONDS:
-                return  sec_elapsed > (tot_sec + self.service.period_deadline_modifier)
+            #WAS if self.service.period_unit_raw == UNIT_MONTHS:
+            #WAS     return  sec_elapsed > (tot_sec + (self.service.period_deadline_modifier * 30*24*60*60 ))
+            #WAS elif self.service.period_unit_raw == UNIT_HOURS:
+            #WAS     return  sec_elapsed > (tot_sec + (self.service.period_deadline_modifier * 60*60))
+            #WAS elif self.service.period_unit_raw == UNIT_SECONDS:
+            #WAS     return  sec_elapsed > (tot_sec + self.service.period_deadline_modifier)
+            return self.last_paid_for < timezone.now()
         raise NotImplementedError("TBD")
 
 class ServiceSubscriptionPayments(models.Model):
