@@ -6,6 +6,7 @@ from services import models as services
 from services.models import Service, ServiceSubscription, ServiceSubscriptionPayments, DATE_CHOICES
 from django import forms
 from django.conf import settings 
+from django.contrib.auth.models import Group
 
 from services.custom_fields import PercentageDecimalField
 
@@ -35,6 +36,7 @@ class ServiceSubscriptionForm(forms.ModelForm):
 
     class Meta:
         model = ServiceSubscription
+        exclude = ('is_deleted',)
     
 
 class ServiceSubscriptionAdmin(admin.ModelAdmin): 
@@ -47,6 +49,7 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
     actions = ['check_payment']
     
     exclude = ('last_paid_on','last_paid_for')
+
 
     def check_payment(self, request, queryset):
         """
@@ -68,6 +71,30 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
                 send_mail(subject, message, sender, receivers, fail_silently=False) 
 
     check_payment.short_description = _("Send a remaind mail about unsolved subcscpriptions")
+
+    def delete_subscriptions(self, request, queryset):
+        """
+        Flag selected subscriptions as deleted
+        """
+
+        for obj in queryset:
+            obj.is_deleted = True
+            obj.save()
+
+    delete_subscriptions.short_description = _("Cancel selected service subscription/s ")
+
+    def get_actions(self, request):
+        """
+        Remove default cancel action behaviour, using custom action
+        instead (see delete_subscriptions ) 
+        """
+
+        actions = super(ServiceSubscriptionAdmin, self).get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        if request.user.is_superuser:
+            actions['delete_subscriptions'] = (self.delete_subscriptions,'delete_subscriptions',self.delete_subscriptions.short_description)
+        return actions
 
     class Media:
         css = {
@@ -92,13 +119,6 @@ class PaymentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(PaymentForm, self).__init__(*args, **kwargs)
         self.fields['paid_for'].initial = DATE_CHOICES[0][0]
-    #    fields = forms.models.fields_for_model(ServiceSubscription,
-    #        fields=['customer','service']
-    #    )
-    #    self.fields['customer'] = fields.get('customer')
-    #    self.fields['service'] = fields.get('service')
-    #    self.Meta.fields.append('customer')
-    #    self.Meta.fields.append('service')
 
     def set_paid_for(self,service=None):
         """
@@ -121,15 +141,6 @@ class PaymentForm(forms.ModelForm):
         if self.data['paid_for'] == "":
             if self.cleaned_data.get('service'):
                 service = self.cleaned_data['service']
-                #if service.period_unit_raw == services.UNIT_MONTHS:
-                #    #instance.paid_for = 1
-                #    self.cleaned_data['paid_for'] = DATE_CHOICES[service.period/12][0]
-                #elif service.period_unit_raw == services.UNIT_HOURS:
-                #    #instance.paid_for = 720
-                #    self.cleaned_data['paid_for'] = DATE_CHOICES[service.period/(360*24)][0]
-                #elif service.period_unit_raw == services.UNIT_SECONDS:
-                #    #instance.paid_for = 259200
-                #    self.cleaned_data['paid_for'] = DATE_CHOICES[service.period/(360*24*60*60)][0]
                 self.cleaned_data['paid_for'] = self.set_paid_for(service)
         
         cleaned_data=super(PaymentForm, self).clean()
