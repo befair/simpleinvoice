@@ -40,12 +40,14 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
 
         for obj in queryset:
             if obj.next_payment_due is True:
+                print "sending"
                 subject = 'payment due'
                 message = "Hi %s, we inform you that you have not paid the amount of %s euro for the periodic service %s" % (obj.customer.name,obj.service.amount,obj.service.name)
                 sender = 'admin@admin.it'
                 receivers = [obj.customer.name]
                 send_mail(subject, message, sender, receivers, fail_silently=False) 
-    check_payment.short_description = _("Check if selected subscription are paid")
+
+    check_payment.short_description = _("Send a remaind mail about unsolved subcscpriptions")
 
     class Media:
         css = {

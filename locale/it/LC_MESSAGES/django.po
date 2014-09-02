@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-01 15:38+0200\n"
+"POT-Creation-Date: 2014-09-02 14:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,7 +74,7 @@ msgstr "Partita IVA"
 msgid "notes"
 msgstr "note"
 
-#: invoice/models.py:43 services/models.py:121
+#: invoice/models.py:43 invoice/models.py:136 services/models.py:121
 msgid "customer"
 msgstr "cliente"
 
@@ -129,7 +129,9 @@ msgstr "numero di fattura"
 
 #: invoice/models.py:135
 msgid "Set this value only if you need a specific invoice number."
-msgstr "Inserisci questo valore solo se si necessita di uno specifico numero di fattura"
+msgstr ""
+"Inserisci questo valore solo se si necessita di uno specifico numero di "
+"fattura"
 
 #: invoice/models.py:137
 msgid "emit date"
@@ -166,6 +168,14 @@ msgstr "fatture"
 #: invoice/models.py:151 invoice/templates/display.html:27
 msgid "of"
 msgstr "di"
+
+#: invoice/models.py:208 services/models.py:99
+msgid "amount"
+msgstr "Costo"
+
+#: invoice/models.py:209 services/models.py:82
+msgid "description"
+msgstr "descrizione"
 
 #: invoice/models.py:220
 msgid "invoice entry"
@@ -224,9 +234,9 @@ msgstr "Il trasferimento di denaro puo essere fatto tramite IBAN"
 msgid "Simple invoice"
 msgstr "Fattura semplificata"
 
-#: services/admin.py:48
-msgid "Check if selected subscription are paid"
-msgstr "Controlla se le sottoscrizioni selezionate sono state pagate"
+#: services/admin.py:50
+msgid "Send a remaind mail about unsolved subcscpriptions"
+msgstr "Invia email di sollecito per il pagamento degli insoluti"
 
 #: services/models.py:23
 msgid "Months"
@@ -239,10 +249,6 @@ msgstr "Ore"
 #: services/models.py:80
 msgid "abbreviation"
 msgstr "abbreviazione"
-
-#: services/models.py:82
-msgid "description"
-msgstr "descrizione"
 
 #: services/models.py:83
 msgid "indicator of a period by raw units."
@@ -275,10 +281,6 @@ msgstr "unità di misura del periodo"
 #: services/models.py:97
 msgid "period unit source"
 msgstr "fonte unità di misura"
-
-#: services/models.py:99
-msgid "amount"
-msgstr "Costo"
 
 #: services/models.py:101
 msgid "default vat percentage"
@@ -346,7 +348,6 @@ msgstr "Sottoscrizioni a servizio"
 
 #: services/models.py:167
 #, python-format
-#| msgid "Subscription of %(customer) to service %(service)"
 msgid "Subscription of %(customer)s to service %(service)s"
 msgstr "Sottoscrizione di %(customer)s al servizio %(service)s"
 
@@ -373,6 +374,9 @@ msgstr "Pagamento di sottoscrizione a servizio"
 #: services/models.py:240
 msgid "Service subscription payments"
 msgstr "Pagamenti di sottoscrizione a servizio"
+
+#~ msgid "Check if selected subscription are paid"
+#~ msgstr "Controlla se le sottoscrizioni selezionate sono state pagate"
 
 #~ msgid "For what has he paid? (incremental value). Leave 0 to use default"
 #~ msgstr ""
