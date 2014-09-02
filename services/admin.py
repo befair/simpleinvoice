@@ -137,6 +137,15 @@ class PaymentForm(forms.ModelForm):
 class ServiceSubscriptionPaymentsAdmin(admin.ModelAdmin): 
 
     form = PaymentForm
+
+    fieldsets = (
+        (None, {
+            'fields' : ('customer', 
+                        'service','amount', 'vat_percent',
+                        'discount', 'paid_for', 'note'
+            )
+        }),
+    )
     
     list_display = ('subscription', 'paid_on', 'amount', 'note')
     search_fields = ['subscription']
