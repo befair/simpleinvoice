@@ -133,7 +133,7 @@ class Invoice(models.Model):
     )
 
     real_id = models.CharField(_('invoice number'), max_length=16, default='', null=False, blank=True, help_text=_("Set this value only if you need a specific invoice number."), unique_for_year="date", db_index=True)
-    customer = models.ForeignKey(Customer, db_index=True)
+    customer = models.ForeignKey(Customer, db_index=True, verbose_name=_("customer"))
     date = models.DateField(_("emit date"), default=datetime.date.today, db_index=True)	
     discount = models.DecimalField(_("discount"), default=0, max_digits=3, decimal_places=2)
     is_valid = models.BooleanField(_('is valid'), default=True, help_text=_("You can invalidate this invoice by unchecking this field."))
@@ -205,8 +205,8 @@ class InvoiceEntry(models.Model):
     """Invoice single entry"""
 
     invoice = models.ForeignKey(Invoice, related_name="entries")
-    amount = models.DecimalField(max_digits=12, decimal_places=2)
-    description = models.TextField()
+    amount = models.DecimalField(_('amount'),max_digits=12, decimal_places=2)
+    description = models.TextField(_('description'))
     vat_percent = models.DecimalField(max_digits=3, decimal_places=2, 
         default=Decimal(str(settings.DEFAULT_VAT_PERCENT))
     )
