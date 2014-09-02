@@ -5,6 +5,7 @@ from django.core.mail import send_mail
 from services import models as services
 from services.models import Service, ServiceSubscription, ServiceSubscriptionPayments, DATE_CHOICES
 from django import forms
+from django.conf import settings 
 
 class ServiceAdmin(admin.ModelAdmin): 
 
@@ -40,10 +41,9 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
 
         for obj in queryset:
             if obj.next_payment_due is True:
-                print "sending"
                 subject = 'payment due'
                 message = "Hi %s, we inform you that you have not paid the amount of %s euro for the periodic service %s" % (obj.customer.name,obj.service.amount,obj.service.name)
-                sender = 'admin@admin.it'
+                sender = settings.EMAIL_SENDER
                 receivers = [obj.customer.name]
                 send_mail(subject, message, sender, receivers, fail_silently=False) 
 
