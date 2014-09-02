@@ -7,6 +7,15 @@ from services.models import Service, ServiceSubscription, ServiceSubscriptionPay
 from django import forms
 from django.conf import settings 
 
+from services.custom_fields import PercentageDecimalField
+
+class ServiceSubscriptionForm(forms.ModelForm):
+
+    default_vat_percent = PercentageDecimalField()
+
+    class Meta:
+        model = Service
+
 class ServiceAdmin(admin.ModelAdmin): 
 
     list_display = ('name', 'description', 'period_unit_display', 'amount')
@@ -19,7 +28,18 @@ class ServiceAdmin(admin.ModelAdmin):
             'all' : ('adminstyle.css',),
         }
 
+class ServiceSubscriptionForm(forms.ModelForm):
+
+    discount = PercentageDecimalField()
+    vat_percent = PercentageDecimalField()
+
+    class Meta:
+        model = ServiceSubscription
+    
+
 class ServiceSubscriptionAdmin(admin.ModelAdmin): 
+
+    form = ServiceSubscriptionForm
 
     list_display = ('customer', 'service', 'subscribed_on', 'subscribed_until', 'note','is_deleted')
     search_fields = ['customer']
@@ -66,6 +86,8 @@ class PaymentForm(forms.ModelForm):
     )
     customer = fields.get('customer')
     service = fields.get('service')
+    discount = PercentageDecimalField()
+    vat_percent = PercentageDecimalField()
 
     def __init__(self, *args, **kwargs):
         super(PaymentForm, self).__init__(*args, **kwargs)
