@@ -212,6 +212,9 @@ class ServiceSubscription(models.Model):
             #WAS     return  sec_elapsed > (tot_sec + (self.service.period_deadline_modifier * 60*60))
             #WAS elif self.service.period_unit_raw == UNIT_SECONDS:
             #WAS     return  sec_elapsed > (tot_sec + self.service.period_deadline_modifier)
+            #TODO BUG waht if no payments where made ??
+            if not self.last_paid_for:
+                return True
             return self.last_paid_for < timezone.now()
         raise NotImplementedError("TBD")
 

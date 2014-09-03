@@ -2,11 +2,13 @@ from django.contrib import admin
 from django.db import models
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.core.mail import send_mail
+from django.template import loader, Context
 from services import models as services
 from services.models import Service, ServiceSubscription, ServiceSubscriptionPayments, DATE_CHOICES
 from django import forms
 from django.conf import settings 
 from django.contrib.auth.models import Group
+from django.utils import timezone
 
 from services.custom_fields import PercentageDecimalField
 
@@ -64,11 +66,20 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
 
         for obj in queryset:
             if obj.next_payment_due is True:
-                subject = 'payment due'
-                message = "Hi %s, we inform you that you have not paid the amount of %s euro for the periodic service %s" % (obj.customer.name,obj.service.amount,obj.service.name)
+                template = settings.EMAIL_TEMPLATE
+                context = {
+                   'customer' : obj.customer,
+                   'service': obj.service,
+                    #TODO compute
+                   'n_periods' : 1,
+                   'subscription' : obj,
+                    #TODO compute
+                   'now' : timezone.now(), 
+                }
+                subject = 'Payment due'
                 sender = settings.EMAIL_SENDER
                 receivers = [obj.customer.name]
-                send_mail(subject, message, sender, receivers, fail_silently=False) 
+                send_mail(subject, loader.get_template(template).render(Context(context)), sender, receivers, fail_silently=False)
 
     check_payment.short_description = _("Send a remaind mail about unsolved subcscpriptions")
 
