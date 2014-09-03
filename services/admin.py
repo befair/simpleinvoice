@@ -48,10 +48,22 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
     list_display = ('customer', 'service', 'subscribed_on', 'subscribed_until', 'note','is_deleted')
     search_fields = ['customer']
 
-    actions = ['check_payment']
+    actions = ['check_payment','delete_subscriptions','restore_subscriptions']
     
     exclude = ('last_paid_on','last_paid_for')
 
+    def get_queryset(self, request):
+        """
+        """
+        if request.user.is_superuser:
+            qs = self.model.all_objects.get_queryset()
+        else:
+            qs = self.model.objects.get_queryset()
+
+        ordering = self.get_ordering(request)
+        if ordering:
+            qs = qs.order_by(*ordering)
+        return qs
 
     def check_payment(self, request, queryset):
         """
@@ -66,7 +78,7 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
 
         for obj in queryset:
             if obj.next_payment_due is True:
-                template = settings.EMAIL_TEMPLATE
+                template = settings.EMAIL_TEMPLATES['INSOLUTE']
                 context = {
                    'customer' : obj.customer,
                    'service': obj.service,
@@ -79,7 +91,10 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
                 subject = 'Payment due'
                 sender = settings.EMAIL_SENDER
                 receivers = [obj.customer.name]
-                send_mail(subject, loader.get_template(template).render(Context(context)), sender, receivers, fail_silently=False)
+                send_mail(subject, 
+                    loader.get_template(template).render(Context(context)), 
+                    sender, receivers, fail_silently=False
+                )
 
     check_payment.short_description = _("Send a remaind mail about unsolved subcscpriptions")
 
@@ -88,11 +103,24 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
         Flag selected subscriptions as deleted
         """
 
-        for obj in queryset:
-            obj.is_deleted = True
-            obj.save()
+        if request.user.is_superuser:
+            for obj in queryset:
+                obj.is_deleted = True
+                obj.save()
 
     delete_subscriptions.short_description = _("Cancel selected service subscription/s ")
+
+    def restore_subscriptions(self, request, queryset):
+        """
+        Flag selected subscriptions as deleted
+        """
+
+        if request.user.is_superuser:
+            for obj in queryset:
+                obj.is_deleted = False
+                obj.save()
+
+    restore_subscriptions.short_description = _("Restore selected service subscription/s ")
 
     def get_actions(self, request):
         """
@@ -103,8 +131,9 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
         actions = super(ServiceSubscriptionAdmin, self).get_actions(request)
         if 'delete_selected' in actions:
             del actions['delete_selected']
-        if request.user.is_superuser:
-            actions['delete_subscriptions'] = (self.delete_subscriptions,'delete_subscriptions',self.delete_subscriptions.short_description)
+        #if request.user.is_superuser:
+        #    actions['delete_subscriptions'] = (self.delete_subscriptions,'delete_subscriptions',self.delete_subscriptions.short_description)
+        #    actions['restore_subscriptions'] = (self.restore_subscriptions,'restore_subscriptions',self.restore_subscriptions.short_description)
         return actions
 
     class Media:
