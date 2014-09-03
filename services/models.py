@@ -193,6 +193,29 @@ class ServiceSubscription(models.Model):
             return self.subscribed_until <= timezone.now
 
     @property
+    def periods_from_last_payment(self):
+        """
+        How many periods passed from last payment. If there is not any
+        payment yet, subscription is used. 
+        """
+
+        if self.service.period_unit_source == SOURCES['TIME']:
+            if not self.last_paid_for:
+                sec_elapsed = (timezone.now() - self.subscribed_on).total_seconds()
+            else:
+                sec_elapsed = (timezone.now() - self.last_paid_for).total_seconds()
+            if self.service.period_unit_raw == UNIT_MONTHS:
+                return  Decimal(CONVERSION_UNIT_MAP[(UNIT_SECONDS, UNIT_MONTHS)](sec_elapsed)) \
+                 / (self.service.period + self.service.period_deadline_modifier)
+            elif self.service.period_unit_raw == UNIT_HOURS:
+                return  Decimal(CONVERSION_UNIT_MAP[(UNIT_HOURS, UNIT_MONTHS)](sec_elapsed)) \
+                 / (self.service.period + self.service.period_deadline_modifier)
+            elif self.service.period_unit_raw == UNIT_SECONDS:
+                return  Decimal(sec_elapsed) \
+                 / (self.service.period + self.service.period_deadline_modifier)
+        raise NotImplementedError("TBD")
+
+    @property
     def next_payment_due(self):
         """
         Check if a subscription has been regularly payed, basing on the
@@ -212,11 +235,13 @@ class ServiceSubscription(models.Model):
             #WAS     return  sec_elapsed > (tot_sec + (self.service.period_deadline_modifier * 60*60))
             #WAS elif self.service.period_unit_raw == UNIT_SECONDS:
             #WAS     return  sec_elapsed > (tot_sec + self.service.period_deadline_modifier)
-            #TODO BUG waht if no payments where made ??
-            if not self.last_paid_for:
-                return True
-            return self.last_paid_for < timezone.now()
+            #if not self.last_paid_for:
+            #    return self.periods_from_last_payment > 1
+            #return self.last_paid_for < timezone.now()
+            return self.periods_from_last_payment > 1
         raise NotImplementedError("TBD")
+
+            
 
 class ServiceSubscriptionPayments(models.Model):
     """

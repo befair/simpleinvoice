@@ -9,6 +9,7 @@ from django import forms
 from django.conf import settings 
 from django.contrib.auth.models import Group
 from django.utils import timezone
+import math
 
 from services.custom_fields import PercentageDecimalField
 
@@ -79,14 +80,19 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
         for obj in queryset:
             if obj.next_payment_due is True:
                 template = settings.EMAIL_TEMPLATES['INSOLUTE']
+                if obj.last_paid_for:
+                    initial = obj.last_paid_for.date
+                else:
+                    initial = obj.subscribed_on.date
+                n_periods = math.trunc(obj.periods_from_last_payment)
                 context = {
                    'customer' : obj.customer,
+                   'amount' : (obj.discounted_price * n_periods),
                    'service': obj.service,
+                   'n_periods' : n_periods,
+                   'initial' : initial,
                     #TODO compute
-                   'n_periods' : 1,
-                   'subscription' : obj,
-                    #TODO compute
-                   'now' : timezone.now(), 
+                   'now' : timezone.now().date, 
                 }
                 subject = 'Payment due'
                 sender = settings.EMAIL_SENDER

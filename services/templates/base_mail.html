@@ -1,6 +1,13 @@
-Hi {{ customer.name }}, we inform you that you have not paid the amount of {{ service.amount }} €,  
-corresponding to {{ n_periods }} period(s) of subscription to service {{service.name }}
-from date {{subscription.subscribed_on }} to date {{ now }}.
+{% load i18n %} 
 
-Thanks for your attention.
+<head></head>
+<body>
+    <p> {% trans "Hi" %} {{ customer.name }}, {% trans "we inform you that you have not paid the amount of" %} {{ amount }} €,  
+   {% trans "corresponding to" %} {{ n_periods }} {% trans "period(s) of subscription to service" %}
+    {{service.name }} 
+   {% trans "from date" %} {{ initial }} {% trans "to date" %} {{ now }}.
+
+    {% trans "Thanks for your attention." %}
+    </p>
+</body>
 
