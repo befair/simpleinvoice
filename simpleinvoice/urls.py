@@ -16,7 +16,11 @@ urlpatterns = patterns('',
     url(r'^%sadmin/' % URL_PREFIX, include(admin.site.urls)),
 	(r'^%sstatic/(?P<path>.*)$' % URL_PREFIX, 'django.views.static.serve', {'document_root': MEDIA_ROOT }),
 
+    url(r'^bulk-service-payments/', "services.views.bulk_service_payment"),
+
     # API ---
     url(r'^api/get-services/(?P<customer_id>\d+)/', "services.views.get_services"),
+    url(r'^api/get-customers/(?P<service_id>\d+)/', "services.views.get_customers"),
+    url(r'^api/bulk-payments/', "services.views.bulk_payments"),
 
 )

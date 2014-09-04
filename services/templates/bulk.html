@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <meta charset="utf-8">
+  <head>
+    <title>Inserimento pagamenti multipli</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+    <style>
+      label {
+        margin: 10px !important;
+      }
+      body {
+        padding: 10px;
+      }
+      .payment {
+        margin: 10px;
+        border: 1px solid #CFCFCF;
+      }
+      h1 { margin-top: 0px; }
+    </style>
+  </head>
+  <body class="pure-form">
+    <h1>Inserimento di pagamenti multipli</h1>
+    <h2>Scegli il servizio di cui vuoi inserire i pagamenti e poi aggiungi le singole entrate.</h2>
+    <label>Servizio</label>
+    <select id="service">
+      <option selected="selected">- scegli -</option>
+      {% for service in services %}
+      <option value="{{ service.id }}">{{ service.name }}</option>
+      {% endfor %}
+    </select>
+
+    <div id="model" style="display: none;" class="model">
+        <span></span>
+        <label>Cliente</label>
+        <select>
+          <option>- scegli -</option>
+        </select>
+        <label>Pagamento</label><input class="text" type="text">
+        <label>Pagato fino al:</label><input class="date" type="date">
+    </div>  
+
+    <div id="container">
+    </div>
+    <div id="buttons" style="display: none;">
+      <button class="pure-button" onclick="newRow();">Aggiungi pagamento</button>
+      <button class="pure-button" onclick="delRow();">Rimuovi pagamento</button>
+    </div>
+    <button class="pure-button" onclick="send();" style="margin-top: 10px; display: none;">Invia</button>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script>
+
+    nrows = 0;
+
+    function newRow() {
+      nrows = nrows + 1;
+      var el = $('#model').clone();
+      el.attr('class', 'payment');
+      el.appendTo('#container');
+      el.css('display', '');
+      el.children('span').text(nrows+'.');
+    }
+
+    function delRow() {
+      $('#container div:last-child').remove(); 
+    }
+
+    function send() {
+      data = {
+        'service_id': $('#service').val(),
+        'payments': []
+      }; 
+      $('.payment').each(
+        function(i, p) {
+          data['payments'].push({
+            'customer': $(this).children('select').val(),
+            'payment': $(this).children('.text').val(),
+            'date': $(this).children('.date').val()
+          });  
+        }
+      );
+      $.post(
+          '/api/bulk-payments/',
+          data,
+          function(data) {
+            $('body').empty();
+            $('body').append('<h1>Pagamenti inseriti con successo!</h1>');
+          }
+      );
+    }
+
+    $(document).ready(function(){
+
+      // trigger when a service is selected
+      $('#service').change(function(e) {
+        // get id of the selected service
+        service_id = e.target.value;
+        // ask the server for the customers
+        $.get(
+          '/api/get-customers/'+service_id+'/',
+          function(data) {
+            // recreate the options, filtered by customer
+            $.each(data, function(i, s) {
+              $('#model select').append(
+                $('<option>').text(s.customer_name).val(s.customer_id)
+              );
+            });
+            // make service readonly
+            $('#service').attr('disabled', 'disabled');
+            // show first form
+            newRow();
+            $('#buttons, .pure-button').show();
+          }
+        );
+      });
+    });
+    </script>
+  </body>
+</html>
