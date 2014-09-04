@@ -201,6 +201,8 @@ class PaymentForm(forms.ModelForm):
                 service=self.cleaned_data['service'],
                 customer=self.cleaned_data['customer']
             )
+            if subscription.is_deleted:
+                raise forms.ValidationError("A payment cannot be done for the subscription since it is deleted") 
             instance.subscription = subscription 
             instance.save()
 

@@ -226,18 +226,6 @@ class ServiceSubscription(models.Model):
             return False
 
         if self.service.period_unit_source == SOURCES['TIME']:
-            #WAS sec_elapsed = (timezone.now() - self.last_paid_on).total_seconds()
-            #WAS tot_sec = (self.last_paid_for - self.last_paid_on).total_seconds()
-
-            #WAS if self.service.period_unit_raw == UNIT_MONTHS:
-            #WAS     return  sec_elapsed > (tot_sec + (self.service.period_deadline_modifier * 30*24*60*60 ))
-            #WAS elif self.service.period_unit_raw == UNIT_HOURS:
-            #WAS     return  sec_elapsed > (tot_sec + (self.service.period_deadline_modifier * 60*60))
-            #WAS elif self.service.period_unit_raw == UNIT_SECONDS:
-            #WAS     return  sec_elapsed > (tot_sec + self.service.period_deadline_modifier)
-            #if not self.last_paid_for:
-            #    return self.periods_from_last_payment > 1
-            #return self.last_paid_for < timezone.now()
             return self.periods_from_last_payment > 1
         raise NotImplementedError("TBD")
 
@@ -267,6 +255,12 @@ class ServiceSubscriptionPayments(models.Model):
         verbose_name = _("Service subscription payment")
         verbose_name_plural = _("Service subscription payments")
 
+    def __unicode__(self):
+        return _("Payment of %(customer)s to service %(service)s") % {
+            'customer' : self.subscription.customer,
+            'service' : self.subscription.service
+        }
+
     @property
     def discounted_price(self):
         """
@@ -282,3 +276,10 @@ class ServiceSubscriptionPayments(models.Model):
         unit_raw = self.subscription.service.period_unit_raw
         unit_display = self.subscription.service.period_unit_display
         return CONVERSION_UNIT_MAP[(unit_raw, unit_display)](self.paid_for)
+    
+    def save(self, *args, **kwargs):
+        """
+        """
+
+        if not self.subscription.is_deleted:
+            return super(ServiceSubscriptionPayments, self).save(*args,**kwargs)
