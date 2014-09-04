@@ -4,7 +4,7 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from django.core.mail import send_mail
 from django.template import loader, Context
 from services import models as services
-from services.models import Service, ServiceSubscription, ServiceSubscriptionPayments, DATE_CHOICES
+from services.models import Service, ServiceSubscription, ServiceSubscriptionPayment, DATE_CHOICES
 from django import forms
 from django.conf import settings 
 from django.contrib.auth.models import Group
@@ -214,10 +214,10 @@ class PaymentForm(forms.ModelForm):
 
 
     class Meta:
-        model = ServiceSubscriptionPayments
+        model = ServiceSubscriptionPayment
         exclude = ('subscription',)
 
-class ServiceSubscriptionPaymentsAdmin(admin.ModelAdmin): 
+class ServiceSubscriptionPaymentAdmin(admin.ModelAdmin): 
 
     form = PaymentForm
 
@@ -243,4 +243,4 @@ class ServiceSubscriptionPaymentsAdmin(admin.ModelAdmin):
 
 admin.site.register(Service, ServiceAdmin)	
 admin.site.register(ServiceSubscription, ServiceSubscriptionAdmin)	
-admin.site.register(ServiceSubscriptionPayments, ServiceSubscriptionPaymentsAdmin)	
+admin.site.register(ServiceSubscriptionPayment, ServiceSubscriptionPaymentAdmin)	

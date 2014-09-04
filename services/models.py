@@ -120,7 +120,7 @@ class ServiceSubscription(models.Model):
     and some attributes specific to this subscription like discount or
     custom vat_percent.
 
-    It is used by ServiceSubscriptionPayments as template for payment.
+    It is used by ServiceSubscriptionPayment as template for payment.
     """
 
     customer = models.ForeignKey(Customer,verbose_name=_("customer"))
@@ -146,7 +146,7 @@ class ServiceSubscription(models.Model):
     last_update_on = models.DateTimeField(auto_now=True,verbose_name=_("updated on"))
 
     # last paid on and last_paid_for
-    # could be also properties get by ServiceSubscriptionPayments model
+    # could be also properties get by ServiceSubscriptionPayment model
     last_paid_on = models.DateTimeField(null=True,blank=True,verbose_name=_("paid on")) 
     last_paid_for = models.DateTimeField(null=True,blank=True,verbose_name=_("paid for")) 
 
@@ -231,7 +231,7 @@ class ServiceSubscription(models.Model):
 
             
 
-class ServiceSubscriptionPayments(models.Model):
+class ServiceSubscriptionPayment(models.Model):
     """
     """
 
@@ -282,4 +282,4 @@ class ServiceSubscriptionPayments(models.Model):
         """
 
         if not self.subscription.is_deleted:
-            return super(ServiceSubscriptionPayments, self).save(*args,**kwargs)
+            return super(ServiceSubscriptionPayment, self).save(*args,**kwargs)
