@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-04 00:46+0200\n"
+"POT-Creation-Date: 2014-09-04 11:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,7 +137,7 @@ msgstr ""
 msgid "emit date"
 msgstr "data di emissione"
 
-#: invoice/models.py:138 services/models.py:133 services/models.py:257
+#: invoice/models.py:138 services/models.py:133 services/models.py:245
 msgid "discount"
 msgstr "sconto in percentuale"
 
@@ -306,7 +306,7 @@ msgstr "Servizi"
 msgid "service"
 msgstr "Servizio"
 
-#: services/models.py:130 services/models.py:254
+#: services/models.py:130 services/models.py:242
 msgid "VAT percentage"
 msgstr "IVA in percentuale"
 
@@ -322,7 +322,7 @@ msgstr "sottoscritta il"
 msgid "subscribed until"
 msgstr "sottoscritta fino a"
 
-#: services/models.py:143 services/models.py:263
+#: services/models.py:143 services/models.py:251
 msgid "note"
 msgstr "note"
 
@@ -334,11 +334,11 @@ msgstr "creata il"
 msgid "updated on"
 msgstr "aggiornato il"
 
-#: services/models.py:150 services/models.py:259
+#: services/models.py:150 services/models.py:247
 msgid "paid on"
 msgstr "pagato il"
 
-#: services/models.py:151 services/models.py:261
+#: services/models.py:151 services/models.py:249
 msgid "paid for"
 msgstr "pagato fino al"
 
@@ -359,29 +359,35 @@ msgstr "Sottoscrizioni a servizio"
 msgid "Subscription of %(customer)s to service %(service)s"
 msgstr "Sottoscrizione di %(customer)s al servizio %(service)s"
 
-#: services/models.py:250
+#: services/models.py:238
 msgid "subscription"
 msgstr "sottoscrizione"
 
-#: services/models.py:252
+#: services/models.py:240
 msgid "cost"
 msgstr "costo"
 
-#: services/models.py:259
+#: services/models.py:247
 msgid "When has it been paid?"
 msgstr "Quando è stato pagato?"
 
-#: services/models.py:261
+#: services/models.py:249
 msgid "What date has he paid until?"
 msgstr "Fino a quando è stato pagato?"
 
-#: services/models.py:267
+#: services/models.py:255
 msgid "Service subscription payment"
 msgstr "Pagamento di sottoscrizione a servizio"
 
-#: services/models.py:268
+#: services/models.py:256
 msgid "Service subscription payments"
 msgstr "Pagamenti di sottoscrizione a servizio"
+
+#: services/models.py:259
+#, python-format
+#| msgid "Subscription of %(customer)s to service %(service)s"
+msgid "Payment of %(customer)s to service %(service)s"
+msgstr "Pagamento di %(customer)s al servizio %(service)s"
 
 #: services/templates/base_mail.html:5
 msgid "Hi"
@@ -400,12 +406,10 @@ msgid "period(s) of subscription to service"
 msgstr "periodo/i di sottoscrizione al servizio"
 
 #: services/templates/base_mail.html:8
-#| msgid "emit date"
 msgid "from date"
 msgstr "per il periodo che va dal"
 
 #: services/templates/base_mail.html:8
-#| msgid "emit date"
 msgid "to date"
 msgstr "al"
 
