@@ -37,9 +37,20 @@ class ServiceSubscriptionForm(forms.ModelForm):
     discount = PercentageDecimalField()
     vat_percent = PercentageDecimalField()
 
+    def save(self, commit=True):
+        instance = super(ServiceSubscriptionForm, self).save(commit=False)
+
+        if instance:
+
+            service = Service.objects.get(pk=1)
+            instance.service = service
+            instance.save()
+
+        return instance
+
     class Meta:
         model = ServiceSubscription
-        exclude = ('is_deleted',)
+        #exclude = ('is_deleted','service',)
     
 
 class ServiceSubscriptionAdmin(admin.ModelAdmin): 
@@ -65,6 +76,13 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
         if ordering:
             qs = qs.order_by(*ordering)
         return qs
+
+    def get_form(self, request, obj=None, **kwargs):
+        """
+        Form Meta exclude seems to not work
+        """
+        kwargs['exclude'] = ['is_deleted','service',]
+        return super(ServiceSubscriptionAdmin, self).get_form(request, obj=obj, **kwargs)
 
     def check_payment(self, request, queryset):
         """
@@ -233,6 +251,12 @@ class ServiceSubscriptionPaymentAdmin(admin.ModelAdmin):
     list_display = ('subscription', 'paid_on', 'amount', 'note')
     search_fields = ['subscription']
 
+    def get_form(self, request, obj=None, **kwargs):
+        """
+        Form Meta exclude seems to not work
+        """
+        kwargs['exclude'] = ['discount','vat_percent',]
+        return super(ServiceSubscriptionPaymentAdmin, self).get_form(request, obj=obj, **kwargs)
 
     class Media:
         css = {
