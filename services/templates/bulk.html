@@ -178,6 +178,8 @@
 
       // trigger when a service is selected
       $('#service').change(function(e) {
+        for(var i = 0; i < 10;  i++)
+          newRow();
         // get id of the selected service
         service_id = e.target.value;
         // ask the server for the customers
