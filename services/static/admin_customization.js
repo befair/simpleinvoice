@@ -29,7 +29,7 @@ $(document).ready(function(){
       }
     );
   });
-  
+}  
   // trigger when service is selected
   $('#id_service').change(function(e) {
     service_id = e.target.value;
