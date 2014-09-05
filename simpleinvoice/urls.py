@@ -21,6 +21,7 @@ urlpatterns = patterns('',
     # API ---
     url(r'^api/get-services/(?P<customer_id>\d+)/', "services.views.get_services"),
     url(r'^api/get-customers/(?P<service_id>\d+)/', "services.views.get_customers"),
+    url(r'^api/get-subscription/(?P<service_id>\d+)/(?P<customer_id>\d+)/', "services.views.get_subscription"),
     url(r'^api/bulk-payments/', "services.views.bulk_payments"),
 
 )

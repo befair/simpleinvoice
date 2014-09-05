@@ -35,8 +35,9 @@
         <select>
           <option>- scegli -</option>
         </select>
-        <label>Pagamento</label><input class="text" type="text">
-        <label>Pagato fino al:</label><input class="date" type="date">
+        <label>Costo</label><input class="text cost" type="text">
+        <label>Pagato fino al:</label><input class="date" type="date" style="width:170px;">
+        <label>Note</label><input class="text notes" type="text" style="width:200px;">
     </div>  
 
     <div id="container">
@@ -73,8 +74,9 @@
         function(i, p) {
           data['payments'].push({
             'customer': $(this).children('select').val(),
-            'payment': $(this).children('.text').val(),
-            'date': $(this).children('.date').val()
+            'cost': $(this).children('.cost').val(),
+            'paid_for': $(this).children('.date').val(),
+            'notes': $(this).children('.notes').val()
           });  
         }
       );
@@ -103,6 +105,7 @@
               $('#model select').append(
                 $('<option>').text(s.customer_name).val(s.customer_id)
               );
+              $('#model .cost').val(data.amount);
             });
             // make service readonly
             $('#service').attr('disabled', 'disabled');

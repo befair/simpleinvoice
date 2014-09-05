@@ -63,6 +63,8 @@ def get_customers(request, service_id):
 
     service = get_object_or_404(Service, pk=service_id)
 
+    response['amount'] = str(service.amount)
+
     for sub in ServiceSubscription.objects.filter(service=service_id):
         response[sub.customer.id] = {
             'customer_id': sub.customer.id,
@@ -73,3 +75,4 @@ def get_customers(request, service_id):
         json.dumps(response),
         content_type="application/json"
     )
+
