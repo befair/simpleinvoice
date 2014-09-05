@@ -123,7 +123,7 @@
       $('.payment').each(function(i, f){
 
         var cost = $(this).children('.cost').val();
-        if(!parseFloat(cost)) {
+        if(!(parseFloat(cost) > 0))) {
           $(this).children('.cost').addClass('error');
           nofloat = true;
         }
@@ -178,7 +178,7 @@
 
       // trigger when a service is selected
       $('#service').change(function(e) {
-        for(var i = 0; i < 10;  i++)
+        for(var i = 0; i < 4;  i++)
           newRow();
         // get id of the selected service
         service_id = e.target.value;
