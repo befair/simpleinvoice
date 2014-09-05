@@ -79,7 +79,7 @@
     </div>
     <div id="buttons" style="display: none;">
       <button class="pure-button" onclick="newRow();">Aggiungi pagamento</button>
-      <button class="pure-button" onclick="delRow();">Rimuovi pagamento</button>
+      <!-- <button class="pure-button" onclick="delRow();">Rimuovi pagamento</button> -->
     </div>
     <button id="send" class="pure-button" onclick="send();" style="margin-top: 10px; display: none;">Invia</button>
     <span id="error-message" style="display: none;">Devi compilare i campi in rosso.</span>
@@ -123,7 +123,7 @@
       $('.payment').each(function(i, f){
 
         var cost = $(this).children('.cost').val();
-        if(!(parseFloat(cost) > 0))) {
+        if(!(parseFloat(cost) > 0)) {
           $(this).children('.cost').addClass('error');
           nofloat = true;
         }
@@ -178,7 +178,7 @@
 
       // trigger when a service is selected
       $('#service').change(function(e) {
-        for(var i = 0; i < 4;  i++)
+        for(var i = 0; i < 1;  i++)
           newRow();
         // get id of the selected service
         service_id = e.target.value;
