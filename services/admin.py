@@ -233,7 +233,7 @@ class PaymentForm(forms.ModelForm):
 
     class Meta:
         model = ServiceSubscriptionPayment
-        exclude = ('subscription',)
+        exclude = ('subscription','vat_percent','discount',)
 
 class ServiceSubscriptionPaymentAdmin(admin.ModelAdmin): 
 
