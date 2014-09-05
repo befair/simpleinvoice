@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from settings import URL_PREFIX, MEDIA_ROOT
+from django.views.generic.base import RedirectView
 
 from django.contrib import admin
 admin.autodiscover()
@@ -11,6 +12,8 @@ urlpatterns = patterns('',
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+
+    url(r'^$', RedirectView.as_view(url='/admin')),
 
     url(r'^%sdisplay/' % URL_PREFIX, 'invoice.views.display', name="display-multiple"),
     url(r'^%sadmin/' % URL_PREFIX, include(admin.site.urls)),
