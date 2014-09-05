@@ -41,7 +41,8 @@ $(document).ready(function(){
     $('#id_vat_percent').val(s.vat);
     $('#id_discount').val(s.discount);
     // show hidden fields
-    $('.field-amount, .field-vat_percent, .field-discount, .field-paid_for, .field-note').fadeIn();
+    // matteo88: for reesmarche vat_percent and discount are hidden
+    $('.field-amount, .field-paid_for, .field-note').fadeIn();
   });
 
 });
