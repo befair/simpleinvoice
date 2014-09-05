@@ -2,9 +2,23 @@ from django.contrib import admin
 from django.db import models
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.core.mail import send_mail
+from django.template import loader, Context
 from services import models as services
-from services.models import Service, ServiceSubscription, ServiceSubscriptionPayments, DATE_CHOICES
+from services.models import Service, ServiceSubscription, ServiceSubscriptionPayment, DATE_CHOICES
 from django import forms
+from django.conf import settings 
+from django.contrib.auth.models import Group
+from django.utils import timezone
+import math
+
+from services.custom_fields import PercentageDecimalField
+
+class ServiceSubscriptionForm(forms.ModelForm):
+
+    default_vat_percent = PercentageDecimalField()
+
+    class Meta:
+        model = Service
 
 class ServiceAdmin(admin.ModelAdmin): 
 
@@ -18,14 +32,57 @@ class ServiceAdmin(admin.ModelAdmin):
             'all' : ('adminstyle.css',),
         }
 
+class ServiceSubscriptionForm(forms.ModelForm):
+
+    discount = PercentageDecimalField()
+    vat_percent = PercentageDecimalField()
+
+    def save(self, commit=True):
+        instance = super(ServiceSubscriptionForm, self).save(commit=False)
+
+        if instance:
+
+            service = Service.objects.get(pk=1)
+            instance.service = service
+            instance.save()
+
+        return instance
+
+    class Meta:
+        model = ServiceSubscription
+        #exclude = ('is_deleted','service',)
+    
+
 class ServiceSubscriptionAdmin(admin.ModelAdmin): 
+
+    form = ServiceSubscriptionForm
 
     list_display = ('customer', 'service', 'subscribed_on', 'subscribed_until', 'note','is_deleted')
     search_fields = ['customer']
 
-    actions = ['check_payment']
+    actions = ['check_payment','delete_subscriptions','restore_subscriptions']
     
     exclude = ('last_paid_on','last_paid_for')
+
+    def get_queryset(self, request):
+        """
+        """
+        if request.user.is_superuser:
+            qs = self.model.all_objects.get_queryset()
+        else:
+            qs = self.model.objects.get_queryset()
+
+        ordering = self.get_ordering(request)
+        if ordering:
+            qs = qs.order_by(*ordering)
+        return qs
+
+    def get_form(self, request, obj=None, **kwargs):
+        """
+        Form Meta exclude seems to not work
+        """
+        kwargs['exclude'] = ['is_deleted','service',]
+        return super(ServiceSubscriptionAdmin, self).get_form(request, obj=obj, **kwargs)
 
     def check_payment(self, request, queryset):
         """
@@ -40,12 +97,68 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
 
         for obj in queryset:
             if obj.next_payment_due is True:
-                subject = 'payment due'
-                message = "Hi %s, we inform you that you have not paid the amount of %s euro for the periodic service %s" % (obj.customer.name,obj.service.amount,obj.service.name)
-                sender = 'admin@admin.it'
+                template = settings.EMAIL_TEMPLATES['INSOLUTE']
+                if obj.last_paid_for:
+                    initial = obj.last_paid_for.date
+                else:
+                    initial = obj.subscribed_on.date
+                n_periods = math.trunc(obj.periods_from_last_payment)
+                context = {
+                   'customer' : obj.customer,
+                   'amount' : (obj.discounted_price * n_periods),
+                   'service': obj.service,
+                   'n_periods' : n_periods,
+                   'initial' : initial,
+                    #TODO compute
+                   'now' : timezone.now().date, 
+                }
+                subject = 'Payment due'
+                sender = settings.EMAIL_SENDER
                 receivers = [obj.customer.name]
-                send_mail(subject, message, sender, receivers, fail_silently=False) 
-    check_payment.short_description = _("Check if selected subscription are paid")
+                send_mail(subject, 
+                    loader.get_template(template).render(Context(context)), 
+                    sender, receivers, fail_silently=False
+                )
+
+    check_payment.short_description = _("Send a remaind mail about unsolved subcscpriptions")
+
+    def delete_subscriptions(self, request, queryset):
+        """
+        Flag selected subscriptions as deleted
+        """
+
+        if request.user.is_superuser:
+            for obj in queryset:
+                obj.is_deleted = True
+                obj.save()
+
+    delete_subscriptions.short_description = _("Cancel selected service subscription/s ")
+
+    def restore_subscriptions(self, request, queryset):
+        """
+        Flag selected subscriptions as deleted
+        """
+
+        if request.user.is_superuser:
+            for obj in queryset:
+                obj.is_deleted = False
+                obj.save()
+
+    restore_subscriptions.short_description = _("Restore selected service subscription/s ")
+
+    def get_actions(self, request):
+        """
+        Remove default cancel action behaviour, using custom action
+        instead (see delete_subscriptions ) 
+        """
+
+        actions = super(ServiceSubscriptionAdmin, self).get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        #if request.user.is_superuser:
+        #    actions['delete_subscriptions'] = (self.delete_subscriptions,'delete_subscriptions',self.delete_subscriptions.short_description)
+        #    actions['restore_subscriptions'] = (self.restore_subscriptions,'restore_subscriptions',self.restore_subscriptions.short_description)
+        return actions
 
     class Media:
         css = {
@@ -64,17 +177,12 @@ class PaymentForm(forms.ModelForm):
     )
     customer = fields.get('customer')
     service = fields.get('service')
+    discount = PercentageDecimalField()
+    vat_percent = PercentageDecimalField()
 
     def __init__(self, *args, **kwargs):
         super(PaymentForm, self).__init__(*args, **kwargs)
         self.fields['paid_for'].initial = DATE_CHOICES[0][0]
-    #    fields = forms.models.fields_for_model(ServiceSubscription,
-    #        fields=['customer','service']
-    #    )
-    #    self.fields['customer'] = fields.get('customer')
-    #    self.fields['service'] = fields.get('service')
-    #    self.Meta.fields.append('customer')
-    #    self.Meta.fields.append('service')
 
     def set_paid_for(self,service=None):
         """
@@ -94,24 +202,13 @@ class PaymentForm(forms.ModelForm):
 
     def clean(self):
    
-        print (self.data['paid_for'])
         if self.data['paid_for'] == "":
             if self.cleaned_data.get('service'):
                 service = self.cleaned_data['service']
-                #if service.period_unit_raw == services.UNIT_MONTHS:
-                #    #instance.paid_for = 1
-                #    self.cleaned_data['paid_for'] = DATE_CHOICES[service.period/12][0]
-                #elif service.period_unit_raw == services.UNIT_HOURS:
-                #    #instance.paid_for = 720
-                #    self.cleaned_data['paid_for'] = DATE_CHOICES[service.period/(360*24)][0]
-                #elif service.period_unit_raw == services.UNIT_SECONDS:
-                #    #instance.paid_for = 259200
-                #    self.cleaned_data['paid_for'] = DATE_CHOICES[service.period/(360*24*60*60)][0]
                 self.cleaned_data['paid_for'] = self.set_paid_for(service)
         
         cleaned_data=super(PaymentForm, self).clean()
 
-        print "%s" % (cleaned_data)
         return cleaned_data
 
     def save(self, commit=True):
@@ -122,6 +219,8 @@ class PaymentForm(forms.ModelForm):
                 service=self.cleaned_data['service'],
                 customer=self.cleaned_data['customer']
             )
+            if subscription.is_deleted:
+                raise forms.ValidationError("A payment cannot be done for the subscription since it is deleted") 
             instance.subscription = subscription 
             instance.save()
 
@@ -133,16 +232,31 @@ class PaymentForm(forms.ModelForm):
 
 
     class Meta:
-        model = ServiceSubscriptionPayments
-        exclude = ('subscription',)
+        model = ServiceSubscriptionPayment
+        exclude = ('subscription','vat_percent','discount',)
 
-class ServiceSubscriptionPaymentsAdmin(admin.ModelAdmin): 
+class ServiceSubscriptionPaymentAdmin(admin.ModelAdmin): 
 
     form = PaymentForm
+
+    fieldsets = (
+        (None, {
+            'fields' : ('customer', 
+                        'service','amount', 'vat_percent',
+                        'discount', 'paid_for', 'note'
+            )
+        }),
+    )
     
-    list_display = ('subscription', 'amount', 'paid_on','note')
+    list_display = ('subscription', 'paid_on', 'amount', 'note')
     search_fields = ['subscription']
 
+    def get_form(self, request, obj=None, **kwargs):
+        """
+        Form Meta exclude seems to not work
+        """
+        kwargs['exclude'] = ['discount','vat_percent',]
+        return super(ServiceSubscriptionPaymentAdmin, self).get_form(request, obj=obj, **kwargs)
 
     class Media:
         css = {
@@ -153,4 +267,4 @@ class ServiceSubscriptionPaymentsAdmin(admin.ModelAdmin):
 
 admin.site.register(Service, ServiceAdmin)	
 admin.site.register(ServiceSubscription, ServiceSubscriptionAdmin)	
-admin.site.register(ServiceSubscriptionPayments, ServiceSubscriptionPaymentsAdmin)	
+admin.site.register(ServiceSubscriptionPayment, ServiceSubscriptionPaymentAdmin)	

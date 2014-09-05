@@ -41,11 +41,6 @@ DEFAULT_VAT_PERCENT = 0.21
 
 #############
 
-SITE_ID = 1
-
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = '/home/letti/src/app' # change this to a proper location
-
 locale.setlocale(locale.LC_ALL, 'it_IT.UTF8')
 LOCALE_PATHS = ( 
     os.path.join(BASE_DIR, 'locale',

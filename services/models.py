@@ -25,6 +25,11 @@ UNIT_CHOICES = (
 )
 
 DATE_CHOICES = (
+    (datetime.datetime(2010,1,1), '01/01/2010'),
+    (datetime.datetime(2011,1,1), '01/01/2011'),
+    (datetime.datetime(2012,1,1), '01/01/2012'),
+    (datetime.datetime(2013,1,1), '01/01/2013'),
+    (datetime.datetime(2014,1,1), '01/01/2014'),
     (datetime.datetime(2015,1,1), '01/01/2015'),
     (datetime.datetime(2016,1,1), '01/01/2016'),
     (datetime.datetime(2017,1,1), '01/01/2017'),
@@ -55,7 +60,11 @@ CONVERSION_UNIT_MAP = {
     (UNIT_SECONDS, UNIT_MONTHS): partial(lambda x : x/2592000),
 }
 
-SOURCES_EPOCH_NOW  = 'epoch_now'
+# A source define the unite of measure chose for a subsription (time, MB, etc. )
+
+SOURCES = {
+    'TIME' : 'epoch_now',
+}
 
 #--------------------------------------------------------------------------------
 
@@ -100,13 +109,18 @@ class Service(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+
+        verbose_name = _("Service")
+        verbose_name_plural = _("Services")
+
 class ServiceSubscription(models.Model):
     """
     Map services offered to customers specifying subscription period,
     and some attributes specific to this subscription like discount or
     custom vat_percent.
 
-    It is used by ServiceSubscriptionPayments as template for payment.
+    It is used by ServiceSubscriptionPayment as template for payment.
     """
 
     customer = models.ForeignKey(Customer,verbose_name=_("customer"))
@@ -132,7 +146,7 @@ class ServiceSubscription(models.Model):
     last_update_on = models.DateTimeField(auto_now=True,verbose_name=_("updated on"))
 
     # last paid on and last_paid_for
-    # could be also properties get by ServiceSubscriptionPayments model
+    # could be also properties get by ServiceSubscriptionPayment model
     last_paid_on = models.DateTimeField(null=True,blank=True,verbose_name=_("paid on")) 
     last_paid_for = models.DateTimeField(null=True,blank=True,verbose_name=_("paid for")) 
 
@@ -144,13 +158,30 @@ class ServiceSubscription(models.Model):
     is_deleted = models.BooleanField(default=False,verbose_name=("is deleted"))
     when_deleted = models.DateTimeField(null=True,blank=True,verbose_name=_("when deleted"))
 
+    objects = ServiceSubscriptionManager()
 
     all_objects = models.Manager()
 
-    objects = ServiceSubscriptionManager()
-
     class Meta:
         unique_together = (('customer', 'service', 'subscribed_on'),)
+        verbose_name = _("Service subscription")
+        verbose_name_plural = _("Service subscriptions")
+
+    def __unicode__(self):
+        return _("Subscription of %(customer)s to service %(service)s") % {
+            'customer' : self.customer,
+            'service' : self.service
+        }
+
+    @property
+    def discounted_price(self):
+        """
+        Compute discounted subscription quote.
+
+        Discount is a percentage.
+        """
+        
+        return self.service.amount * (1 - self.discount)
 
     @property
     def expired(self):
@@ -162,34 +193,45 @@ class ServiceSubscription(models.Model):
             return self.subscribed_until <= timezone.now
 
     @property
+    def periods_from_last_payment(self):
+        """
+        How many periods passed from last payment. If there is not any
+        payment yet, subscription is used. 
+        """
+
+        if self.service.period_unit_source == SOURCES['TIME']:
+            if not self.last_paid_for:
+                sec_elapsed = (timezone.now() - self.subscribed_on).total_seconds()
+            else:
+                sec_elapsed = (timezone.now() - self.last_paid_for).total_seconds()
+            if self.service.period_unit_raw == UNIT_MONTHS:
+                return  Decimal(CONVERSION_UNIT_MAP[(UNIT_SECONDS, UNIT_MONTHS)](sec_elapsed)) \
+                 / (self.service.period + self.service.period_deadline_modifier)
+            elif self.service.period_unit_raw == UNIT_HOURS:
+                return  Decimal(CONVERSION_UNIT_MAP[(UNIT_HOURS, UNIT_MONTHS)](sec_elapsed)) \
+                 / (self.service.period + self.service.period_deadline_modifier)
+            elif self.service.period_unit_raw == UNIT_SECONDS:
+                return  Decimal(sec_elapsed) \
+                 / (self.service.period + self.service.period_deadline_modifier)
+        raise NotImplementedError("TBD")
+
+    @property
     def next_payment_due(self):
         """
         Check if a subscription has been regularly payed, basing on the
-        last payement registered into the subscription.
-
-        There has not been any payement for the subscription, 
+        last payement expiry date registered into the subscription.
         """
 
         if self.expired or self.is_deleted:
             return False
 
-        if not self.last_paid_on:
-            return False
-
-        if self.service.period_unit_source == SOURCES_EPOCH_NOW:
-            sec_elapsed = (timezone.now() - self.last_paid_on).total_seconds()
-            tot_sec = (self.last_paid_for - self.last_paid_on).total_seconds()
-
-            if self.service.period_unit_raw == UNIT_MONTHS:
-                return  sec_elapsed > (tot_sec + (self.service.period_deadline_modifier * 30*24*60*60 ))
-            elif self.service.period_unit_raw == UNIT_HOURS:
-                return  sec_elapsed > (tot_sec + (self.service.period_deadline_modifier * 60*60))
-            elif self.service.period_unit_raw == UNIT_SECONDS:
-                return  sec_elapsed > (tot_sec + self.service.period_deadline_modifier)
+        if self.service.period_unit_source == SOURCES['TIME']:
+            return self.periods_from_last_payment > 1
         raise NotImplementedError("TBD")
-        
 
-class ServiceSubscriptionPayments(models.Model):
+            
+
+class ServiceSubscriptionPayment(models.Model):
     """
     """
 
@@ -204,15 +246,40 @@ class ServiceSubscriptionPayments(models.Model):
 
     paid_on = models.DateTimeField(auto_now_add=True, help_text=_('When has it been paid?'),verbose_name=_("paid on")) 
     #WAS: paid_for = models.IntegerField(help_text=_("For what has he paid? (incremental value). Leave 0 to use default"),verbose_name=_("paid for"))
-    paid_for = models.DateTimeField(choices=DATE_CHOICES,help_text=_("For what has he paid? (incremental value). Leave 0 to use default"),verbose_name=_("paid for")) 
+    paid_for = models.DateTimeField(choices=DATE_CHOICES,help_text=_("What date has he paid until?"),verbose_name=_("paid for")) 
 
     note = models.TextField(blank=True,verbose_name=_("note"))
 
     class Meta:
         unique_together = (('subscription', 'paid_for'),)
+        verbose_name = _("Service subscription payment")
+        verbose_name_plural = _("Service subscription payments")
+
+    def __unicode__(self):
+        return _("Payment of %(customer)s to service %(service)s") % {
+            'customer' : self.subscription.customer,
+            'service' : self.subscription.service
+        }
+
+    @property
+    def discounted_price(self):
+        """
+        Compute discounted subscription quote.
+
+        Discount is a percentage.
+        """
+        
+        return self.amount * (1 - self.discount)
 
     @property
     def paid_for_display(self):
         unit_raw = self.subscription.service.period_unit_raw
         unit_display = self.subscription.service.period_unit_display
         return CONVERSION_UNIT_MAP[(unit_raw, unit_display)](self.paid_for)
+    
+    def save(self, *args, **kwargs):
+        """
+        """
+
+        if not self.subscription.is_deleted:
+            return super(ServiceSubscriptionPayment, self).save(*args,**kwargs)

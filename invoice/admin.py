@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.safestring import mark_safe
 from django.contrib.sites.models import Site
 from django.contrib import admin
 from django import forms
@@ -126,6 +127,11 @@ class CustomerForm(forms.ModelForm):
 
     class Meta:
         model = Customer
+
+        help_texts = {
+            'ssn' : _('SSN number must be inserted if customer is a natural person'),
+            'vat' : _('VAT number must be inserted if customer is a legal person')
+        }
 
     def clean(self):
 

@@ -162,3 +162,13 @@ LOGGING = {
         },
     }
 }
+
+
+SITE_ID = 1
+
+EMAIL_SENDER = 'webmaster@localhost' # overwrite this with proper mail address
+EMAIL_TEMPLATES = {
+    'INSOLUTE' : 'base_mail.html',
+}
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'mails') # change this to a proper location
