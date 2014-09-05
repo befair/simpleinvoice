@@ -15,7 +15,15 @@
         margin: 10px;
         border: 1px solid #CFCFCF;
       }
+      .error {
+        border-color: red !important;
+      }
       h1 { margin-top: 0px; }
+      #error-message {
+        color: red;
+        font-weight: bold;
+        margin-left: 10px;
+      }
     </style>
   </head>
   <body class="pure-form">
@@ -30,13 +38,40 @@
     </select>
 
     <div id="model" style="display: none;" class="model">
-        <span></span>
         <label>Cliente</label>
-        <select>
+        <select class="customer">
           <option>- scegli -</option>
         </select>
         <label>Costo</label><input class="text cost" type="text">
-        <label>Pagato fino al:</label><input class="date" type="date" style="width:170px;">
+        <label>Pagato fino al:</label>
+        <select class="date" style="width:170px;">
+          <option>01/01/2010</option>
+          <option>01/01/2011</option>
+          <option>01/01/2012</option>
+          <option>01/01/2013</option>
+          <option>01/01/2014</option>
+          <option>01/01/2015</option>
+          <option>01/01/2016</option>
+          <option>01/01/2017</option>
+          <option>01/01/2018</option>
+          <option>01/01/2019</option>
+          <option>01/01/2020</option>
+          <option>01/01/2021</option>
+          <option>01/01/2022</option>
+          <option>01/01/2023</option>
+          <option>01/01/2024</option>
+          <option>01/01/2025</option>
+          <option>01/01/2026</option>
+          <option>01/01/2027</option>
+          <option>01/01/2028</option>
+          <option>01/01/2029</option>
+          <option>01/01/2030</option>
+          <option>01/01/2031</option>
+          <option>01/01/2032</option>
+          <option>01/01/2033</option>
+          <option>01/01/2034</option>
+          <option>01/01/2035</option>
+        </select>
         <label>Note</label><input class="text notes" type="text" style="width:200px;">
     </div>  
 
@@ -46,7 +81,8 @@
       <button class="pure-button" onclick="newRow();">Aggiungi pagamento</button>
       <button class="pure-button" onclick="delRow();">Rimuovi pagamento</button>
     </div>
-    <button class="pure-button" onclick="send();" style="margin-top: 10px; display: none;">Invia</button>
+    <button id="send" class="pure-button" onclick="send();" style="margin-top: 10px; display: none;">Invia</button>
+    <span id="error-message" style="display: none;">Devi compilare i campi in rosso.</span>
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script>
 
@@ -62,10 +98,33 @@
     }
 
     function delRow() {
+      nrows = nrows - 1;
       $('#container div:last-child').remove(); 
     }
 
     function send() {
+
+      $('.error').removeClass('error');
+      errors = false;
+      $('#error-message').hide();
+
+      // form validation
+      $('.payment').each(function(i, f){
+        if($(this).children('.customer').val() == '- scegli -') {
+          $(this).children('.customer').addClass('error');  
+          errors = true;
+        } 
+        if(!$(this).children('.cost').val()) {
+          $(this).children('.cost').addClass('error');  
+          errors = true;
+        } 
+      });
+
+      if(errors){
+        $('#error-message').show();
+        return;
+      }
+        
       data = {
         'service_id': $('#service').val(),
         'payments': []
@@ -73,7 +132,7 @@
       $('.payment').each(
         function(i, p) {
           data['payments'].push({
-            'customer': $(this).children('select').val(),
+            'customer': $(this).children('.customer').val(),
             'cost': $(this).children('.cost').val(),
             'paid_for': $(this).children('.date').val(),
             'notes': $(this).children('.notes').val()
@@ -102,10 +161,12 @@
           function(data) {
             // recreate the options, filtered by customer
             $.each(data, function(i, s) {
-              $('#model select').append(
-                $('<option>').text(s.customer_name).val(s.customer_id)
-              );
-              $('#model .cost').val(data.amount);
+              if(i != 'amount') {
+                $('#model .customer').append(
+                  $('<option>').text(s.customer_name).val(s.customer_id)
+                );
+                $('#model .cost').val(data.amount);
+              }
             });
             // make service readonly
             $('#service').attr('disabled', 'disabled');
