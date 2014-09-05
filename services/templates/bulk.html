@@ -19,7 +19,7 @@
         border-color: red !important;
       }
       h1 { margin-top: 0px; }
-      #error-message {
+      #error-message, #float-message {
         color: red;
         font-weight: bold;
         margin-left: 10px;
@@ -83,10 +83,19 @@
     </div>
     <button id="send" class="pure-button" onclick="send();" style="margin-top: 10px; display: none;">Invia</button>
     <span id="error-message" style="display: none;">Devi compilare i campi in rosso.</span>
+    <span id="float-message" style="display: none;">Il costo deve essere un decimale.</span>
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script>
 
     nrows = 0;
+
+    function isFloat(n) {
+      return n === +n && n !== (n|0);
+    }
+    
+    function isInteger(n) {
+      return n === +n && n === (n|0);
+    }
 
     function newRow() {
       nrows = nrows + 1;
@@ -106,10 +115,19 @@
 
       $('.error').removeClass('error');
       errors = false;
+      nofloat = false;
       $('#error-message').hide();
+      $('#float-message').hide();
 
       // form validation
       $('.payment').each(function(i, f){
+
+        var cost = $(this).children('.cost').val();
+        if(!parseFloat(cost)) {
+          $(this).children('.cost').addClass('error');
+          nofloat = true;
+        }
+
         if($(this).children('.customer').val() == '- scegli -') {
           $(this).children('.customer').addClass('error');  
           errors = true;
@@ -120,6 +138,11 @@
         } 
       });
 
+      if(nofloat){
+        $('#float-message').show();
+        return;
+      }
+        
       if(errors){
         $('#error-message').show();
         return;
@@ -144,9 +167,11 @@
           data,
           function(data) {
             $('body').empty();
-            $('body').append('<h1>Pagamenti inseriti con successo!</h1>');
+            $('body').append('<h1>Pagamenti inseriti con successo!</h1><p><a href="/">Torna al pannello di controllo.</a></p>');
           }
-      );
+      ).error(function() {
+        alert('Stai cercando di inserire un pagamento che già esiste');
+      });
     }
 
     $(document).ready(function(){
