@@ -81,7 +81,9 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
         """
         Form Meta exclude seems to not work
         """
-        kwargs['exclude'] = ['is_deleted','service',]
+        kwargs['exclude'] = ['is_deleted','service',
+            'last_paid_on','last_paid_for',
+        ]
         return super(ServiceSubscriptionAdmin, self).get_form(request, obj=obj, **kwargs)
 
     def check_payment(self, request, queryset):
@@ -130,6 +132,7 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             for obj in queryset:
                 obj.is_deleted = True
+                obj.when_deleted = timezone.now()
                 obj.save()
 
     delete_subscriptions.short_description = _("Cancel selected service subscription/s ")
@@ -142,6 +145,7 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             for obj in queryset:
                 obj.is_deleted = False
+                obj.when_deleted = None
                 obj.save()
 
     restore_subscriptions.short_description = _("Restore selected service subscription/s ")
