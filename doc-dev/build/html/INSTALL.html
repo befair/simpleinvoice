@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Istruzioni per installare Simpleinvoice (8 settembre 2014) &mdash; DES Developer Manual 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="DES Developer Manual 0.0.1 documentation" href="index.html" />
+    <link rel="prev" title="Welcome to Simpleinvoice Developers documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Simpleinvoice Developers documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">DES Developer Manual 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="istruzioni-per-installare-simpleinvoice-8-settembre-2014">
+<h1>Istruzioni per installare Simpleinvoice (8 settembre 2014)<a class="headerlink" href="#istruzioni-per-installare-simpleinvoice-8-settembre-2014" title="Permalink to this headline">¶</a></h1>
+<p>0/6</p>
+<blockquote>
+<div><p>E&#8217; consigliato installare Simpleinvoice in un virtual environment</p>
+<p>$ mkvirtualenv &#8220;name&#8221;  &#8211;&gt; creare ambiente di lavoro</p>
+<p>I prossimi passi dell&#8217;installazione avranno come ambiente il virtual
+environment creato.</p>
+</div></blockquote>
+<p>1/6 Scaricare il codice del progetto SIMPLEINVOICE dal repository pubblico:</p>
+<blockquote>
+<div>$ git clone <a class="reference external" href="https://github.com/befair/simpleinvoice.git">https://github.com/befair/simpleinvoice.git</a></div></blockquote>
+<p>2/6 Installare i requisiti del progetto:</p>
+<blockquote>
+<div>simpleinvoice$ pip install -r requirements.txt</div></blockquote>
+<p>3/6 Configurare Simpleinvoice:</p>
+<blockquote>
+<div><blockquote>
+<div><ol class="arabic simple">
+<li>Copiare il contenuto del file &#8220;settings_dist.py&#8221; nel</li>
+</ol>
+</div></blockquote>
+<p>file &#8220;settings.py&#8221;:</p>
+<blockquote>
+<div><p>/simpleinvoice$ cd simpleinvoice
+/simpleinvoice/simpleinvoice$ cp settings_dist.py settings.py</p>
+<ol class="arabic simple" start="2">
+<li>aprire il file &#8220;settings.py&#8221;:</li>
+</ol>
+<p>quindi inserire i settaggi relativi a &#8220;DATABASES&#8221; e ai vari valori &#8220;COMPANY_*&#8221;.</p>
+</div></blockquote>
+</div></blockquote>
+<p>4/6 Sincronizzare il database:</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p class="first">Creazione delle tabelle:</p>
+<p>In caso di utilizzo di postgreSQL è necessario disporre di un database già</p>
+</li>
+</ol>
+<dl class="docutils">
+<dt>creato ed associato ad un utente.</dt>
+<dd>Il nome del database, insieme all&#8217;username e alla password dell&#8217;utente a cui
+è associato, vanno inseriti nei campi corrispondenti della struttura
+DATABASES nel file &#8220;settings.py&#8221; in simpleinvoice/simpleinvoice/.</dd>
+</dl>
+<p>In caso il database sia sqlite, sarà sufficiente settare il nome del database
+nello stesso file di cui sopra.</p>
+<p>Inizializzare il database eseguendo:</p>
+<blockquote>
+<div><ul class="simple">
+<li>simpleinvoice$ python manage.py migrate &#8211;noinput</li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt>NOTA: Nel caso sia necessario settare username, password, ed email dell&#8217;utente</dt>
+<dd><blockquote class="first">
+<div>amministratore, eseguire:</div></blockquote>
+<ul class="last simple">
+<li>simpleinvoice$ python manage.py createsuperuser</li>
+</ul>
+</dd>
+</dl>
+<p>Se durante la creazione viene visualizzato il messaggio:</p>
+<blockquote>
+<div><ul class="simple">
+<li>&#8221; Your models have changes that are not yet reflected in a migration, and so won&#8217;t be applied.&#8221;</li>
+</ul>
+</div></blockquote>
+<p>Eseguire i comandi:</p>
+<blockquote>
+<div><ul class="simple">
+<li>simpleinvoice$ python manage.py makemigrations</li>
+<li>simpleinvoice$ python manage.py migrate</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p>5/6     (punto facoltativo) Caricare dei dati di prova:</p>
+<blockquote>
+<div><ul class="simple">
+<li>/simpleinvoice/simpleinvoice$ python manage.py loaddata initial_data.json</li>
+</ul>
+</div></blockquote>
+<p>6/6 Far partire il server:</p>
+<blockquote>
+<div><ul class="simple">
+<li>/simpleinvoice/simpleinvoice$ python manage.py runserver</li>
+</ul>
+<p>In seguito, sarà possibile accedere ai seguenti link tramite browser:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a></li>
+</ul>
+</div></blockquote>
+<div class="section" id="note-di-configurazione">
+<h2>NOTE DI CONFIGURAZIONE<a class="headerlink" href="#note-di-configurazione" title="Permalink to this headline">¶</a></h2>
+<p>Visualizzare le email ed abilitarne l&#8217;invio</p>
+<blockquote>
+<div><blockquote>
+<div><p>Simpleinvoice di default imposta un indirizzo fittizio come indirizzo di default per l&#8217;utente amministratore, e un backend basato sulla creazione di file. Nel caso si voglia abilitare l&#8217;invio delle mail tramite SMTP, sarà necessario:</p>
+<ul class="simple">
+<li>copiare la variabile EMAIL_BACKEND  presente nel file default_settings.py nel file settings.py e valorizzarlo con:</li>
+<li>&#8220;django.core.mail.backends.smtp.EmailBackend&#8221;</li>
+</ul>
+<p>Inoltre, nel caso si voglia modificare il template di default per le mail, sarà necessario</p>
+</div></blockquote>
+<ul>
+<li><p class="first">copiare  la variabile EMAIL_TEMPLATES presente nel file default_settings.py nel file default_settings.py e indicare il nome del template utilizzato nella chiave INSOLUTE, sostituendone il valore con il nome del fie template desiderato:</p>
+<blockquote>
+<div><ul>
+<li><dl class="first docutils">
+<dt>EMAIL_TEMPLATES = {</dt>
+<dd><p class="first last">&#8216;INSOLUTE&#8217; : &#8216;template_name&#8217;</p>
+</dd>
+</dl>
+</li>
+</ul>
+<blockquote>
+<div><p>}</p>
+</div></blockquote>
+</div></blockquote>
+</li>
+</ul>
+<p>Informazioni aggiuntive e si possono trovare sul sito di documentazione di Django al link: <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/email/#topic-email-backends">https://docs.djangoproject.com/en/1.7/topics/email/#topic-email-backends</a></p>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Istruzioni per installare Simpleinvoice (8 settembre 2014)</a><ul>
+<li><a class="reference internal" href="#note-di-configurazione">NOTE DI CONFIGURAZIONE</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to Simpleinvoice Developers documentation!</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/INSTALL.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Simpleinvoice Developers documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">DES Developer Manual 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Rete di Economia Etica e Solidale delle Marche.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
