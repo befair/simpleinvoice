@@ -190,7 +190,7 @@ class PaymentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PaymentForm, self).__init__(*args, **kwargs)
-        self.fields['paid_for'].initial = DATE_CHOICES[0][0]
+        self.fields['paid_for'].initial = DATE_CHOICES[5][0]
 
     def set_paid_for(self,service=None):
         """
