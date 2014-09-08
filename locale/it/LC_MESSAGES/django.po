@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-04 11:29+0200\n"
+"POT-Creation-Date: 2014-09-08 16:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,7 +137,8 @@ msgstr ""
 msgid "emit date"
 msgstr "data di emissione"
 
-#: invoice/models.py:138 services/models.py:133 services/models.py:245
+#: invoice/models.py:138 services/admin.py:37 services/models.py:133
+#: services/models.py:245
 msgid "discount"
 msgstr "sconto in percentuale"
 
@@ -234,15 +235,19 @@ msgstr "Il trasferimento di denaro puo essere fatto tramite IBAN"
 msgid "Simple invoice"
 msgstr "Fattura semplificata"
 
-#: services/admin.py:105
+#: services/admin.py:38
+msgid "vat_percent"
+msgstr "IVA predefinita in percentuale"
+
+#: services/admin.py:129
 msgid "Send a remaind mail about unsolved subcscpriptions"
 msgstr "Invia email di sollecito per il pagamento degli insoluti"
 
-#: services/admin.py:117
+#: services/admin.py:142
 msgid "Cancel selected service subscription/s "
 msgstr "Cancella sottoscrizioni"
 
-#: services/admin.py:129
+#: services/admin.py:155
 msgid "Restore selected service subscription/s "
 msgstr "Riabilita sottoscrizioni cancellate"
 
@@ -385,7 +390,6 @@ msgstr "Pagamenti di sottoscrizione a servizio"
 
 #: services/models.py:259
 #, python-format
-#| msgid "Subscription of %(customer)s to service %(service)s"
 msgid "Payment of %(customer)s to service %(service)s"
 msgstr "Pagamento di %(customer)s al servizio %(service)s"
 
@@ -416,6 +420,11 @@ msgstr "al"
 #: services/templates/base_mail.html:10
 msgid "Thanks for your attention."
 msgstr "Grazie per l'attenzione"
+
+#: services/views.py:52 services/views.py:56 services/views.py:67
+#: services/views.py:84
+msgid "Invalid data"
+msgstr "Dati non validi"
 
 #~ msgid "Check if selected subscription are paid"
 #~ msgstr "Controlla se le sottoscrizioni selezionate sono state pagate"

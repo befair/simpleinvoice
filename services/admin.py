@@ -34,8 +34,8 @@ class ServiceAdmin(admin.ModelAdmin):
 
 class ServiceSubscriptionForm(forms.ModelForm):
 
-    discount = PercentageDecimalField()
-    vat_percent = PercentageDecimalField()
+    discount = PercentageDecimalField(label=_('discount'))
+    vat_percent = PercentageDecimalField(label=_('vat_percent'))
 
     def save(self, commit=True):
         instance = super(ServiceSubscriptionForm, self).save(commit=False)
@@ -50,6 +50,10 @@ class ServiceSubscriptionForm(forms.ModelForm):
 
     class Meta:
         model = ServiceSubscription
+        #labels = {
+        #    'discount' : _("discount"),
+        #    'vat_percent' : _("vat_percent"),
+        #}
         #exclude = ('is_deleted','service',)
     
 
@@ -82,7 +86,7 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
         Form Meta exclude seems to not work
         """
         kwargs['exclude'] = ['is_deleted','service',
-            'last_paid_on','last_paid_for',
+            'last_paid_on','last_paid_for','when_deleted'
         ]
         return super(ServiceSubscriptionAdmin, self).get_form(request, obj=obj, **kwargs)
 
