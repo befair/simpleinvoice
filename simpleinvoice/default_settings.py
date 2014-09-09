@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
+import os, locale
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 VERSION = __version__ = file(BASE_DIR + '/VERSION').read().strip() 
 
@@ -23,12 +24,12 @@ ADMINS = (
 )
 MANAGERS = ADMINS
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.4/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -123,6 +124,7 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
+COMPANY_VAT_PERCENT = 0.22
 COMPANY_NAME = "beFair"
 COMPANY_INTERNET_CONTACTS = "http://www.befair.it - info@befair.it"
 COMPANY_ADDRESS = "Via Don Minzoni, 158 - 60044 Fabriano"
@@ -166,9 +168,17 @@ LOGGING = {
 
 SITE_ID = 1
 
-EMAIL_SENDER = 'webmaster@localhost' # overwrite this with proper mail address
+EMAIL_SENDER = 'simpleinvoice@mysite.it' # overwrite this with proper mail address
 EMAIL_TEMPLATES = {
     'INSOLUTE' : 'base_mail.html',
 }
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'mails') # change this to a proper location
+
+#############
+# Localizzazione italiana
+
+locale.setlocale(locale.LC_ALL, 'it_IT.UTF8')
+LOCALE_PATHS = ( 
+    os.path.join(BASE_DIR, 'locale',)
+)
