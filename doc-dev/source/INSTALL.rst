@@ -1,106 +1,171 @@
-Istruzioni per installare Simpleinvoice (8 settembre 2014)
-----------------------------------------------------------
+Istruzioni per installare simpleinvoice (8 settembre 2014)
+==========================================================
 
+Si suggerisce di operare in un virtual environment python (v. :ref:`suggerimento`).
 
-0/6
+1/6 Download
+------------
 
-	E' consigliato installare Simpleinvoice in un virtual environment 
+Scaricare il codice del progetto SIMPLEINVOICE dal repository pubblico:
 
-	$ mkvirtualenv "name"  --> creare ambiente di lavoro
+$ git clone https://github.com/befair/simpleinvoice.git
 
-	I prossimi passi dell'installazione avranno come ambiente il virtual 
-	environment creato. 
-	
+2/6 Requisiti
+-------------
 
+Installare i requisiti del progetto:
 
+$ cd simpleinvoice
+$ pip install -r requirements.txt
 
-1/6 Scaricare il codice del progetto SIMPLEINVOICE dal repository pubblico:
+In caso di consultare :ref:`faq-1`
 
-	$ git clone https://github.com/befair/simpleinvoice.git
+3/6 Configurazione di base
+--------------------------
 
+1. Copiare il contenuto del file "settings_dist.py" nel 
+   file "settings.py". Su sistemi GNU/Linux o Unix-like:
 
-2/6 Installare i requisiti del progetto:
+   simpleinvoice$ cp simpleinvoice/settings_dist.py simpleinvoice/settings.py
 
-	simpleinvoice$ pip install -r requirements.txt
-	
+2. aprire il file "settings.py" e modificare i settaggi relativi a:
+   - "COMPANY_*" con le impostazioni della propria azienda
+   - "SECRET_KEY" con il valore riportato dal comando TODO
 
-3/6 Configurare Simpleinvoice:
+4/6 Inizializzazione
+--------------------
 
-	1. Copiare il contenuto del file "settings_dist.py" nel 
-       file "settings.py":
-	
-	/simpleinvoice$ cd simpleinvoice
-	/simpleinvoice/simpleinvoice$ cp settings_dist.py settings.py
-	
-	2.	aprire il file "settings.py": 
-	
-	quindi inserire i settaggi relativi a "DATABASES" e ai vari valori "COMPANY_*".
+La configurazione di default prevede l'uso di `sqlite <http://sqlite.org>`__ (TODO rivedere link).
 
+Inizializzare il database eseguendo:
 
-
-4/6 Sincronizzare il database:
-
-	1.	Creazione delle tabelle:
-
-		In caso di utilizzo di postgreSQL è necessario disporre di un database già 
-        creato ed associato ad un utente.
-		Il nome del database, insieme all'username e alla password dell'utente a cui 
-		è associato, vanno inseriti nei campi corrispondenti della struttura 
-		DATABASES nel file "settings.py" in simpleinvoice/simpleinvoice/.
-        In caso il database sia sqlite, sarà sufficiente settare il nome del database
-        nello stesso file di cui sopra.
-
-        Inizializzare il database eseguendo:
-	
-		    * simpleinvoice$ python manage.py migrate --noinput
-
-        NOTA: Nel caso sia necessario settare username, password, ed email dell'utente 
-              amministratore, eseguire:
-
-            * simpleinvoice$ python manage.py createsuperuser
-                
-        Se durante la creazione viene visualizzato il messaggio:
+1. simpleinvoice$ python manage.py migrate --noinput
+2. simpleinvoice$ python manage.py createsuperuser
             
-            * " Your models have changes that are not yet reflected in a migration, and so won't be applied."
+5/6 Avviare il servizio
+-----------------------
 
-        Eseguire i comandi:
+* simpleinvoice$ python manage.py runserver
 
-            * simpleinvoice$ python manage.py makemigrations
-            * simpleinvoice$ python manage.py migrate
+6/6 Fatto!
+----------
 
-5/6	(punto facoltativo) Caricare dei dati di prova:
-
-	* /simpleinvoice/simpleinvoice$ python manage.py loaddata initial_data.json
-
-6/6 Far partire il server:
-
-	* /simpleinvoice/simpleinvoice$ python manage.py runserver
-
-	In seguito, sarà possibile accedere ai seguenti link tramite browser:
+Accedere a `simpleinvoice` puntando il browser all'indirizzo:
 	
-	* http://127.0.0.1:8000/
+* http://127.0.0.1:8000/
+
+
+[PER TESTARE] Caricare i dati di prova
+--------------------------------------
+
+* simpleinvoice$ python manage.py loaddata initial_data.json
+
+.. _suggerimento:
+
+[SUGGERIMENTO] Operare in un virtual environment
+------------------------------------------------
+
+TODO verifica link
+
+È consigliato installare simpleinvoice in un `virtual environment python <http://virtualenv.org>`__ . Per fare ciò si consiglia di installare gli script `virtualenvwrapper <http://virtualenvwrapper.org>`__ ed eseguire
+
+$ mkvirtualenv <name> per creare ambiente di lavoro ed entrarci
+
+Per uscire digitare
+
+(<name>)$ deactivate
+
+Per entrare nuovamente
+
+$ workon <name>
 
 
 
+REFERENCE DI CONFIGURAZIONE
+===========================
 
-NOTE DI CONFIGURAZIONE
-=====================
+Premessa
+--------
 
-Visualizzare le email ed abilitarne l'invio
+Simpleinvoice dispone di vari parametri configurabili. Essi sono nei file:
 
-	Simpleinvoice di default imposta un indirizzo fittizio come indirizzo di default per l'utente amministratore, e un backend basato sulla creazione di file. Nel caso si voglia abilitare l'invio delle mail tramite SMTP, sarà necessario:
+* `simpleinvoice/settings_dist.py`: i più comuni da verificare ed adattare ad ogni installazione;
+* `simpleinvoice/default_settings.py`: quelli di sviluppo di simpleinvoice
+* tutti quelli previsti dalla configurazione di Django 1.7 (TODO mettere reference)
 
-	* copiare la variabile EMAIL_BACKEND  presente nel file default_settings.py nel file settings.py e valorizzarlo con:
+Per adattare un parametro di configurazione alla propria installazione 
+basta copiarlo nel file `simpleinvoice/settings.py` e modificarne il valore.
+
+Si riportano le impostazioni specifiche di simpleinvoice e le più comuni
+che possono richiedere adattamento. Per ulteriori dettagli su parametri meno comuni
+si rimanda all'ottima `documentazione di Django TODO link alla reference dei settings`__
+
+DATABASE SETTINGS
+-----------------
+
+TODO Info di base
+
+Per ulteriori dettagli sulle configurazioni al database consultare
+https://docs.djangoproject.com/en/dev/ref/settings/#databases
+
+EMAIL SETTINGS
+--------------
+
+* `EMAIL_TEMPLATES` (default: { 'INSOLUTE' : 'base_mail.html' })
+
+* `EMAIL_BACKEND` (default: "django.core.mail.backends.smtp.EmailBackend")
+* `EMAIL_SMTPHOST` (TODO verifica parametro)
+* `EMAIL_SENDER` (default: "webmaster@localhost") (TODO mittente della mail è configurabile no?)
+
+Per ulteriori dettagli sulle configurazioni email consultare 
+https://docs.djangoproject.com/en/1.7/topics/email/#topic-email-backends
+
+
+FAQ (TODO verificare numerazione)
+============================
+
+.. _faq-1:
+
+1. **Q**: nell'installazione dei requisiti di sistema ho questo errore (TODO incollare un permission denied)
+1. **A**: potrebbero essere necessari i permessi di root 
+(se non si opera in un virtual environment - v. :ref:`suggerimento`). 
+Eventualmente eseguire
+
+$ sudo pip install -r requirements.txt
+	
+.. _faq-2:
+
+2. **Q**: non riesco ad avviare il server
+2. **A**: installa il driver python per lo specifico database (pysqlite, MySQLdb, psycopg2 TODO da rivedere i nomi)
+
+.. _faq-3:
+
+* **Q**: sono supportati database differenti da sqlite (PostgreSQL/MySQL ad esempio)?
+* **A**: sì, tutti quelli supportati da `Django <http://www.djangoproject.com>`__
+
+.. _faq-4:
+
+* **Q**: io utilizzo PostgreSQL/MySQL come posso inizializzare il database?
+* **A**: è necessario impostare i dati per la connessione al database con il parametro "DATABASES" in settings.py. Per maggiori info http://link_alla_pagina_dei_settings_del_database. Inoltre è necessario disporre di un database già 
+    creato ed associato ad un utente.
+    Il nome del database, insieme all'username e alla password dell'utente a cui 
+    è associato, vanno inseriti nei campi corrispondenti della struttura 
+    DATABASES nel file "settings.py" in simpleinvoice/simpleinvoice/.
+
+.. _faq-5:
+
+* **Q**: Vorrei avere una previsione delle mail che invio prima di inviarle effettivamente, come posso fare?
+* **A**: Modifica il parametro "EMAIL_*" in settings.py
+
+[X MATTEO] Riprodurre il bug partendo da una clonazione pulita
+--------------------------------------------------------------
+
+    Se durante la creazione viene visualizzato il messaggio:
         
-        * "django.core.mail.backends.smtp.EmailBackend"
+        * " Your models have changes that are not yet reflected in a migration, and so won't be applied."
 
-	Inoltre, nel caso si voglia modificare il template di default per le mail, sarà necessario 
-    
-    * copiare  la variabile EMAIL_TEMPLATES presente nel file default_settings.py nel file default_settings.py e indicare il nome del template utilizzato nella chiave INSOLUTE, sostituendone il valore con il nome del fie template desiderato:
+    Eseguire i comandi:
 
-       * EMAIL_TEMPLATES = {
-            'INSOLUTE' : 'template_name'
-        }
-    
-   
-    Informazioni aggiuntive e si possono trovare sul sito di documentazione di Django al link: https://docs.djangoproject.com/en/1.7/topics/email/#topic-email-backends
+        * simpleinvoice$ python manage.py makemigrations
+        * simpleinvoice$ python manage.py migrate
+
