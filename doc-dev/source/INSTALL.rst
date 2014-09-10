@@ -30,12 +30,12 @@ In caso di consultare :ref:`faq-1`
 
 2. aprire il file "settings.py" e modificare i settaggi relativi a:
    - "COMPANY_*" con le impostazioni della propria azienda
-   - "SECRET_KEY" con il valore riportato dal comando TODO
+   - "SECRET_KEY" con il valore riportato dal comando TODO ???django-admin.py startproject???
 
 4/6 Inizializzazione
 --------------------
 
-La configurazione di default prevede l'uso di `sqlite <http://sqlite.org>`__ (TODO rivedere link).
+La configurazione di default prevede l'uso di `sqlite <http://sqlite.org>`__.
 
 Inizializzare il database eseguendo:
 
@@ -65,9 +65,7 @@ Accedere a `simpleinvoice` puntando il browser all'indirizzo:
 [SUGGERIMENTO] Operare in un virtual environment
 ------------------------------------------------
 
-TODO verifica link
-
-È consigliato installare simpleinvoice in un `virtual environment python <http://virtualenv.org>`__ . Per fare ciò si consiglia di installare gli script `virtualenvwrapper <http://virtualenvwrapper.org>`__ ed eseguire
+È consigliato installare simpleinvoice in un `virtual environment python <https://virtualenv.pypa.io/en/latest/>`__ . Per fare ciò si consiglia di installare gli script `virtualenvwrapper <http://virtualenvwrapper.readthedocs.org/en/latest/>`__ ed eseguire
 
 $ mkvirtualenv <name> per creare ambiente di lavoro ed entrarci
 
@@ -91,22 +89,35 @@ Simpleinvoice dispone di vari parametri configurabili. Essi sono nei file:
 
 * `simpleinvoice/settings_dist.py`: i più comuni da verificare ed adattare ad ogni installazione;
 * `simpleinvoice/default_settings.py`: quelli di sviluppo di simpleinvoice
-* tutti quelli previsti dalla configurazione di Django 1.7 (TODO mettere reference)
+* tutti quelli previsti dalla `configurazione di Django 1.7 <https://docs.djangoproject.com/en/1.7/topics/settings/>` __
 
 Per adattare un parametro di configurazione alla propria installazione 
 basta copiarlo nel file `simpleinvoice/settings.py` e modificarne il valore.
 
 Si riportano le impostazioni specifiche di simpleinvoice e le più comuni
 che possono richiedere adattamento. Per ulteriori dettagli su parametri meno comuni
-si rimanda all'ottima `documentazione di Django TODO link alla reference dei settings`__
+si rimanda all'ottima `documentazione di Django <https://docs.djangoproject.com/en/1.7/ref/settings/>`__
 
 DATABASE SETTINGS
 -----------------
 
-TODO Info di base
+Per configurare il database, è necessario impostarne i valori nel file `simpleinvoice/settings.py`, nel setting `DATABASES`. Qui è possibile impostare il database di `default`.
 
-Per ulteriori dettagli sulle configurazioni al database consultare
-https://docs.djangoproject.com/en/dev/ref/settings/#databases
+Per database di tipo SQLite, è sufficiente impostare:
+
+* `ENGINE`: 'django.db.backends.sqlite3'
+* `NAME`: il nome del database
+
+Per altri tipi di database supportati ( `Django <https://docs.djangoproject.com/en/1.7/ref/databases/>`__ ), impostare:
+
+* `ENGINE`: relativo al database (vedere referenza sopra)
+* `NAME`: il nome del database
+* `USER`: l'utente del database
+* `PASSWORD`: la password del database
+* `HOST`: facoltativo. Indica l'host da usare per la connessione al database. Se non impostato, viene usato il localhost
+* `PORT`:  facoltativo. Indica la porta da usare per la connessione al database. Se non impostato, viene usato il valore di default 
+
+Per ulteriori dettagli sulle configurazioni al database consultare la `documentazione di Django 1.7 <https://docs.djangoproject.com/en/1.7/ref/settings/#databases>`__
 
 EMAIL SETTINGS
 --------------
@@ -114,15 +125,15 @@ EMAIL SETTINGS
 * `EMAIL_TEMPLATES` (default: { 'INSOLUTE' : 'base_mail.html' })
 
 * `EMAIL_BACKEND` (default: "django.core.mail.backends.smtp.EmailBackend")
-* `EMAIL_SMTPHOST` (TODO verifica parametro)
-* `EMAIL_SENDER` (default: "webmaster@localhost") (TODO mittente della mail è configurabile no?)
+* `EMAIL_HOST` (default: localhost) l'host da usare per l'invio delle mail 
+* `EMAIL_SENDER` (default: "webmaster@localhost") 
 
 Per ulteriori dettagli sulle configurazioni email consultare 
 https://docs.djangoproject.com/en/1.7/topics/email/#topic-email-backends
 
 
-FAQ (TODO verificare numerazione)
-============================
+FAQ
+===
 
 .. _faq-1:
 
@@ -136,17 +147,20 @@ $ sudo pip install -r requirements.txt
 .. _faq-2:
 
 2. **Q**: non riesco ad avviare il server
-2. **A**: installa il driver python per lo specifico database (pysqlite, MySQLdb, psycopg2 TODO da rivedere i nomi)
+2. **A**: installa il driver python per lo specifico database:
+    * SQLite: pysqlite
+    * MySQL: MySQL-python
+    * postgreSQL: psycopg2
 
 .. _faq-3:
 
-* **Q**: sono supportati database differenti da sqlite (PostgreSQL/MySQL ad esempio)?
-* **A**: sì, tutti quelli supportati da `Django <http://www.djangoproject.com>`__
+3. **Q**: sono supportati database differenti da sqlite (PostgreSQL/MySQL ad esempio)?
+3. **A**: sì, tutti quelli supportati da `Django <http://www.djangoproject.com>`__
 
 .. _faq-4:
 
-* **Q**: io utilizzo PostgreSQL/MySQL come posso inizializzare il database?
-* **A**: è necessario impostare i dati per la connessione al database con il parametro "DATABASES" in settings.py. Per maggiori info http://link_alla_pagina_dei_settings_del_database. Inoltre è necessario disporre di un database già 
+4. **Q**: io utilizzo PostgreSQL/MySQL come posso inizializzare il database?
+4. **A**: è necessario impostare i dati per la connessione al database con il parametro "DATABASES" in settings.py. Per maggiori info http://link_alla_pagina_dei_settings_del_database. Inoltre è necessario disporre di un database già 
     creato ed associato ad un utente.
     Il nome del database, insieme all'username e alla password dell'utente a cui 
     è associato, vanno inseriti nei campi corrispondenti della struttura 
@@ -154,8 +168,8 @@ $ sudo pip install -r requirements.txt
 
 .. _faq-5:
 
-* **Q**: Vorrei avere una previsione delle mail che invio prima di inviarle effettivamente, come posso fare?
-* **A**: Modifica il parametro "EMAIL_*" in settings.py
+5. **Q**: Vorrei avere una previsione delle mail che invio prima di inviarle effettivamente, come posso fare?
+5. **A**: Modifica il parametro "EMAIL_*" in settings.py
 
 [X MATTEO] Riprodurre il bug partendo da una clonazione pulita
 --------------------------------------------------------------

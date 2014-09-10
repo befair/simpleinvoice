@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Istruzioni per installare Simpleinvoice (8 settembre 2014) &mdash; DES Developer Manual 0.0.1 documentation</title>
+    <title>Istruzioni per installare simpleinvoice (8 settembre 2014) &mdash; DES Developer Manual 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -46,68 +46,149 @@
           <div class="body">
             
   <div class="section" id="istruzioni-per-installare-simpleinvoice-8-settembre-2014">
-<h1>Istruzioni per installare Simpleinvoice (8 settembre 2014)<a class="headerlink" href="#istruzioni-per-installare-simpleinvoice-8-settembre-2014" title="Permalink to this headline">¶</a></h1>
-<p>0/6</p>
-<blockquote>
-<div><p>E&#8217; consigliato installare Simpleinvoice in un virtual environment</p>
-<p>$ mkvirtualenv &#8220;name&#8221;  &#8211;&gt; creare ambiente di lavoro</p>
-<p>I prossimi passi dell&#8217;installazione avranno come ambiente il virtual
-environment creato.</p>
-</div></blockquote>
-<p>1/6 Scaricare il codice del progetto SIMPLEINVOICE dal repository pubblico:</p>
-<blockquote>
-<div>$ git clone <a class="reference external" href="https://github.com/befair/simpleinvoice.git">https://github.com/befair/simpleinvoice.git</a></div></blockquote>
-<p>2/6 Installare i requisiti del progetto:</p>
-<blockquote>
-<div>simpleinvoice$ pip install -r requirements.txt</div></blockquote>
-<p>3/6 Configurare Simpleinvoice:</p>
-<blockquote>
-<div><blockquote>
-<div><ol class="arabic simple">
-<li>Copiare il contenuto del file &#8220;settings_dist.py&#8221; nel</li>
-</ol>
-</div></blockquote>
-<p>file &#8220;settings.py&#8221;:</p>
-<blockquote>
-<div><p>/simpleinvoice$ cd simpleinvoice
-/simpleinvoice/simpleinvoice$ cp settings_dist.py settings.py</p>
-<ol class="arabic simple" start="2">
-<li>aprire il file &#8220;settings.py&#8221;:</li>
-</ol>
-<p>quindi inserire i settaggi relativi a &#8220;DATABASES&#8221; e ai vari valori &#8220;COMPANY_*&#8221;.</p>
-</div></blockquote>
-</div></blockquote>
-<p>4/6 Sincronizzare il database:</p>
-<blockquote>
-<div><ol class="arabic">
-<li><p class="first">Creazione delle tabelle:</p>
-<p>In caso di utilizzo di postgreSQL è necessario disporre di un database già</p>
+<h1>Istruzioni per installare simpleinvoice (8 settembre 2014)<a class="headerlink" href="#istruzioni-per-installare-simpleinvoice-8-settembre-2014" title="Permalink to this headline">¶</a></h1>
+<p>Si suggerisce di operare in un virtual environment python (v. <a class="reference internal" href="#suggerimento"><em>[SUGGERIMENTO] Operare in un virtual environment</em></a>).</p>
+<div class="section" id="download">
+<h2>1/6 Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
+<p>Scaricare il codice del progetto SIMPLEINVOICE dal repository pubblico:</p>
+<p>$ git clone <a class="reference external" href="https://github.com/befair/simpleinvoice.git">https://github.com/befair/simpleinvoice.git</a></p>
+</div>
+<div class="section" id="requisiti">
+<h2>2/6 Requisiti<a class="headerlink" href="#requisiti" title="Permalink to this headline">¶</a></h2>
+<p>Installare i requisiti del progetto:</p>
+<p>$ cd simpleinvoice
+$ pip install -r requirements.txt</p>
+<p>In caso di consultare <em class="xref std std-ref">faq-1</em></p>
+</div>
+<div class="section" id="configurazione-di-base">
+<h2>3/6 Configurazione di base<a class="headerlink" href="#configurazione-di-base" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Copiare il contenuto del file &#8220;settings_dist.py&#8221; nel
+file &#8220;settings.py&#8221;. Su sistemi GNU/Linux o Unix-like:</p>
+<p>simpleinvoice$ cp simpleinvoice/settings_dist.py simpleinvoice/settings.py</p>
+</li>
+<li><p class="first">aprire il file &#8220;settings.py&#8221; e modificare i settaggi relativi a:
+- &#8220;COMPANY_*&#8221; con le impostazioni della propria azienda
+- &#8220;SECRET_KEY&#8221; con il valore riportato dal comando TODO ???django-admin.py startproject???</p>
 </li>
 </ol>
-<dl class="docutils">
-<dt>creato ed associato ad un utente.</dt>
-<dd>Il nome del database, insieme all&#8217;username e alla password dell&#8217;utente a cui
-è associato, vanno inseriti nei campi corrispondenti della struttura
-DATABASES nel file &#8220;settings.py&#8221; in simpleinvoice/simpleinvoice/.</dd>
-</dl>
-<p>In caso il database sia sqlite, sarà sufficiente settare il nome del database
-nello stesso file di cui sopra.</p>
+</div>
+<div class="section" id="inizializzazione">
+<h2>4/6 Inizializzazione<a class="headerlink" href="#inizializzazione" title="Permalink to this headline">¶</a></h2>
+<p>La configurazione di default prevede l&#8217;uso di <a class="reference external" href="http://sqlite.org">sqlite</a>.</p>
 <p>Inizializzare il database eseguendo:</p>
+<ol class="arabic simple">
+<li>simpleinvoice$ python manage.py migrate &#8211;noinput</li>
+<li>simpleinvoice$ python manage.py createsuperuser</li>
+</ol>
+</div>
+<div class="section" id="avviare-il-servizio">
+<h2>5/6 Avviare il servizio<a class="headerlink" href="#avviare-il-servizio" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>simpleinvoice$ python manage.py runserver</li>
+</ul>
+</div>
+<div class="section" id="fatto">
+<h2>6/6 Fatto!<a class="headerlink" href="#fatto" title="Permalink to this headline">¶</a></h2>
+<p>Accedere a <cite>simpleinvoice</cite> puntando il browser all&#8217;indirizzo:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a></li>
+</ul>
+</div>
+<div class="section" id="per-testare-caricare-i-dati-di-prova">
+<h2>[PER TESTARE] Caricare i dati di prova<a class="headerlink" href="#per-testare-caricare-i-dati-di-prova" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>simpleinvoice$ python manage.py loaddata initial_data.json</li>
+</ul>
+</div>
+<div class="section" id="suggerimento-operare-in-un-virtual-environment">
+<span id="suggerimento"></span><h2>[SUGGERIMENTO] Operare in un virtual environment<a class="headerlink" href="#suggerimento-operare-in-un-virtual-environment" title="Permalink to this headline">¶</a></h2>
+<p>È consigliato installare simpleinvoice in un <a class="reference external" href="https://virtualenv.pypa.io/en/latest/">virtual environment python</a> . Per fare ciò si consiglia di installare gli script <a class="reference external" href="http://virtualenvwrapper.readthedocs.org/en/latest/">virtualenvwrapper</a> ed eseguire</p>
+<p>$ mkvirtualenv &lt;name&gt; per creare ambiente di lavoro ed entrarci</p>
+<p>Per uscire digitare</p>
+<p>(&lt;name&gt;)$ deactivate</p>
+<p>Per entrare nuovamente</p>
+<p>$ workon &lt;name&gt;</p>
+</div>
+</div>
+<div class="section" id="reference-di-configurazione">
+<h1>REFERENCE DI CONFIGURAZIONE<a class="headerlink" href="#reference-di-configurazione" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="premessa">
+<h2>Premessa<a class="headerlink" href="#premessa" title="Permalink to this headline">¶</a></h2>
+<p>Simpleinvoice dispone di vari parametri configurabili. Essi sono nei file:</p>
+<ul class="simple">
+<li><cite>simpleinvoice/settings_dist.py</cite>: i più comuni da verificare ed adattare ad ogni installazione;</li>
+<li><cite>simpleinvoice/default_settings.py</cite>: quelli di sviluppo di simpleinvoice</li>
+<li>tutti quelli previsti dalla <cite>configurazione di Django 1.7 &lt;https://docs.djangoproject.com/en/1.7/topics/settings/&gt;</cite> __</li>
+</ul>
+<p>Per adattare un parametro di configurazione alla propria installazione
+basta copiarlo nel file <cite>simpleinvoice/settings.py</cite> e modificarne il valore.</p>
+<p>Si riportano le impostazioni specifiche di simpleinvoice e le più comuni
+che possono richiedere adattamento. Per ulteriori dettagli su parametri meno comuni
+si rimanda all&#8217;ottima <a class="reference external" href="https://docs.djangoproject.com/en/1.7/ref/settings/">documentazione di Django</a></p>
+</div>
+<div class="section" id="database-settings">
+<h2>DATABASE SETTINGS<a class="headerlink" href="#database-settings" title="Permalink to this headline">¶</a></h2>
+<p>Per configurare il database, è necessario impostarne i valori nel file <cite>simpleinvoice/settings.py</cite>, nel setting <cite>DATABASES</cite>. Qui è possibile impostare il database di <cite>default</cite>.</p>
+<p>Per database di tipo SQLite, è sufficiente impostare:</p>
+<ul class="simple">
+<li><cite>ENGINE</cite>: &#8216;django.db.backends.sqlite3&#8217;</li>
+<li><cite>NAME</cite>: il nome del database</li>
+</ul>
+<p>Per altri tipi di database supportati ( <a class="reference external" href="https://docs.djangoproject.com/en/1.7/ref/databases/">Django</a> ), impostare:</p>
+<ul class="simple">
+<li><cite>ENGINE</cite>: relativo al database (vedere referenza sopra)</li>
+<li><cite>NAME</cite>: il nome del database</li>
+<li><cite>USER</cite>: l&#8217;utente del database</li>
+<li><cite>PASSWORD</cite>: la password del database</li>
+<li><cite>HOST</cite>: facoltativo. Indica l&#8217;host da usare per la connessione al database. Se non impostato, viene usato il localhost</li>
+<li><cite>PORT</cite>:  facoltativo. Indica la porta da usare per la connessione al database. Se non impostato, viene usato il valore di default</li>
+</ul>
+<p>Per ulteriori dettagli sulle configurazioni al database consultare la <a class="reference external" href="https://docs.djangoproject.com/en/1.7/ref/settings/#databases">documentazione di Django 1.7</a></p>
+</div>
+<div class="section" id="email-settings">
+<h2>EMAIL SETTINGS<a class="headerlink" href="#email-settings" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><cite>EMAIL_TEMPLATES</cite> (default: { &#8216;INSOLUTE&#8217; : &#8216;base_mail.html&#8217; })</li>
+<li><cite>EMAIL_BACKEND</cite> (default: &#8220;django.core.mail.backends.smtp.EmailBackend&#8221;)</li>
+<li><cite>EMAIL_HOST</cite> (default: localhost) l&#8217;host da usare per l&#8217;invio delle mail</li>
+<li><cite>EMAIL_SENDER</cite> (default: &#8220;<a class="reference external" href="mailto:webmaster&#37;&#52;&#48;localhost">webmaster<span>&#64;</span>localhost</a>&#8221;)</li>
+</ul>
+<p>Per ulteriori dettagli sulle configurazioni email consultare
+<a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/email/#topic-email-backends">https://docs.djangoproject.com/en/1.7/topics/email/#topic-email-backends</a></p>
+</div>
+</div>
+<div class="section" id="faq">
+<h1>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h1>
+<p id="faq-1">1. <strong>Q</strong>: nell&#8217;installazione dei requisiti di sistema ho questo errore (TODO incollare un permission denied)
+1. <strong>A</strong>: potrebbero essere necessari i permessi di root
+(se non si opera in un virtual environment - v. <a class="reference internal" href="#suggerimento"><em>[SUGGERIMENTO] Operare in un virtual environment</em></a>).
+Eventualmente eseguire</p>
+<p>$ sudo pip install -r requirements.txt</p>
+<p id="faq-2">2. <strong>Q</strong>: non riesco ad avviare il server
+2. <strong>A</strong>: installa il driver python per lo specifico database:</p>
 <blockquote>
 <div><ul class="simple">
-<li>simpleinvoice$ python manage.py migrate &#8211;noinput</li>
+<li>SQLite: pysqlite</li>
+<li>MySQL: MySQL-python</li>
+<li>postgreSQL: psycopg2</li>
 </ul>
 </div></blockquote>
-<dl class="docutils">
-<dt>NOTA: Nel caso sia necessario settare username, password, ed email dell&#8217;utente</dt>
-<dd><blockquote class="first">
-<div>amministratore, eseguire:</div></blockquote>
-<ul class="last simple">
-<li>simpleinvoice$ python manage.py createsuperuser</li>
-</ul>
-</dd>
-</dl>
-<p>Se durante la creazione viene visualizzato il messaggio:</p>
+<p id="faq-3">3. <strong>Q</strong>: sono supportati database differenti da sqlite (PostgreSQL/MySQL ad esempio)?
+3. <strong>A</strong>: sì, tutti quelli supportati da <a class="reference external" href="http://www.djangoproject.com">Django</a></p>
+<p id="faq-4">4. <strong>Q</strong>: io utilizzo PostgreSQL/MySQL come posso inizializzare il database?
+4. <strong>A</strong>: è necessario impostare i dati per la connessione al database con il parametro &#8220;DATABASES&#8221; in settings.py. Per maggiori info <a class="reference external" href="http://link_alla_pagina_dei_settings_del_database">http://link_alla_pagina_dei_settings_del_database</a>. Inoltre è necessario disporre di un database già</p>
+<blockquote>
+<div>creato ed associato ad un utente.
+Il nome del database, insieme all&#8217;username e alla password dell&#8217;utente a cui
+è associato, vanno inseriti nei campi corrispondenti della struttura
+DATABASES nel file &#8220;settings.py&#8221; in simpleinvoice/simpleinvoice/.</div></blockquote>
+<p id="faq-5">5. <strong>Q</strong>: Vorrei avere una previsione delle mail che invio prima di inviarle effettivamente, come posso fare?
+5. <strong>A</strong>: Modifica il parametro &#8220;EMAIL_*&#8221; in settings.py</p>
+<div class="section" id="x-matteo-riprodurre-il-bug-partendo-da-una-clonazione-pulita">
+<h2>[X MATTEO] Riprodurre il bug partendo da una clonazione pulita<a class="headerlink" href="#x-matteo-riprodurre-il-bug-partendo-da-una-clonazione-pulita" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Se durante la creazione viene visualizzato il messaggio:</p>
 <blockquote>
 <div><ul class="simple">
 <li>&#8221; Your models have changes that are not yet reflected in a migration, and so won&#8217;t be applied.&#8221;</li>
@@ -121,53 +202,6 @@ nello stesso file di cui sopra.</p>
 </ul>
 </div></blockquote>
 </div></blockquote>
-<p>5/6     (punto facoltativo) Caricare dei dati di prova:</p>
-<blockquote>
-<div><ul class="simple">
-<li>/simpleinvoice/simpleinvoice$ python manage.py loaddata initial_data.json</li>
-</ul>
-</div></blockquote>
-<p>6/6 Far partire il server:</p>
-<blockquote>
-<div><ul class="simple">
-<li>/simpleinvoice/simpleinvoice$ python manage.py runserver</li>
-</ul>
-<p>In seguito, sarà possibile accedere ai seguenti link tramite browser:</p>
-<ul class="simple">
-<li><a class="reference external" href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a></li>
-</ul>
-</div></blockquote>
-<div class="section" id="note-di-configurazione">
-<h2>NOTE DI CONFIGURAZIONE<a class="headerlink" href="#note-di-configurazione" title="Permalink to this headline">¶</a></h2>
-<p>Visualizzare le email ed abilitarne l&#8217;invio</p>
-<blockquote>
-<div><blockquote>
-<div><p>Simpleinvoice di default imposta un indirizzo fittizio come indirizzo di default per l&#8217;utente amministratore, e un backend basato sulla creazione di file. Nel caso si voglia abilitare l&#8217;invio delle mail tramite SMTP, sarà necessario:</p>
-<ul class="simple">
-<li>copiare la variabile EMAIL_BACKEND  presente nel file default_settings.py nel file settings.py e valorizzarlo con:</li>
-<li>&#8220;django.core.mail.backends.smtp.EmailBackend&#8221;</li>
-</ul>
-<p>Inoltre, nel caso si voglia modificare il template di default per le mail, sarà necessario</p>
-</div></blockquote>
-<ul>
-<li><p class="first">copiare  la variabile EMAIL_TEMPLATES presente nel file default_settings.py nel file default_settings.py e indicare il nome del template utilizzato nella chiave INSOLUTE, sostituendone il valore con il nome del fie template desiderato:</p>
-<blockquote>
-<div><ul>
-<li><dl class="first docutils">
-<dt>EMAIL_TEMPLATES = {</dt>
-<dd><p class="first last">&#8216;INSOLUTE&#8217; : &#8216;template_name&#8217;</p>
-</dd>
-</dl>
-</li>
-</ul>
-<blockquote>
-<div><p>}</p>
-</div></blockquote>
-</div></blockquote>
-</li>
-</ul>
-<p>Informazioni aggiuntive e si possono trovare sul sito di documentazione di Django al link: <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/email/#topic-email-backends">https://docs.djangoproject.com/en/1.7/topics/email/#topic-email-backends</a></p>
-</div></blockquote>
 </div>
 </div>
 
@@ -179,8 +213,25 @@ nello stesso file di cui sopra.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Istruzioni per installare Simpleinvoice (8 settembre 2014)</a><ul>
-<li><a class="reference internal" href="#note-di-configurazione">NOTE DI CONFIGURAZIONE</a></li>
+<li><a class="reference internal" href="#">Istruzioni per installare simpleinvoice (8 settembre 2014)</a><ul>
+<li><a class="reference internal" href="#download">1/6 Download</a></li>
+<li><a class="reference internal" href="#requisiti">2/6 Requisiti</a></li>
+<li><a class="reference internal" href="#configurazione-di-base">3/6 Configurazione di base</a></li>
+<li><a class="reference internal" href="#inizializzazione">4/6 Inizializzazione</a></li>
+<li><a class="reference internal" href="#avviare-il-servizio">5/6 Avviare il servizio</a></li>
+<li><a class="reference internal" href="#fatto">6/6 Fatto!</a></li>
+<li><a class="reference internal" href="#per-testare-caricare-i-dati-di-prova">[PER TESTARE] Caricare i dati di prova</a></li>
+<li><a class="reference internal" href="#suggerimento-operare-in-un-virtual-environment">[SUGGERIMENTO] Operare in un virtual environment</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#reference-di-configurazione">REFERENCE DI CONFIGURAZIONE</a><ul>
+<li><a class="reference internal" href="#premessa">Premessa</a></li>
+<li><a class="reference internal" href="#database-settings">DATABASE SETTINGS</a></li>
+<li><a class="reference internal" href="#email-settings">EMAIL SETTINGS</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#faq">FAQ</a><ul>
+<li><a class="reference internal" href="#x-matteo-riprodurre-il-bug-partendo-da-una-clonazione-pulita">[X MATTEO] Riprodurre il bug partendo da una clonazione pulita</a></li>
 </ul>
 </li>
 </ul>

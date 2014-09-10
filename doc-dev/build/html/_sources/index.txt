@@ -3,7 +3,7 @@
    contain the root `toctree` directive.
 
 Welcome to Simpleinvoice Developers documentation!
-===============================
+==================================================
 
 Contents:
 
