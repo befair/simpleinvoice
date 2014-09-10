@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db import models
 from django.utils.translation import ugettext, ugettext_lazy as _
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template import loader, Context
 from services import models as services
 from services.models import Service, ServiceSubscription, ServiceSubscriptionPayment, DATE_CHOICES
@@ -137,10 +137,19 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
                     subject = 'Payment due'
                     sender = settings.EMAIL_SENDER
                     receivers = [obj.customer.email]
-                    send_mail(subject, 
-                        loader.get_template(template).render(Context(context)), 
-                        sender, receivers, fail_silently=False
-                    )
+                msg = EmailMultiAlternatives(
+                    subject, loader.get_template(template_txt).render(Context(context)), 
+                    sender, receivers
+                )
+                msg.attach_alternative(
+                    loader.get_template(template_html).render(Context(context)),
+                    "text/html"
+                )
+                msg.send()
+                #send_mail(subject, 
+                #    loader.get_template(template).render(Context(context)), 
+                #    sender, receivers, fail_silently=False
+                #)
 
     check_payment.short_description = _("Send a reminder mail about unsolved subcscpriptions")
 

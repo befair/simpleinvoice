@@ -173,7 +173,8 @@ SITE_ID = 1
 
 EMAIL_SENDER = 'simpleinvoice@mysite.it' # overwrite this with proper mail address
 EMAIL_TEMPLATES = {
-    'INSOLUTE' : 'base_mail.html',
+    'INSOLUTE_HTML' : 'base_mail.html',
+    'INSOLUTE_TXT' : 'base_mail.txt',
 }
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'mails') # change this to a proper location
