@@ -86,7 +86,10 @@ LANGUAGE_CODE = 'it-IT'
 
 USE_I18N = True
 
-USE_L10N = True
+# set this to True if you want the locale-dictated format have higher precedence 
+# and be applied instead of using date FORMAT settings. 
+# See https://docs.djangoproject.com/en/dev/ref/settings/#date-format
+USE_L10N = False
 
 USE_TZ = True
 
@@ -179,3 +182,9 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'mails') # change this to a proper loca
 # Localizzazione italiana
 
 locale.setlocale(locale.LC_ALL, 'it_IT.UTF8')
+
+#############
+# DATE e DATE_TIME format
+
+DATE_FORMAT = 'd/m/Y'
+DATETIME_FORMAT = DATE_FORMAT
