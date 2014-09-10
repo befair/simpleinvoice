@@ -188,6 +188,10 @@ class PaymentForm(forms.ModelForm):
     #discount = PercentageDecimalField()
     #vat_percent = PercentageDecimalField()
 
+    class Meta:
+        model = ServiceSubscriptionPayment
+        exclude = ('subscription','vat_percent','discount',)
+
     def __init__(self, *args, **kwargs):
         super(PaymentForm, self).__init__(*args, **kwargs)
         self.fields['paid_for'].initial = DATE_CHOICES[5][0]
@@ -237,11 +241,6 @@ class PaymentForm(forms.ModelForm):
             subscription.save()
 
         return instance
-
-
-    class Meta:
-        model = ServiceSubscriptionPayment
-        exclude = ('subscription','vat_percent','discount',)
 
 class ServiceSubscriptionPaymentAdmin(admin.ModelAdmin): 
 
