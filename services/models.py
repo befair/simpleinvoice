@@ -1,8 +1,10 @@
 from django.db import models
 from django.utils.translation import ugettext, ugettext_lazy as _
+from django.core.exceptions import ValidationError
 
 from invoice.models import Customer
 from services.managers import ServiceSubscriptionManager
+from services.custom_fields import PercentageDecimalField
 
 from django.conf import settings
 from decimal import Decimal
@@ -109,8 +111,9 @@ class Service(models.Model):
     period_unit_source = models.CharField(max_length=32, default="epoch_now",verbose_name=_("period unit source"))
 
     amount = models.DecimalField(max_digits=12, decimal_places=2, verbose_name=_("amount"))
-    default_vat_percent = models.DecimalField(max_digits=3, decimal_places=2, 
-        default=Decimal(str(settings.DEFAULT_VAT_PERCENT)), verbose_name=_("default vat percentage")
+    default_vat_percent = PercentageDecimalField(
+        default=Decimal(str(settings.DEFAULT_VAT_PERCENT)),
+        verbose_name=_("default vat percentage")
     )
 
     class Meta:
@@ -122,8 +125,13 @@ class Service(models.Model):
         return self.name
 
     def clean(self):
+        """
+        Custom clean method
+        """
 
         self.period_deadline_modifier = self.period_deadline_modifier or 0
+        if not (0 <= self.default_vat_percent <= 1):
+            raise ValidationError(_('Vat has to be a percentage value'))
 
     def save(self, *args, **kw):
 
@@ -153,11 +161,12 @@ class ServiceSubscription(models.Model):
     customer = models.ForeignKey(Customer,verbose_name=_("customer"))
     service = models.ForeignKey(Service,verbose_name=_("service"))
 
-    vat_percent = models.DecimalField(max_digits=3, decimal_places=2, 
-        default=Decimal(str(settings.DEFAULT_VAT_PERCENT)),verbose_name=_("VAT percentage")
+    vat_percent = PercentageDecimalField(
+        default=Decimal(str(settings.DEFAULT_VAT_PERCENT)),
+        verbose_name=_("VAT percentage")
     )
 
-    discount = models.DecimalField(_("discount"), default=0, max_digits=3, decimal_places=2, blank=True)
+    discount = PercentageDecimalField(_("discount"), default=0, blank=True)
 
     invoice_period = models.IntegerField(null=True, blank=True,
         help_text=_('how many period lasts before creating an invoice?'),
@@ -210,9 +219,17 @@ class ServiceSubscription(models.Model):
         }
 
     def clean(self):
+        """
+        Custom clean method
+        """
 
-        # First implementation
+		# First implementation
         self.subscribed_from_dt = self.subscribed_on
+
+        if not (0 <= self.discount <= 1):
+            raise ValidationError(_('Discount has to be a percentage value'))
+        if not (0 <= self.vat_percent <= 1):
+            raise ValidationError(_('Vat has to be a percentage value'))
 
     def save(self, *args, **kw):
 
@@ -343,11 +360,12 @@ class ServiceSubscriptionPayment(models.Model):
     subscription = models.ForeignKey(ServiceSubscription,verbose_name=_("subscription"))
 
     amount = models.DecimalField(max_digits=12, decimal_places=2,verbose_name=_("cost"))
-    vat_percent = models.DecimalField(max_digits=3, decimal_places=2, 
-        default=Decimal(str(settings.DEFAULT_VAT_PERCENT)),verbose_name=_("VAT percentage")
+    vat_percent = PercentageDecimalField( 
+        default=Decimal(str(settings.DEFAULT_VAT_PERCENT)),
+        verbose_name=_("VAT percentage")
     )
 
-    discount = models.DecimalField(_("discount"), default=0, max_digits=3, decimal_places=2)
+    discount = PercentageDecimalField(_("discount"), default=0)
 
     paid_on = models.DateTimeField(auto_now_add=True, help_text=_('When has it been paid?'),verbose_name=_("paid on")) 
     #WAS: paid_for = models.IntegerField(help_text=_("For what has he paid? (incremental value). Leave 0 to use default"),verbose_name=_("paid for"))
@@ -366,6 +384,25 @@ class ServiceSubscriptionPayment(models.Model):
             'service' : self.subscription.service
         }
 
+    def clean(self):
+        """
+        Custom clean method
+        """
+
+        if not (0 <= self.discount <= 1):
+            raise ValidationError(_('Discount has to be a percentage value'))
+        if not (0 <= self.vat_percent <= 1):
+            raise ValidationError(_('Vat has to be a percentage value'))
+
+    def save(self, *args, **kwargs):
+        """
+        Payment is not saved if corresponding subscription is deleted
+        """
+
+        if not self.subscription.is_deleted:
+            self.full_clean()
+            return super(ServiceSubscriptionPayment, self).save(*args,**kwargs)
+
     @property
     def discounted_price(self):
         """
@@ -382,9 +419,3 @@ class ServiceSubscriptionPayment(models.Model):
         unit_display = self.subscription.service.period_unit_display
         return CONVERSION_UNIT_MAP[(unit_raw, unit_display)](self.paid_for)
     
-    def save(self, *args, **kwargs):
-        """
-        """
-
-        if not self.subscription.is_deleted:
-            return super(ServiceSubscriptionPayment, self).save(*args,**kwargs)

@@ -10,11 +10,9 @@ from django.conf import settings
 from django.contrib import messages
 from django.utils import timezone
 
-from services.custom_fields import PercentageDecimalField
-
 class ServiceSubscriptionForm(forms.ModelForm):
 
-    default_vat_percent = PercentageDecimalField()
+    #default_vat_percent = PercentageDecimalField()
 
     class Meta:
         model = Service
@@ -33,8 +31,8 @@ class ServiceAdmin(admin.ModelAdmin):
 
 class ServiceSubscriptionForm(forms.ModelForm):
 
-    discount = PercentageDecimalField(label=_('discount'))
-    vat_percent = PercentageDecimalField(label=_('vat_percent'))
+    #discount = PercentageDecimalField(label=_('discount'))
+    #vat_percent = PercentageDecimalField(label=_('vat_percent'))
 
     #def save(self, commit=True):
     #    instance = super(ServiceSubscriptionForm, self).save(commit=False)
@@ -184,8 +182,8 @@ class PaymentForm(forms.ModelForm):
     )
     customer = fields.get('customer')
     service = fields.get('service')
-    discount = PercentageDecimalField()
-    vat_percent = PercentageDecimalField()
+    #discount = PercentageDecimalField()
+    #vat_percent = PercentageDecimalField()
 
     def __init__(self, *args, **kwargs):
         super(PaymentForm, self).__init__(*args, **kwargs)
