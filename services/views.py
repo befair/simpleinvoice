@@ -8,7 +8,7 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from django.utils import timezone
 from django.db import IntegrityError
 
-from services.models import ServiceSubscriptionPayment, ServiceSubscription, Service
+from services.models import ServiceSubscriptionPayment, ServiceSubscription, Service, DATE_CHOICES
 from invoice.models import Customer
 
 import json
@@ -47,7 +47,11 @@ def bulk_payments(request):
         date = qd.pop("payments[%s][%s]" % (i,'paid_for'))[0]
         try:
             #TODO Matteo: check if date is valid
-            paid_for = timezone.datetime(int(date[6:]),int(date[3:5]),int(date[:2]))
+            #DONE Matteo
+            if check_date:
+                paid_for = timezone.datetime(int(date[6:]),int(date[3:5]),int(date[:2]))
+            else:
+                raise ValueError
         except ValueError as e:
             return HttpResponse('{"status": "ERROR","message": "%(message)s' % {'message':_("Invalid data"),},content_type="application/json")
             
@@ -140,3 +144,13 @@ def get_customers(request, service_id):
         content_type="application/json"
     )
 
+def check_date(date):
+    """
+    Check if date year is between the allowed services.models.DATE_CHOICES.
+    Checks on month and day are done from timezone.datetime(), wrong ones raise
+    ValueError
+    """
+
+    return len(date) == 10 and ( 
+        int(DATE_CHOICES[0][1][6:]) < int(date[6:]) < int(DATE_CHOICES[-1][1][6:])
+        )
