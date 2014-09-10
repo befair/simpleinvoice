@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext, ugettext_lazy as _
-import datetime
+import datetime, pytz
 
 from django.conf import settings
 from decimal import Decimal
@@ -22,6 +22,8 @@ class Customer(models.Model):
 
     name = models.CharField(_('name'), max_length=256, blank=False, db_index=True)
 
+    email = models.EmailField(blank=True)
+
     address = models.CharField(_('address'), max_length=128, blank=True, null=True, default='')
     zipcode = models.CharField(_('zipcode'), max_length=16, blank=True, null=True, default='')
     city = models.CharField(_('city'), max_length=64, blank=True, null=True, default='')
@@ -32,6 +34,10 @@ class Customer(models.Model):
 
     notes = models.TextField(_('notes'), blank=True, null=True, default='')
 
+    class Meta:
+        verbose_name = _('customer')
+        verbose_name_plural = _("customers")
+
     def __unicode__(self):
         return self.name
 
@@ -39,9 +45,10 @@ class Customer(models.Model):
         return self.invoice_set.filter(when_paid__isnull=True).count()
     is_debtor.boolean = True
 
-    class Meta:
-        verbose_name = _('customer')
-        verbose_name_plural = _("customers")
+    @property
+    def timezone(self):
+        return pytz.timezone("Europe/Rome")
+        raise NotImplementedError("da derivare da 'state'")
 
 class CustomerContact(models.Model):
     """Customer contacts: 
