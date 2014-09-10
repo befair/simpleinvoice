@@ -45,9 +45,6 @@ STATIC_URL = '/static/'
 # Localizzazione italiana
 
 locale.setlocale(locale.LC_ALL, 'it_IT.UTF8')
-LOCALE_PATHS = ( 
-    os.path.join(BASE_DIR, 'locale',)
-)
 
 # OLDIES TODO TOREMOVE?
 

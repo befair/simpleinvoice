@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-08 16:06+0200\n"
+"POT-Creation-Date: 2014-09-09 17:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -239,15 +239,15 @@ msgstr "Fattura semplificata"
 msgid "vat_percent"
 msgstr "IVA predefinita in percentuale"
 
-#: services/admin.py:129
+#: services/admin.py:130
 msgid "Send a remaind mail about unsolved subcscpriptions"
 msgstr "Invia email di sollecito per il pagamento degli insoluti"
 
-#: services/admin.py:142
+#: services/admin.py:143
 msgid "Cancel selected service subscription/s "
 msgstr "Cancella sottoscrizioni"
 
-#: services/admin.py:155
+#: services/admin.py:156
 msgid "Restore selected service subscription/s "
 msgstr "Riabilita sottoscrizioni cancellate"
 

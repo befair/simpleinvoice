@@ -179,6 +179,3 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'mails') # change this to a proper loca
 # Localizzazione italiana
 
 locale.setlocale(locale.LC_ALL, 'it_IT.UTF8')
-LOCALE_PATHS = ( 
-    os.path.join(BASE_DIR, 'locale',)
-)
