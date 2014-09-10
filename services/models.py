@@ -8,13 +8,16 @@ from django.conf import settings
 from decimal import Decimal
 #import datetime
 from functools import partial
-import datetime
+import datetime, pytz
 from django.utils import timezone
+
 
 #--------------------------------------------------------------------------------
 # Measures units constants.
 # note: other UNIT_ could be Gigabytes, Terabytes
 
+UNIT_DAYS = 'days'
+UNIT_YEARS = 'years'
 UNIT_MONTHS = 'months'
 UNIT_HOURS = 'hours'
 UNIT_SECONDS = 'seconds'
@@ -22,6 +25,8 @@ UNIT_CHOICES = (
     #(UNIT_SECONDS, _('Seconds')),
     (UNIT_MONTHS, _('Months')),
     (UNIT_HOURS, _('Hours')),
+    (UNIT_DAYS, _('Days')),
+    (UNIT_YEARS, _('Years')),
 )
 
 DATE_CHOICES = (
@@ -58,6 +63,8 @@ DATE_CHOICES = (
 CONVERSION_UNIT_MAP = {
     (UNIT_HOURS, UNIT_MONTHS): partial(lambda x : x/720),
     (UNIT_SECONDS, UNIT_MONTHS): partial(lambda x : x/2592000),
+    (UNIT_MONTHS, UNIT_SECONDS): partial(lambda x : x*2592000),
+    (UNIT_HOURS, UNIT_SECONDS): partial(lambda x : x*3600),
 }
 
 # A source define the unite of measure chose for a subsription (time, MB, etc. )
@@ -123,6 +130,17 @@ class Service(models.Model):
         self.full_clean()
         super(Service, self).save(*args, **kw)
 
+    @property
+    def period_in_base_units(self):
+
+        if self.period_unit_source == SOURCES["TIME"]:
+            # base units are seconds
+            base_units_kind = UNIT_SECONDS
+        else:
+            raise NotImplementedError("TBD")
+
+        return CONVERSION_UNIT_MAP[(self.period_unit_raw, base_units_kind)](self.period)
+
 class ServiceSubscription(models.Model):
     """
     Map services offered to customers specifying subscription period,
@@ -148,6 +166,15 @@ class ServiceSubscription(models.Model):
 
     subscribed_on = models.DateTimeField(null=True,verbose_name=_("subscribed on"))
     subscribed_until = models.DateTimeField(null=True,blank=True,choices=DATE_CHOICES,verbose_name=_("subscribed until")) 
+
+    # ---- set starting subscription
+    subscribed_from_dt = models.DateTimeField(
+        null=True,verbose_name=_("subscribed from (datetime)"), blank=True
+    )
+    subscribed_from_value = models.IntegerField(
+        null=True,verbose_name=_("subscribed from (value)"), blank=True
+    )
+    # ----
 
     note = models.TextField(blank=True,verbose_name=_("note"))
 
@@ -182,6 +209,16 @@ class ServiceSubscription(models.Model):
             'service' : self.service
         }
 
+    def clean(self):
+
+        # First implementation
+        self.subscribed_from_dt = self.subscribed_on
+
+    def save(self, *args, **kw):
+
+        self.full_clean()
+        super(ServiceSubscription, self).save(*args, **kw)
+
     @property
     def discounted_price(self):
         """
@@ -191,6 +228,22 @@ class ServiceSubscription(models.Model):
         """
         
         return self.service.amount * (1 - self.discount)
+
+    @property
+    def subscribed_on_localtime(self):
+        return self.subscribed_on.astimezone(self.customer.timezone)
+
+    @property
+    def subscribed_from_dt_localtime(self):
+        return self.subscribed_from_dt.astimezone(self.customer.timezone)
+
+    @property
+    def subscribed_from_display(self):
+        if self.subscribed_from_dt:
+            rv = self.subscribed_from_dt_localtime
+        else:
+            raise NotImplementedError("TBD, this could be also an integer...")
+        return rv
 
     @property
     def expired(self):
@@ -213,6 +266,7 @@ class ServiceSubscription(models.Model):
                 sec_elapsed = (timezone.now() - self.subscribed_on).total_seconds()
             else:
                 sec_elapsed = (timezone.now() - self.last_paid_for).total_seconds()
+
             if self.service.period_unit_raw == UNIT_MONTHS:
                 return  Decimal(CONVERSION_UNIT_MAP[(UNIT_SECONDS, UNIT_MONTHS)](sec_elapsed)) \
                  / (self.service.period + self.service.period_deadline_modifier)
@@ -228,7 +282,7 @@ class ServiceSubscription(models.Model):
     def next_payment_due(self):
         """
         Check if a subscription has been regularly payed, basing on the
-        last payement expiry date registered into the subscription.
+        last payment expiry date registered into the subscription.
         """
 
         if self.expired or self.is_deleted:
@@ -238,7 +292,49 @@ class ServiceSubscription(models.Model):
             return self.periods_from_last_payment > 1
         raise NotImplementedError("TBD")
 
+    @property
+    def topay_start_display(self):
+
+        if self.last_paid_for:
+            # This will be valid even if last_paid_for will be an integer
+            rv = self.last_paid_for
+        else:
+            if self.service.period_unit_source == SOURCES['TIME']:
+                rv = self.subscribed_from_display
+
+            else:
+                raise NotImplementedError("TBD")
+
+        return rv
+
+    @property
+    def topay_end_display(self):
             
+        base = self.topay_start_display
+
+        if self.service.period_unit_source == SOURCES['TIME']:
+            if self.service.period_unit_raw == UNIT_MONTHS:
+                m = base.month + self.service.period
+                if m > 12:
+                    m = m % 12
+                    y = base.year + 1
+                d = base.day
+                dt = timezone.datetime(y, m, d, tzinfo=base.tzinfo)
+                rv = dt.astimezone(self.customer.timezone)
+            elif self.service.period_unit_raw == UNIT_YEARS:
+                y = base.year + self.service.period
+                m = base.month
+                d = base.day
+                dt = timezone.datetime(y, m, d, tzinfo=base.tzinfo)
+                rv = dt.astimezone(self.customer.timezone)
+            elif self.service.period_unit_raw == UNIT_DAYS:
+                t = datetime.timedelta(self.service.period)
+                rv = base + t
+        else:
+            raise NotImplementedError("TBD")
+        
+        return rv
+
 
 class ServiceSubscriptionPayment(models.Model):
     """

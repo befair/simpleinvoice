@@ -1,1 +1,2 @@
-https://www.djangoproject.com/download/1.7c3/tarball/
+https://www.djangoproject.com/download/1.7/tarball/
+pytz

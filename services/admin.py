@@ -7,9 +7,8 @@ from services import models as services
 from services.models import Service, ServiceSubscription, ServiceSubscriptionPayment, DATE_CHOICES
 from django import forms
 from django.conf import settings 
-from django.contrib.auth.models import Group
+from django.contrib import messages
 from django.utils import timezone
-import math
 
 from services.custom_fields import PercentageDecimalField
 
@@ -51,7 +50,11 @@ class ServiceSubscriptionForm(forms.ModelForm):
     class Meta:
 
         model = ServiceSubscription
-        exclude = ('invoice_period', 'last_paid_on','last_paid_for', 'is_deleted', 'when_deleted')
+        exclude = (
+            'invoice_period', 'last_paid_on','last_paid_for', 
+            'is_deleted', 'when_deleted',
+            'subscribed_from_dt', 'subscribed_from_value'
+        )
 
         #labels = {
         #    'discount' : _("discount"),
@@ -94,29 +97,33 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
         """
 
         for obj in queryset:
-            if obj.next_payment_due is True:
-                template = settings.EMAIL_TEMPLATES['INSOLUTE']
-                if obj.last_paid_for:
-                    initial = obj.last_paid_for.date
+
+            if obj.next_payment_due:
+
+                if not obj.customer.email:
+                    self.message_user(request, _("Customer %s should pay, but is has no email address"), level=messages.WARNING)
+
                 else:
-                    initial = obj.subscribed_on.date
-                n_periods = math.trunc(obj.periods_from_last_payment)
-                context = {
-                   'customer' : obj.customer,
-                   'amount' : (obj.discounted_price * n_periods),
-                   'service': obj.service,
-                   'n_periods' : n_periods,
-                   'initial' : initial,
-                    #TODO compute
-                   'now' : timezone.now().date, 
-                }
-                subject = 'Payment due'
-                sender = settings.EMAIL_SENDER
-                receivers = [obj.customer.name]
-                send_mail(subject, 
-                    loader.get_template(template).render(Context(context)), 
-                    sender, receivers, fail_silently=False
-                )
+
+                    template = settings.EMAIL_TEMPLATES['INSOLUTE']
+                    n_periods = int(obj.periods_from_last_payment)
+                    context = {
+                       'customer' : obj.customer,
+                       'amount' : (obj.discounted_price * n_periods),
+                       'service': obj.service,
+                       'n_periods' : n_periods,
+                       'initial' : obj.topay_start_display,
+                       'end' : obj.topay_end_display,
+                        #TODO compute
+                       'now' : timezone.now().astimezone(obj.customer.timezone).date, 
+                    }
+                    subject = 'Payment due'
+                    sender = settings.EMAIL_SENDER
+                    receivers = [obj.customer.email]
+                    send_mail(subject, 
+                        loader.get_template(template).render(Context(context)), 
+                        sender, receivers, fail_silently=False
+                    )
 
     check_payment.short_description = _("Send a remaind mail about unsolved subcscpriptions")
 
