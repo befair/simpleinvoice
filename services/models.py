@@ -90,7 +90,7 @@ class Service(models.Model):
     )
     period_deadline_modifier=models.IntegerField(blank=True,
         help_text=_('indicator to modify the periodic payement deadline'),
-        verbose_name=_("period deadline modifier")
+        verbose_name=_("period deadline modifier"), default=0
     ) 
     period_unit_raw = models.CharField(max_length=16, default=UNIT_HOURS, 
         choices=UNIT_CHOICES, verbose_name=_("raw unit")
@@ -106,13 +106,22 @@ class Service(models.Model):
         default=Decimal(str(settings.DEFAULT_VAT_PERCENT)), verbose_name=_("default vat percentage")
     )
 
-    def __unicode__(self):
-        return self.name
-
     class Meta:
 
         verbose_name = _("Service")
         verbose_name_plural = _("Services")
+
+    def __unicode__(self):
+        return self.name
+
+    def clean(self):
+
+        self.period_deadline_modifier = self.period_deadline_modifier or 0
+
+    def save(self, *args, **kw):
+
+        self.full_clean()
+        super(Service, self).save(*args, **kw)
 
 class ServiceSubscription(models.Model):
     """
