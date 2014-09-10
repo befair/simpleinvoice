@@ -130,7 +130,7 @@ class ServiceSubscription(models.Model):
         default=Decimal(str(settings.DEFAULT_VAT_PERCENT)),verbose_name=_("VAT percentage")
     )
 
-    discount = models.DecimalField(_("discount"), default=0, max_digits=3, decimal_places=2)
+    discount = models.DecimalField(_("discount"), default=0, max_digits=3, decimal_places=2, blank=True)
 
     invoice_period = models.IntegerField(null=True, blank=True,
         help_text=_('how many period lasts before creating an invoice?'),
