@@ -64,6 +64,7 @@ DATE_CHOICES = (
 
 CONVERSION_UNIT_MAP = {
     (UNIT_HOURS, UNIT_MONTHS): partial(lambda x : x/720),
+    (UNIT_SECONDS, UNIT_HOURS): partial(lambda x : x/3600),
     (UNIT_SECONDS, UNIT_MONTHS): partial(lambda x : x/2592000),
     (UNIT_MONTHS, UNIT_SECONDS): partial(lambda x : x*2592000),
     (UNIT_HOURS, UNIT_SECONDS): partial(lambda x : x*3600),
@@ -291,7 +292,7 @@ class ServiceSubscription(models.Model):
                 return  Decimal(CONVERSION_UNIT_MAP[(UNIT_SECONDS, UNIT_MONTHS)](sec_elapsed)) \
                  / (self.service.period + self.service.period_deadline_modifier)
             elif self.service.period_unit_raw == UNIT_HOURS:
-                return  Decimal(CONVERSION_UNIT_MAP[(UNIT_HOURS, UNIT_MONTHS)](sec_elapsed)) \
+                return  Decimal(CONVERSION_UNIT_MAP[(UNIT_SECONDS, UNIT_HOURS)](sec_elapsed)) \
                  / (self.service.period + self.service.period_deadline_modifier)
             elif self.service.period_unit_raw == UNIT_SECONDS:
                 return  Decimal(sec_elapsed) \
