@@ -91,6 +91,14 @@ class InvoiceAdmin(admin.ModelAdmin):
 
     actions = ['make_paid', 'display']
 
+    def has_add_permission(self, request):
+        """
+        """
+
+        if not Customer.objects.count():
+            return False
+        return True
+
     def has_change_permission(self, request, obj=None):
         if obj and obj.when_paid:
             return False

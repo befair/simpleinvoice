@@ -11,6 +11,7 @@ from django.contrib.auth.models import Group
 from django.contrib import messages
 from django.utils import timezone
 
+from invoice.models import Customer
 
 class ServiceSubscriptionForm(forms.ModelForm):
 
@@ -67,18 +68,25 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
 
     form = ServiceSubscriptionForm
 
-    list_display = ('customer', 'service', 'subscribed_on', 'subscribed_until', 'note','is_deleted')
+    #list_display = ('customer', 'service', 'subscribed_on', 'subscribed_until', 'note','is_deleted')
     search_fields = ['customer']
 
     actions = ['check_payment','delete_subscriptions','restore_subscriptions']
+
+    def has_add_permission(self, request):
+        """
+        """
+        if Customer.objects.count() == 0:
+            return False
+        return True
 
     def get_list_display(self, request):
         """
         """
         if request.user.groups.filter(name='referrers'):
-            list_display = ('customer', 'service', 'subscribed_on', 'subscribed_until', 'note','is_deleted')
+            list_display = ('customer', 'service', 'subscribed_on', 'note','is_deleted')
         else:
-            list_display = ('customer', 'service', 'subscribed_on', 'subscribed_until', 'note')
+            list_display = ('customer', 'service', 'subscribed_on', 'note')
         return list_display
 
     def get_queryset(self, request):
@@ -272,6 +280,14 @@ class ServiceSubscriptionPaymentAdmin(admin.ModelAdmin):
         """
         kwargs['exclude'] = ['discount','vat_percent',]
         return super(ServiceSubscriptionPaymentAdmin, self).get_form(request, obj=obj, **kwargs)
+
+    def has_add_permission(self, request):
+        """
+        """
+        # Checking only not-deleted Subscriptions
+        if ServiceSubscription.objects.count() == 0:
+            return False
+        return True
 
     class Media:
         css = {
