@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-10 15:50+0200\n"
+"POT-Creation-Date: 2014-09-10 15:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -235,7 +235,9 @@ msgid "Simple invoice"
 msgstr "Fattura semplificata"
 
 #: services/admin.py:119
-msgid "Send a remaind mail about unsolved subcscpriptions"
+#, fuzzy
+#| msgid "Send a remaind mail about unsolved subcscpriptions"
+msgid "Send a reminder mail about unsolved subcscpriptions"
 msgstr "Invia email di sollecito per il pagamento degli insoluti"
 
 #: services/admin.py:132
@@ -267,14 +269,6 @@ msgid "period"
 msgstr "periodo"
 
 #: services/models.py:94
-#| msgid ""
-#| "Indicator to modify the periodic payement deadline. This value has to be "
-#| "greater then -(period), and represents the relative numebr of period "
-#| "units (for instance, months) that should be considered to determine the "
-#| "final deadline. So, if the period is of 12 months, and the modifier is "
-#| "set to -2, then the actual deadline is computed as (12 + (-2) = 10) "
-#| "months. In the same way, a modifier of 2 chenges the deadline to (12 + 2 "
-#| "= 14) month. "
 msgid ""
 "Indicator to modify the periodic payement deadline. This value has to be "
 "greater then -(period), and represents the relative numebr of period units "

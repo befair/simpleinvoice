@@ -123,7 +123,7 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
                         sender, receivers, fail_silently=False
                     )
 
-    check_payment.short_description = _("Send a remaind mail about unsolved subcscpriptions")
+    check_payment.short_description = _("Send a reminder mail about unsolved subcscpriptions")
 
     def delete_subscriptions(self, request, queryset):
         """
