@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-10 15:57+0200\n"
+"POT-Creation-Date: 2014-09-10 16:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,7 +137,7 @@ msgstr ""
 msgid "emit date"
 msgstr "data di emissione"
 
-#: invoice/models.py:138 services/models.py:151 services/models.py:279
+#: invoice/models.py:138 services/models.py:151 services/models.py:282
 msgid "discount"
 msgstr "sconto in percentuale"
 
@@ -234,17 +234,16 @@ msgstr "Il trasferimento di denaro puo essere fatto tramite IBAN"
 msgid "Simple invoice"
 msgstr "Fattura semplificata"
 
-#: services/admin.py:119
-#, fuzzy
+#: services/admin.py:122
 #| msgid "Send a remaind mail about unsolved subcscpriptions"
 msgid "Send a reminder mail about unsolved subcscpriptions"
 msgstr "Invia email di sollecito per il pagamento degli insoluti"
 
-#: services/admin.py:132
+#: services/admin.py:135
 msgid "Cancel selected service subscription/s "
 msgstr "Cancella sottoscrizioni"
 
-#: services/admin.py:145
+#: services/admin.py:148
 msgid "Restore selected service subscription/s "
 msgstr "Riabilita sottoscrizioni cancellate"
 
@@ -317,7 +316,7 @@ msgstr "Servizio"
 msgid "Services"
 msgstr "Servizi"
 
-#: services/models.py:127 services/models.py:202 services/models.py:306
+#: services/models.py:127 services/models.py:205 services/models.py:309
 msgid "Vat has to be a percentage value"
 msgstr "L'Iva deve essere un valore percentuale (compreso tra 0 e 1)"
 
@@ -325,7 +324,7 @@ msgstr "L'Iva deve essere un valore percentuale (compreso tra 0 e 1)"
 msgid "service"
 msgstr "Servizio"
 
-#: services/models.py:148 services/models.py:276
+#: services/models.py:148 services/models.py:279
 msgid "VAT percentage"
 msgstr "IVA in percentuale"
 
@@ -341,7 +340,7 @@ msgstr "sottoscritta il"
 msgid "subscribed until"
 msgstr "sottoscritta fino a"
 
-#: services/models.py:161 services/models.py:285
+#: services/models.py:161 services/models.py:288
 msgid "note"
 msgstr "note"
 
@@ -353,11 +352,11 @@ msgstr "creata il"
 msgid "updated on"
 msgstr "aggiornato il"
 
-#: services/models.py:168 services/models.py:281
+#: services/models.py:168 services/models.py:284
 msgid "paid on"
 msgstr "pagato il"
 
-#: services/models.py:169 services/models.py:283
+#: services/models.py:169 services/models.py:286
 msgid "paid for"
 msgstr "pagato fino al"
 
@@ -365,48 +364,57 @@ msgstr "pagato fino al"
 msgid "when deleted"
 msgstr "data di cancellazione"
 
-#: services/models.py:185
+#: services/models.py:179
+#| msgid "service"
+msgid "service details"
+msgstr "Dettagli di sottoscrizione"
+
+#: services/models.py:180
+msgid "how many"
+msgstr "Numero di sottoscrizioni"
+
+#: services/models.py:188
 msgid "Service subscription"
 msgstr "Sottoscrizione a servizio"
 
-#: services/models.py:186
+#: services/models.py:189
 msgid "Service subscriptions"
 msgstr "Sottoscrizioni a servizio"
 
-#: services/models.py:189
+#: services/models.py:192
 #, python-format
 msgid "Subscription of %(customer)s to service %(service)s"
 msgstr "Sottoscrizione di %(customer)s al servizio %(service)s"
 
-#: services/models.py:200 services/models.py:304
+#: services/models.py:203 services/models.py:307
 msgid "Discount has to be a percentage value"
 msgstr "Lo sconto deve essere un valore percentuale (compreso tra 0 e 1)"
 
-#: services/models.py:271
+#: services/models.py:274
 msgid "subscription"
 msgstr "sottoscrizione"
 
-#: services/models.py:273
+#: services/models.py:276
 msgid "cost"
 msgstr "costo"
 
-#: services/models.py:281
+#: services/models.py:284
 msgid "When has it been paid?"
 msgstr "Quando è stato pagato?"
 
-#: services/models.py:283
+#: services/models.py:286
 msgid "What date has he paid until?"
 msgstr "Fino a quando è stato pagato?"
 
-#: services/models.py:289
+#: services/models.py:292
 msgid "Service subscription payment"
 msgstr "Pagamento di sottoscrizione a servizio"
 
-#: services/models.py:290
+#: services/models.py:293
 msgid "Service subscription payments"
 msgstr "Pagamenti di sottoscrizione a servizio"
 
-#: services/models.py:293
+#: services/models.py:296
 #, python-format
 msgid "Payment of %(customer)s to service %(service)s"
 msgstr "Pagamento di %(customer)s al servizio %(service)s"

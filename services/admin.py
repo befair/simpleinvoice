@@ -6,9 +6,11 @@ from django.template import loader, Context
 from services import models as services
 from services.models import Service, ServiceSubscription, ServiceSubscriptionPayment, DATE_CHOICES
 from django import forms
-from django.conf import settings 
+from django.conf import settings
+from django.contrib.auth.models import Group 
 from django.contrib import messages
 from django.utils import timezone
+
 
 class ServiceSubscriptionForm(forms.ModelForm):
 
@@ -51,7 +53,8 @@ class ServiceSubscriptionForm(forms.ModelForm):
         exclude = (
             'invoice_period', 'last_paid_on','last_paid_for', 
             'is_deleted', 'when_deleted',
-            'subscribed_from_dt', 'subscribed_from_value'
+            'subscribed_from_dt', 'subscribed_from_value',
+			'howmany'
         )
 
         #labels = {

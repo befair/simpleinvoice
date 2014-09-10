@@ -203,6 +203,9 @@ class ServiceSubscription(models.Model):
     is_deleted = models.BooleanField(default=False,verbose_name=("is deleted"))
     when_deleted = models.DateTimeField(null=True,blank=True,verbose_name=_("when deleted"))
 
+    service_details = models.TextField(null=True,blank=True,verbose_name=_('service details'))
+    howmany = models.IntegerField(null=True,blank=True,verbose_name=_('how many'),default=1)
+
     objects = ServiceSubscriptionManager()
 
     all_objects = models.Manager()
