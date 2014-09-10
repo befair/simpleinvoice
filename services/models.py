@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 from invoice.models import Customer
 from services.managers import ServiceSubscriptionManager
-from services.custom_fields import PercentageDecimalField
+from services.custom_fields import PercentageDecimalField, CurrencyField
 
 from django.conf import settings
 from decimal import Decimal
@@ -110,7 +110,7 @@ class Service(models.Model):
     )
     period_unit_source = models.CharField(max_length=32, default="epoch_now",verbose_name=_("period unit source"))
 
-    amount = models.DecimalField(max_digits=12, decimal_places=2, verbose_name=_("amount"))
+    amount = CurrencyField(verbose_name=_("amount"))
     default_vat_percent = PercentageDecimalField(
         default=Decimal(str(settings.DEFAULT_VAT_PERCENT)),
         verbose_name=_("default vat percentage")
@@ -272,7 +272,7 @@ class ServiceSubscription(models.Model):
         the current date
         """
         if self.subscribed_until:
-            return self.subscribed_until <= timezone.now
+            return self.subscribed_until <= timezone.now()
 
     @property
     def periods_from_last_payment(self):
@@ -362,7 +362,7 @@ class ServiceSubscriptionPayment(models.Model):
 
     subscription = models.ForeignKey(ServiceSubscription,verbose_name=_("subscription"))
 
-    amount = models.DecimalField(max_digits=12, decimal_places=2,verbose_name=_("cost"))
+    amount = CurrencyField(verbose_name=_("cost"))
     vat_percent = PercentageDecimalField( 
         default=Decimal(str(settings.DEFAULT_VAT_PERCENT)),
         verbose_name=_("VAT percentage")
