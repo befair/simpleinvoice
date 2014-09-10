@@ -49,13 +49,15 @@ class ServiceSubscriptionForm(forms.ModelForm):
     #    return instance
 
     class Meta:
+
         model = ServiceSubscription
+        exclude = ('invoice_period', 'last_paid_on','last_paid_for', 'is_deleted', 'when_deleted')
+
         #labels = {
         #    'discount' : _("discount"),
         #    'vat_percent' : _("vat_percent"),
         #}
-        #exclude = ('is_deleted','service',)
-    
+
 
 class ServiceSubscriptionAdmin(admin.ModelAdmin): 
 
@@ -65,9 +67,8 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
     search_fields = ['customer']
 
     actions = ['check_payment','delete_subscriptions','restore_subscriptions']
-    
-    exclude = ('last_paid_on','last_paid_for')
 
+    
     def get_queryset(self, request):
         """
         """
@@ -80,16 +81,6 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
         if ordering:
             qs = qs.order_by(*ordering)
         return qs
-
-    def get_form(self, request, obj=None, **kwargs):
-        """
-        Form Meta exclude seems to not work
-        """
-        kwargs['exclude'] = ['is_deleted',
-            #'service',
-            'last_paid_on','last_paid_for','when_deleted'
-        ]
-        return super(ServiceSubscriptionAdmin, self).get_form(request, obj=obj, **kwargs)
 
     def check_payment(self, request, queryset):
         """
