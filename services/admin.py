@@ -72,7 +72,15 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
 
     actions = ['check_payment','delete_subscriptions','restore_subscriptions']
 
-    
+    def get_list_display(self, request):
+        """
+        """
+        if request.user.groups.filter(name='referrers'):
+            list_display = ('customer', 'service', 'subscribed_on', 'subscribed_until', 'note','is_deleted')
+        else:
+            list_display = ('customer', 'service', 'subscribed_on', 'subscribed_until', 'note')
+        return list_display
+
     def get_queryset(self, request):
         """
         """
