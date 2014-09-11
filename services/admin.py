@@ -111,7 +111,14 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
         
         """
 
+        sender = settings.EMAIL_SENDER
+        subject = ugettext('Payment due')
+        template_txt = settings.EMAIL_TEMPLATES['INSOLUTE_TXT']
+        template_html = settings.EMAIL_TEMPLATES['INSOLUTE_HTML']
+        tmpl_txt = loader.get_template(template_txt)
+        tmpl_html = loader.get_template(template_html)
         c = 0
+
         for obj in queryset:
 
             if obj.next_payment_due:
@@ -123,8 +130,6 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
                 
                     c +=1
 
-                    template_txt = settings.EMAIL_TEMPLATES['INSOLUTE_TXT']
-                    template_html = settings.EMAIL_TEMPLATES['INSOLUTE_HTML']
                     n_periods = int(obj.periods_from_last_payment)
                     context = {
                        'customer' : obj.customer,
@@ -136,15 +141,13 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
                         #TODO compute
                        'now' : timezone.now().astimezone(obj.customer.timezone).date, 
                     }
-                    subject = 'Payment due'
-                    sender = settings.EMAIL_SENDER
                     receivers = [obj.customer.email]
                     msg = EmailMultiAlternatives(
-                        subject, loader.get_template(template_txt).render(Context(context)), 
+                        subject, tmpl_txt.render(Context(context)), 
                         sender, receivers
                     )
                     msg.attach_alternative(
-                        loader.get_template(template_html).render(Context(context)),
+                        tmpl_html.render(Context(context)),
                         "text/html"
                     )
                     msg.send()
