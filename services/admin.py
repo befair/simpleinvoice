@@ -123,7 +123,6 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
                     template_txt = settings.EMAIL_TEMPLATES['INSOLUTE_TXT']
                     template_html = settings.EMAIL_TEMPLATES['INSOLUTE_HTML']
                     n_periods = int(obj.periods_from_last_payment)
-                    print type((obj.discounted_price * n_periods))
                     context = {
                        'customer' : obj.customer,
                        'amount' : (obj.discounted_price * n_periods),
