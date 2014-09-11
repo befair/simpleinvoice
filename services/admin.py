@@ -268,22 +268,16 @@ class ServiceSubscriptionPaymentAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields' : ('customer', 
-                        'service','amount', 'vat_percent',
-                        'discount', 'paid_for', 'note'
+            'fields' : (
+                'customer', 
+                'service','amount',
+                'paid_for', 'note'
             )
         }),
     )
     
     list_display = ('subscription', 'paid_on', 'amount', 'note')
     search_fields = ['subscription']
-
-    def get_form(self, request, obj=None, **kwargs):
-        """
-        Form Meta exclude seems to not work
-        """
-        kwargs['exclude'] = ['discount','vat_percent',]
-        return super(ServiceSubscriptionPaymentAdmin, self).get_form(request, obj=obj, **kwargs)
 
     def has_add_permission(self, request):
         """
