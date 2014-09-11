@@ -3,7 +3,7 @@
 <head></head>
 <body>
     {% blocktrans %}
-    <p> Hi {{ customer }}, we inform you that you should pay {{ amount }} &euro;,  
+    <p> Hi {{ customer }}, we inform you that you should pay {{ amount|floatformat:2 }} &euro;,  
     for the subscription to service
     <p> {{ service }} </p>
     from date {{ initial }} to date {{ end }}.

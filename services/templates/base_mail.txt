@@ -1,7 +1,7 @@
 {% load i18n %} 
 
 {% blocktrans %}
-Hi {{ customer }}, we inform you that you should pay {{ amount }} &euro;,  
+Hi {{ customer }}, we inform you that you should pay {{ amount|floatformat:2 }} &euro;,  
 for the subscription to service
 {{ service }}
 from date {{ initial }} to date {{ end }}.
