@@ -83,7 +83,7 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
     def get_list_display(self, request):
         """
         """
-        if request.user.groups.filter(name='referrers'):
+        if request.user.is_superuser:
             list_display = ('customer', 'service', 'subscribed_on', 'note','is_deleted')
         else:
             list_display = ('customer', 'service', 'subscribed_on', 'note')
