@@ -1,12 +1,20 @@
 {% load i18n %} 
 
 {% blocktrans %}
-Hi {{ customer }}, we inform you that you should pay {{ amount|floatformat:2 }} &euro;,  
+
+Hi {{ customer }}, 
+
+we inform you that you should pay {{ amount|floatformat:"2" }} euro  
 for the subscription to service
-{{ service }}
+
+"{{ service }}"
+
 from date {{ initial }} to date {{ end }}.
 
-Thanks for your attention.
+Thanks for your attention and your choice.
 
+We wish you best days!
+
+beFair team
 {% endblocktrans %}
 

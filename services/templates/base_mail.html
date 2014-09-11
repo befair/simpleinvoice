@@ -3,13 +3,20 @@
 <head></head>
 <body>
     {% blocktrans %}
-    <p> Hi {{ customer }}, we inform you that you should pay {{ amount|floatformat:2 }} &euro;,  
-    for the subscription to service
-    <p> {{ service }} </p>
-    from date {{ initial }} to date {{ end }}.
+    <p>Hi {{ customer }},</p>
 
-    Thanks for your attention.
-    </p>
+    <p>we inform you that you should pay {{ amount|floatformat:2 }} &euro;,  
+    for the subscription to service</p>
+
+    <p>{{ service }}</p>
+
+    <p>from date {{ initial }} to date {{ end }}.</p>
+
+    <p>Thanks for your attention and your choice</p>
+
+    <p>We wish you best days!</p>
+
+    beFair team
     {% endblocktrans %}
 </body>
 
