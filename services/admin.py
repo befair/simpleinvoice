@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db import models
 from django.utils.translation import ugettext, ugettext_lazy as _
-from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 from django.template import loader, Context
 from services import models as services
 from services.models import Service, ServiceSubscription, ServiceSubscriptionPayment, DATE_CHOICES

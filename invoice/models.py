@@ -22,8 +22,6 @@ class Customer(models.Model):
 
     name = models.CharField(_('name'), max_length=256, blank=False, db_index=True)
 
-    email = models.EmailField(blank=True)
-
     address = models.CharField(_('address'), max_length=128, blank=True, null=True, default='')
     zipcode = models.CharField(_('zipcode'), max_length=16, blank=True, null=True, default='')
     city = models.CharField(_('city'), max_length=64, blank=True, null=True, default='')
@@ -50,15 +48,28 @@ class Customer(models.Model):
         return pytz.timezone("Europe/Rome")
         raise NotImplementedError("da derivare da 'state'")
 
-class CustomerContact(models.Model):
-    """Customer contacts: 
-    each record holds a contact for a customer,
-    along with the corresponding type"""
+    @property
+    def email(self):
+        emails = self.customercontact_set.filter(flavour=CustomerContact.FLAVOUR_EMAIL)
+        email = emails.first()
+        if email:
+            email = email.value
+        return email
 
+class CustomerContact(models.Model):
+    """
+    Customer contacts: 
+    each record holds a contact for a customer,
+    along with the corresponding type.
+
+    TODO: add the "preferred" checkbox like gasista felice...
+    """
+
+    FLAVOUR_EMAIL = 'email'
     FLAVOUR_CHOICES = (
         ('phone', _('phone')),
         ('fax',_('fax')),
-        ('email',_('email')),
+        (FLAVOUR_EMAIL,_('email')),
         ('other',_('other')),
     )
 

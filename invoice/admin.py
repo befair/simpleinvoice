@@ -153,15 +153,18 @@ class CustomerAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields' : ('name', 'address',
-                        ('zipcode','city','state'),
-                        'ssn','vat',
+            'fields' : (
+                ('name', 'email'),
+                'address',
+                ('zipcode','city','state'),
+                'ssn','vat',
             )
         }), (_('More info...'), { 'fields' : ('notes',), 'classes' : ('collapse',) }
         ),
     )
 
-    list_display = ('name', 'address', 'city', 'notes')
+    readonly_fields = ('email',)
+    list_display = ('name', 'email', 'address', 'city', 'notes')
     list_display_links = ('name',)
     list_filter = []
     search_fields = ['name']
