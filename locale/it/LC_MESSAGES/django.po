@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-11 18:47+0200\n"
+"POT-Creation-Date: 2014-09-11 19:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -234,27 +234,32 @@ msgstr "Il trasferimento di denaro puo essere fatto tramite IBAN"
 msgid "Simple invoice"
 msgstr "Fattura semplice"
 
-#: services/admin.py:120
+#: services/admin.py:115
+#, python-format
+msgid "Payment due for %s"
+msgstr "Promemoria pagamento %s"
+
+#: services/admin.py:127
 #, python-format
 msgid "Customer %s should pay, but is has no email address"
 msgstr ""
 "Il cliente %s dovrebbe pagare, ma non ha un indirizzo email cui spedirgli il "
 "sollecito"
 
-#: services/admin.py:152
+#: services/admin.py:156
 #, python-format
 msgid "%s reminder mails sents"
 msgstr "%s mail di sollecito inviate"
 
-#: services/admin.py:154
+#: services/admin.py:158
 msgid "Send a reminder mail about unsolved subcscpriptions"
 msgstr "Invia email di sollecito per il pagamento degli insoluti"
 
-#: services/admin.py:167
+#: services/admin.py:171
 msgid "Cancel selected service subscription/s "
 msgstr "Cancella sottoscrizioni"
 
-#: services/admin.py:180
+#: services/admin.py:184
 msgid "Restore selected service subscription/s "
 msgstr "Riabilita sottoscrizioni cancellate"
 

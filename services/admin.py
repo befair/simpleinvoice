@@ -112,7 +112,7 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
         """
 
         sender = settings.EMAIL_SENDER
-        subject = ugettext('Payment due')
+        tmpl_subject = ugettext('Payment due for %s')
         template_txt = settings.EMAIL_TEMPLATES['INSOLUTE_TXT']
         template_html = settings.EMAIL_TEMPLATES['INSOLUTE_HTML']
         tmpl_txt = loader.get_template(template_txt)
@@ -143,7 +143,8 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
                     }
                     receivers = [obj.customer.email]
                     msg = EmailMultiAlternatives(
-                        subject, tmpl_txt.render(Context(context)), 
+                        tmpl_subject % obj.service, 
+                        tmpl_txt.render(Context(context)), 
                         sender, receivers
                     )
                     msg.attach_alternative(
