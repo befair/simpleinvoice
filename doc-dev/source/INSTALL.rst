@@ -40,7 +40,7 @@ La configurazione di default prevede l'uso di `sqlite <http://sqlite.org>`__.
 Inizializzare il database eseguendo:
 
 1. simpleinvoice$ python manage.py migrate --noinput
-2. simpleinvoice$ python manage.py createsuperuser
+2. simpleinvoice$ python manage.py dbshell < invoice/sql/invoice_sequence.sql (TODO fixture iniziale)
             
 5/6 Avviare il servizio
 -----------------------
@@ -58,7 +58,7 @@ Accedere a `simpleinvoice` puntando il browser all'indirizzo:
 [PER TESTARE] Caricare i dati di prova
 --------------------------------------
 
-* simpleinvoice$ python manage.py loaddata initial_data.json
+* simpleinvoice$ python manage.py loaddata initial_data.json (TODO rinominare in test_data)
 
 .. _suggerimento:
 
