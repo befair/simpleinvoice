@@ -76,9 +76,7 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         """
         """
-        if Customer.objects.count() == 0:
-            return False
-        return True
+        return bool(Customer.objects.count())
 
     def get_list_display(self, request):
         """
@@ -292,9 +290,7 @@ class ServiceSubscriptionPaymentAdmin(admin.ModelAdmin):
         """
         """
         # Checking only not-deleted Subscriptions
-        if ServiceSubscription.objects.count() == 0:
-            return False
-        return True
+        return bool(ServiceSubscription.objects.count())
 
     class Media:
         css = {
