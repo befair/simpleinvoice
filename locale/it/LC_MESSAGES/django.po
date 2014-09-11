@@ -232,7 +232,7 @@ msgstr "Il trasferimento di denaro puo essere fatto tramite IBAN"
 #: invoice/templates/display_many.html:13 templates/admin/base_site.html:8
 #: templates/admin/base_site.html.py:11
 msgid "Simple invoice"
-msgstr "Fattura semplificata"
+msgstr "Fattura semplice"
 
 #: services/admin.py:122
 #| msgid "Send a remaind mail about unsolved subcscpriptions"
