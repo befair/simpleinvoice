@@ -2,10 +2,10 @@
 
 <head></head>
 <body>
-    {% blocktrans %}
+    {% blocktrans with pretty_amount=amount|floatformat:"2" %}
     <p>Hi {{ customer }},</p>
 
-    <p>we inform you that you should pay {{ amount|floatformat:2 }} &euro;,  
+    <p>we inform you that you should pay {{ pretty_amount }} &euro;,  
     for the subscription to service</p>
 
     <p>{{ service }}</p>

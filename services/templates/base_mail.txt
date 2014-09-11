@@ -1,10 +1,10 @@
 {% load i18n %} 
 
-{% blocktrans %}
+{% blocktrans with pretty_amount=amount|floatformat:"2" %}
 
 Hi {{ customer }}, 
 
-we inform you that you should pay {{ amount|floatformat:"2" }} euro  
+we inform you that you should pay {{ pretty_amount }} euro  
 for the subscription to service
 
 "{{ service }}"
