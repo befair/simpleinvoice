@@ -121,9 +121,11 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
                     self.message_user(request, _("Customer %s should pay, but is has no email address"), level=messages.WARNING)
 
                 else:
-
-                    template = settings.EMAIL_TEMPLATES['INSOLUTE']
+                
+                    template_txt = settings.EMAIL_TEMPLATES['INSOLUTE_TXT']
+                    template_html = settings.EMAIL_TEMPLATES['INSOLUTE_HTML']
                     n_periods = int(obj.periods_from_last_payment)
+                    print type((obj.discounted_price * n_periods))
                     context = {
                        'customer' : obj.customer,
                        'amount' : (obj.discounted_price * n_periods),
@@ -137,19 +139,15 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
                     subject = 'Payment due'
                     sender = settings.EMAIL_SENDER
                     receivers = [obj.customer.email]
-                msg = EmailMultiAlternatives(
-                    subject, loader.get_template(template_txt).render(Context(context)), 
-                    sender, receivers
-                )
-                msg.attach_alternative(
-                    loader.get_template(template_html).render(Context(context)),
-                    "text/html"
-                )
-                msg.send()
-                #send_mail(subject, 
-                #    loader.get_template(template).render(Context(context)), 
-                #    sender, receivers, fail_silently=False
-                #)
+                    msg = EmailMultiAlternatives(
+                        subject, loader.get_template(template_txt).render(Context(context)), 
+                        sender, receivers
+                    )
+                    msg.attach_alternative(
+                        loader.get_template(template_html).render(Context(context)),
+                        "text/html"
+                    )
+                    msg.send()
 
     check_payment.short_description = _("Send a reminder mail about unsolved subcscpriptions")
 
