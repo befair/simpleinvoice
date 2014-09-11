@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-10 16:25+0200\n"
+"POT-Creation-Date: 2014-09-11 12:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,31 +18,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: invoice/admin.py:102
+#: invoice/admin.py:107
 msgid "Make selected invoices as paid today"
 msgstr "Segna le fatture selezionate come pagate oggi"
 
-#: invoice/admin.py:109
+#: invoice/admin.py:114
 msgid "Display selected invoices"
 msgstr "Mostra le fatture selezionate"
 
-#: invoice/admin.py:132
+#: invoice/admin.py:137
 msgid "SSN number must be inserted if customer is a natural person"
 msgstr "Inserire il Codice Fiscale se il cliente è una persona fisica"
 
-#: invoice/admin.py:133
+#: invoice/admin.py:138
 msgid "VAT number must be inserted if customer is a legal person"
 msgstr "Inserire la Partita IVA se il cliente è una persona giuridica"
 
-#: invoice/admin.py:139
+#: invoice/admin.py:144
 msgid "You should write social security or vat number"
 msgstr "Dovresti scrivere il codice fiscale o la partita IVA"
 
-#: invoice/admin.py:152
+#: invoice/admin.py:159
 msgid "More info..."
 msgstr "Altre informazioni..."
 
-#: invoice/models.py:23 services/models.py:88
+#: invoice/models.py:23 services/models.py:96
 msgid "name"
 msgstr "nome"
 
@@ -74,114 +74,114 @@ msgstr "Partita IVA"
 msgid "notes"
 msgstr "note"
 
-#: invoice/models.py:43 invoice/models.py:136 services/models.py:143
+#: invoice/models.py:36 invoice/models.py:154 services/models.py:162
 msgid "customer"
 msgstr "cliente"
 
-#: invoice/models.py:44
+#: invoice/models.py:37
 msgid "customers"
 msgstr "clienti"
 
-#: invoice/models.py:52
+#: invoice/models.py:70
 msgid "phone"
 msgstr "telefono"
 
-#: invoice/models.py:53
+#: invoice/models.py:71
 msgid "fax"
 msgstr "fax"
 
-#: invoice/models.py:54
+#: invoice/models.py:72
 msgid "email"
 msgstr "e-mail"
 
-#: invoice/models.py:55
+#: invoice/models.py:73
 msgid "other"
 msgstr "altro"
 
-#: invoice/models.py:66
+#: invoice/models.py:84
 msgid "customer contact"
 msgstr "contatto del cliente"
 
-#: invoice/models.py:67
+#: invoice/models.py:85
 msgid "customer contacts"
 msgstr "contatti del cliente"
 
-#: invoice/models.py:118
+#: invoice/models.py:136
 #, python-format
 msgid "Next invoice id is %s"
 msgstr "L'id della prossima fattura è %s"
 
-#: invoice/models.py:130
+#: invoice/models.py:148
 msgid "money transfer"
 msgstr "trasferimento monetario"
 
-#: invoice/models.py:131
+#: invoice/models.py:149
 msgid "cash"
 msgstr "contanti"
 
-#: invoice/models.py:132
+#: invoice/models.py:150
 msgid "credit card"
 msgstr "carta di credito"
 
-#: invoice/models.py:135
+#: invoice/models.py:153
 msgid "invoice number"
 msgstr "numero di fattura"
 
-#: invoice/models.py:135
+#: invoice/models.py:153
 msgid "Set this value only if you need a specific invoice number."
 msgstr ""
 "Inserisci questo valore solo se si necessita di uno specifico numero di "
 "fattura"
 
-#: invoice/models.py:137
+#: invoice/models.py:155
 msgid "emit date"
 msgstr "data di emissione"
 
-#: invoice/models.py:138 services/models.py:151 services/models.py:282
+#: invoice/models.py:156 services/models.py:170 services/models.py:372
 msgid "discount"
 msgstr "sconto in percentuale"
 
-#: invoice/models.py:139
+#: invoice/models.py:157
 msgid "is valid"
 msgstr "vlaidità"
 
-#: invoice/models.py:139
+#: invoice/models.py:157
 msgid "You can invalidate this invoice by unchecking this field."
 msgstr "Invalida la fattura deselezionando questa casella"
 
-#: invoice/models.py:140
+#: invoice/models.py:158
 msgid "pay with"
 msgstr "paga con"
 
-#: invoice/models.py:142
+#: invoice/models.py:160
 msgid "when paid"
 msgstr "data di pagamento"
 
-#: invoice/models.py:145
+#: invoice/models.py:163
 msgid "invoice"
 msgstr "fattura"
 
-#: invoice/models.py:146
+#: invoice/models.py:164
 msgid "invoices"
 msgstr "fatture"
 
-#: invoice/models.py:151 invoice/templates/display.html:27
+#: invoice/models.py:169 invoice/templates/display.html:27
 msgid "of"
 msgstr "di"
 
-#: invoice/models.py:208 services/models.py:106
+#: invoice/models.py:226 services/models.py:114
 msgid "amount"
 msgstr "Costo"
 
-#: invoice/models.py:209 services/models.py:89
+#: invoice/models.py:227 services/models.py:97
 msgid "description"
 msgstr "descrizione"
 
-#: invoice/models.py:220
+#: invoice/models.py:238
 msgid "invoice entry"
 msgstr "annotazione di fattura"
 
-#: invoice/models.py:221
+#: invoice/models.py:239
 msgid "invoice entries"
 msgstr "annotazioni di fattura"
 
@@ -234,43 +234,63 @@ msgstr "Il trasferimento di denaro puo essere fatto tramite IBAN"
 msgid "Simple invoice"
 msgstr "Fattura semplice"
 
-#: services/admin.py:122
-#| msgid "Send a remaind mail about unsolved subcscpriptions"
+#: services/admin.py:119
+#, python-format
+msgid "Customer %s should pay, but is has no email address"
+msgstr ""
+
+#: services/admin.py:150
 msgid "Send a reminder mail about unsolved subcscpriptions"
 msgstr "Invia email di sollecito per il pagamento degli insoluti"
 
-#: services/admin.py:135
+#: services/admin.py:163
 msgid "Cancel selected service subscription/s "
 msgstr "Cancella sottoscrizioni"
 
-#: services/admin.py:148
+#: services/admin.py:176
 msgid "Restore selected service subscription/s "
 msgstr "Riabilita sottoscrizioni cancellate"
 
-#: services/models.py:25
+#: services/models.py:28
 msgid "Months"
 msgstr "Mesi"
 
-#: services/models.py:26
+#: services/models.py:29
 msgid "Hours"
 msgstr "Ore"
 
-#: services/models.py:87
+#: services/models.py:30
+msgid "Days"
+msgstr ""
+
+#: services/models.py:31
+msgid "Years"
+msgstr ""
+
+#: services/models.py:95
 msgid "abbreviation"
 msgstr "abbreviazione"
 
-#: services/models.py:90
+#: services/models.py:98
 msgid "indicator of a period by raw units."
 msgstr "indicatore del periodo in unità grezze"
 
-#: services/models.py:91 services/models.py:155
+#: services/models.py:99 services/models.py:174
 msgid "period"
 msgstr "periodo"
 
-#: services/models.py:94
+#: services/models.py:102
+#| msgid ""
+#| "Indicator to modify the periodic payement deadline. This value has to be "
+#| "greater then -(period), and represents the relative numebr of period "
+#| "units (for instance, months) that should be considered to determine the "
+#| "final service payment deadline. So, if the period is of 12 months, and "
+#| "the modifier is set to -2, then the actual service payment deadline is "
+#| "computed as (12 + (-2) = 10) months. In the same way, a modifier of 2 "
+#| "chenges the deadline to (12 + 2 = 14) month. "
 msgid ""
-"Indicator to modify the periodic payement deadline. This value has to be "
-"greater then -(period), and represents the relative numebr of period units "
+"Indicator to modify the periodic payment deadline. This value has to be "
+"greater than -(period), and represents the relative number of period units "
 "(for instance, months) that should be considered to determine the final "
 "service payment deadline. So, if the period is of 12 months, and the "
 "modifier is set to -2, then the actual service payment deadline is computed "
@@ -284,165 +304,219 @@ msgstr ""
 "vera scadenza del pagamento sarà dopo (12 + (-2) = 10) mesi. Allo stesso "
 "modo, un modificatore settato a 2 cambia la scadenza a (12 + 2) = 14 mesi."
 
-#: services/models.py:95
+#: services/models.py:103
 msgid "period deadline modifier"
 msgstr "modificatore per la scadenza periodica"
 
-#: services/models.py:98
+#: services/models.py:106
 msgid "raw unit"
 msgstr "unità grezza"
 
-#: services/models.py:101
+#: services/models.py:109
 msgid "display measure unit for period"
 msgstr "mostra l'unità di misura del periodo"
 
-#: services/models.py:102
+#: services/models.py:110
 msgid "period measure of unit"
 msgstr "unità di misura del periodo"
 
-#: services/models.py:104
+#: services/models.py:112
 msgid "period unit source"
 msgstr "fonte unità di misura"
 
-#: services/models.py:109
+#: services/models.py:117
 msgid "default vat percentage"
 msgstr "IVA predefinita in percentuale"
 
-#: services/models.py:114
+#: services/models.py:122
 msgid "Service"
 msgstr "Servizio"
 
-#: services/models.py:115
+#: services/models.py:123
 msgid "Services"
 msgstr "Servizi"
 
-#: services/models.py:127 services/models.py:205 services/models.py:309
+#: services/models.py:135 services/models.py:236 services/models.py:399
 msgid "Vat has to be a percentage value"
 msgstr "L'Iva deve essere un valore percentuale (compreso tra 0 e 1)"
 
-#: services/models.py:144
+#: services/models.py:163
 msgid "service"
 msgstr "Servizio"
 
-#: services/models.py:148 services/models.py:279
+#: services/models.py:167 services/models.py:369
 msgid "VAT percentage"
 msgstr "IVA in percentuale"
 
-#: services/models.py:154
+#: services/models.py:173
 msgid "how many period lasts before creating an invoice?"
 msgstr "periodi che devono passare prima della creazione di una fattura"
 
-#: services/models.py:158
+#: services/models.py:177
 msgid "subscribed on"
 msgstr "sottoscritta il"
 
-#: services/models.py:159
+#: services/models.py:178
 msgid "subscribed until"
 msgstr "sottoscritta fino a"
 
-#: services/models.py:161 services/models.py:288
+#: services/models.py:182
+#| msgid "subscribed until"
+msgid "subscribed from (datetime)"
+msgstr "sottoscritta dal"
+
+#: services/models.py:185
+#| msgid "subscribed on"
+msgid "subscribed from (value)"
+msgstr "sottoscritta dal"
+
+#: services/models.py:189 services/models.py:378
 msgid "note"
 msgstr "note"
 
-#: services/models.py:163
+#: services/models.py:191
 msgid "created on"
 msgstr "creata il"
 
-#: services/models.py:164
+#: services/models.py:192
 msgid "updated on"
 msgstr "aggiornato il"
 
-#: services/models.py:168 services/models.py:284
+#: services/models.py:196 services/models.py:374
 msgid "paid on"
 msgstr "pagato il"
 
-#: services/models.py:169 services/models.py:286
+#: services/models.py:197 services/models.py:376
 msgid "paid for"
 msgstr "pagato fino al"
 
-#: services/models.py:177
+#: services/models.py:205
 msgid "when deleted"
 msgstr "data di cancellazione"
 
-#: services/models.py:179
-#| msgid "service"
+#: services/models.py:207
 msgid "service details"
 msgstr "Dettagli di sottoscrizione"
 
-#: services/models.py:180
+#: services/models.py:208
 msgid "how many"
 msgstr "Numero di sottoscrizioni"
 
-#: services/models.py:188
+#: services/models.py:216
 msgid "Service subscription"
 msgstr "Sottoscrizione a servizio"
 
-#: services/models.py:189
+#: services/models.py:217
 msgid "Service subscriptions"
 msgstr "Sottoscrizioni a servizio"
 
-#: services/models.py:192
+#: services/models.py:220
 #, python-format
 msgid "Subscription of %(customer)s to service %(service)s"
 msgstr "Sottoscrizione di %(customer)s al servizio %(service)s"
 
-#: services/models.py:203 services/models.py:307
+#: services/models.py:234 services/models.py:397
 msgid "Discount has to be a percentage value"
 msgstr "Lo sconto deve essere un valore percentuale (compreso tra 0 e 1)"
 
-#: services/models.py:274
+#: services/models.py:364
 msgid "subscription"
 msgstr "sottoscrizione"
 
-#: services/models.py:276
+#: services/models.py:366
 msgid "cost"
 msgstr "costo"
 
-#: services/models.py:284
+#: services/models.py:374
 msgid "When has it been paid?"
 msgstr "Quando è stato pagato?"
 
-#: services/models.py:286
+#: services/models.py:376
 msgid "What date has he paid until?"
 msgstr "Fino a quando è stato pagato?"
 
-#: services/models.py:292
+#: services/models.py:382
 msgid "Service subscription payment"
 msgstr "Pagamento di sottoscrizione a servizio"
 
-#: services/models.py:293
+#: services/models.py:383
 msgid "Service subscription payments"
 msgstr "Pagamenti di sottoscrizione a servizio"
 
-#: services/models.py:296
+#: services/models.py:386
 #, python-format
 msgid "Payment of %(customer)s to service %(service)s"
 msgstr "Pagamento di %(customer)s al servizio %(service)s"
 
 #: services/templates/base_mail.html:5
 #, python-format
+#| msgid ""
+#| "\n"
+#| "    <p> Hi %(customer)s, we inform you that you should pay "
+#| "%(amount)s &euro;,  \n"
+#| "    for the subscription to service\n"
+#| "    <p> %(service)s </p>\n"
+#| "    from date %(initial)s to date %(end)s.\n"
+#| "\n"
+#| "    Thanks for your attention.\n"
+#| "    </p>\n"
+#| "    "
 msgid ""
 "\n"
-"    <p> Hi %(customer.name)s, we inform you that you should pay %(amount)s "
-"&euro;,  \n"
+"    <p> Hi %(customer)s, we inform you that you should pay "
+"%(amount|floatformat:2)s &euro;,  \n"
 "    for the subscription to service\n"
 "    <p> %(service)s </p>\n"
-"    from date %(initial)s to date %(now)s.\n"
+"    from date %(initial)s to date %(end)s.\n"
 "\n"
 "    Thanks for your attention.\n"
 "    </p>\n"
 "    "
 msgstr ""
 "\n"
-"    <p> Ciao %(customer.name)s, la informiamo che dovrebbe pagare %(amount)s "
+"    <p> Ciao %(customer)s, la informiamo che dovrebbe pagare %(amount|floatformat:2)s "
 "&euro;,  \n"
 "    per la sua sottoscrizione al servizio\n"
 "    <p> %(service)s </p>\n"
-"    dal %(initial)s al %(now)s.\n"
+"    dal %(initial)s al %(end)s.\n"
 "\n"
 "    Grazie per l'attenzione.\n"
 "    </p>\n"
 "    "
+
+#: services/templates/base_mail.txt:3
+#, python-format
+#| msgid ""
+#| "\n"
+#| "    <p> Hi %(customer)s, we inform you that you should pay "
+#| "%(amount|floatformat:2)s &euro;,  \n"
+#| "    for the subscription to service\n"
+#| "    <p> %(service)s </p>\n"
+#| "    from date %(initial)s to date %(end)s.\n"
+#| "\n"
+#| "    Thanks for your attention.\n"
+#| "    </p>\n"
+#| "    "
+msgid ""
+"\n"
+"Hi %(customer)s, we inform you that you should pay %(amount|floatformat:2)s "
+"&euro;,  \n"
+"for the subscription to service\n"
+"%(service)s\n"
+"from date %(initial)s to date %(end)s.\n"
+"\n"
+"Thanks for your attention.\n"
+"\n"
+msgstr ""
+"\n"
+"Ciao %(customer)s, la informiamo che dovrebbe pagare %(amount|floatformat:2)s "
+"&euro;,  \n"
+"per la sua sottoscrizione al servizio\n"
+"%(service)s \n"
+"dal %(initial)s al %(end)s.\n"
+"\n"
+"Grazie per l'attenzione.\n"
+"\n"
 
 #: services/views.py:56 services/views.py:60 services/views.py:71
 #: services/views.py:88
