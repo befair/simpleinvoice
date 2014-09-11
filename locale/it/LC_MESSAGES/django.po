@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-11 12:22+0200\n"
+"POT-Creation-Date: 2014-09-11 18:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -234,20 +234,27 @@ msgstr "Il trasferimento di denaro puo essere fatto tramite IBAN"
 msgid "Simple invoice"
 msgstr "Fattura semplice"
 
-#: services/admin.py:119
+#: services/admin.py:120
 #, python-format
 msgid "Customer %s should pay, but is has no email address"
 msgstr ""
+"Il cliente %s dovrebbe pagare, ma non ha un indirizzo email cui spedirgli il "
+"sollecito"
 
-#: services/admin.py:150
+#: services/admin.py:152
+#, python-format
+msgid "%s reminder mails sents"
+msgstr "%s mail di sollecito inviate"
+
+#: services/admin.py:154
 msgid "Send a reminder mail about unsolved subcscpriptions"
 msgstr "Invia email di sollecito per il pagamento degli insoluti"
 
-#: services/admin.py:163
+#: services/admin.py:167
 msgid "Cancel selected service subscription/s "
 msgstr "Cancella sottoscrizioni"
 
-#: services/admin.py:176
+#: services/admin.py:180
 msgid "Restore selected service subscription/s "
 msgstr "Riabilita sottoscrizioni cancellate"
 
@@ -261,11 +268,11 @@ msgstr "Ore"
 
 #: services/models.py:30
 msgid "Days"
-msgstr ""
+msgstr "Giorni"
 
 #: services/models.py:31
 msgid "Years"
-msgstr ""
+msgstr "Anni"
 
 #: services/models.py:95
 msgid "abbreviation"
@@ -280,14 +287,6 @@ msgid "period"
 msgstr "periodo"
 
 #: services/models.py:102
-#| msgid ""
-#| "Indicator to modify the periodic payement deadline. This value has to be "
-#| "greater then -(period), and represents the relative numebr of period "
-#| "units (for instance, months) that should be considered to determine the "
-#| "final service payment deadline. So, if the period is of 12 months, and "
-#| "the modifier is set to -2, then the actual service payment deadline is "
-#| "computed as (12 + (-2) = 10) months. In the same way, a modifier of 2 "
-#| "chenges the deadline to (12 + 2 = 14) month. "
 msgid ""
 "Indicator to modify the periodic payment deadline. This value has to be "
 "greater than -(period), and represents the relative number of period units "
@@ -361,12 +360,10 @@ msgid "subscribed until"
 msgstr "sottoscritta fino a"
 
 #: services/models.py:182
-#| msgid "subscribed until"
 msgid "subscribed from (datetime)"
 msgstr "sottoscritta dal"
 
 #: services/models.py:185
-#| msgid "subscribed on"
 msgid "subscribed from (value)"
 msgstr "sottoscritta dal"
 
@@ -450,17 +447,6 @@ msgstr "Pagamento di %(customer)s al servizio %(service)s"
 
 #: services/templates/base_mail.html:5
 #, python-format
-#| msgid ""
-#| "\n"
-#| "    <p> Hi %(customer)s, we inform you that you should pay "
-#| "%(amount)s &euro;,  \n"
-#| "    for the subscription to service\n"
-#| "    <p> %(service)s </p>\n"
-#| "    from date %(initial)s to date %(end)s.\n"
-#| "\n"
-#| "    Thanks for your attention.\n"
-#| "    </p>\n"
-#| "    "
 msgid ""
 "\n"
 "    <p> Hi %(customer)s, we inform you that you should pay "
@@ -474,8 +460,8 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"    <p> Ciao %(customer)s, la informiamo che dovrebbe pagare %(amount|floatformat:2)s "
-"&euro;,  \n"
+"    <p> Ciao %(customer)s, la informiamo che dovrebbe pagare "
+"%(amount|floatformat:2)s &euro;,  \n"
 "    per la sua sottoscrizione al servizio\n"
 "    <p> %(service)s </p>\n"
 "    dal %(initial)s al %(end)s.\n"
@@ -486,17 +472,6 @@ msgstr ""
 
 #: services/templates/base_mail.txt:3
 #, python-format
-#| msgid ""
-#| "\n"
-#| "    <p> Hi %(customer)s, we inform you that you should pay "
-#| "%(amount|floatformat:2)s &euro;,  \n"
-#| "    for the subscription to service\n"
-#| "    <p> %(service)s </p>\n"
-#| "    from date %(initial)s to date %(end)s.\n"
-#| "\n"
-#| "    Thanks for your attention.\n"
-#| "    </p>\n"
-#| "    "
 msgid ""
 "\n"
 "Hi %(customer)s, we inform you that you should pay %(amount|floatformat:2)s "
@@ -509,8 +484,8 @@ msgid ""
 "\n"
 msgstr ""
 "\n"
-"Ciao %(customer)s, la informiamo che dovrebbe pagare %(amount|floatformat:2)s "
-"&euro;,  \n"
+"Ciao %(customer)s, la informiamo che dovrebbe pagare "
+"%(amount|floatformat:2)s &euro;,  \n"
 "per la sua sottoscrizione al servizio\n"
 "%(service)s \n"
 "dal %(initial)s al %(end)s.\n"

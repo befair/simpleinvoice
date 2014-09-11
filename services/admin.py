@@ -111,15 +111,18 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
         
         """
 
+        c = 0
         for obj in queryset:
 
             if obj.next_payment_due:
 
                 if not obj.customer.email:
-                    self.message_user(request, _("Customer %s should pay, but is has no email address"), level=messages.WARNING)
+                    self.message_user(request, ugettext("Customer %s should pay, but is has no email address") % obj.customer, level=messages.WARNING)
 
                 else:
                 
+                    c +=1
+
                     template_txt = settings.EMAIL_TEMPLATES['INSOLUTE_TXT']
                     template_html = settings.EMAIL_TEMPLATES['INSOLUTE_HTML']
                     n_periods = int(obj.periods_from_last_payment)
@@ -145,6 +148,8 @@ class ServiceSubscriptionAdmin(admin.ModelAdmin):
                         "text/html"
                     )
                     msg.send()
+
+        self.message_user(request, ugettext("%s reminder mails sents") % c)
 
     check_payment.short_description = _("Send a reminder mail about unsolved subcscpriptions")
 
