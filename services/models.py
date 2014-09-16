@@ -237,7 +237,7 @@ class ServiceSubscription(models.Model):
 
     def save(self, *args, **kw):
 
-        self.full_clean()
+        #self.full_clean()
         super(ServiceSubscription, self).save(*args, **kw)
 
     @property
@@ -406,6 +406,33 @@ class ServiceSubscriptionPayment(models.Model):
         if not self.subscription.is_deleted:
             self.full_clean()
             return super(ServiceSubscriptionPayment, self).save(*args,**kwargs)
+
+    def delete(self, *args, **kwargs):
+        """
+        Delete subscription payment.
+
+        If subscription has only this payment, last_paid_for and last_paid_on 
+        are set to None.
+
+        If subscription has more than one payment, last_paid_for and last_paid_on 
+        are set to the last payment which has the highest paid_on value, without
+        considering the current deleted payment .
+        """
+        
+        #return None if queryset is empty
+        payments = self.subscription.servicesubscriptionpayment_set
+        if payments.count() == 1:
+            self.subscription.last_paid_on = None
+            self.subscription.last_paid_for = None
+            
+        else:
+            last_payment = payments.exclude(pk=self.pk).order_by('paid_on').last()
+            self.subscription.last_paid_on = last_payment.paid_on
+            self.subscription.last_paid_for = last_payment.paid_for
+            print "LAST: %s" % last_payment
+        
+        self.subscription.save()
+        super(ServiceSubscriptionPayment, self).delete(*args,**kwargs)
 
     @property
     def discounted_price(self):

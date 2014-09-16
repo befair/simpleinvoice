@@ -10,6 +10,7 @@ from django.conf import settings
 from django.contrib.auth.models import Group 
 from django.contrib import messages
 from django.utils import timezone
+from django.core.exceptions import MultipleObjectsReturned
 
 from invoice.models import Customer
 
@@ -256,10 +257,17 @@ class PaymentForm(forms.ModelForm):
         instance = super(PaymentForm, self).save(commit=False)
         if instance:
 
-            subscription = ServiceSubscription.objects.get(
-                service=self.cleaned_data['service'],
-                customer=self.cleaned_data['customer']
-            )
+            try:
+                subscription = ServiceSubscription.objects.get(
+                    service=self.cleaned_data['service'],
+                    customer=self.cleaned_data['customer']
+                )
+            except MultipleObjectsReturned as e:
+                subscription = ServiceSubscription.objects.filter(
+                    service=self.cleaned_data['service'],
+                    customer=self.cleaned_data['customer']
+                ).first()
+                
             if subscription.is_deleted:
                 raise forms.ValidationError("A payment cannot be done for the subscription since it is deleted") 
             instance.subscription = subscription 
@@ -272,6 +280,9 @@ class PaymentForm(forms.ModelForm):
         return instance
 
 class ServiceSubscriptionPaymentAdmin(admin.ModelAdmin): 
+
+    actions = ['delete_payments']
+
 
     form = PaymentForm
 
@@ -293,6 +304,26 @@ class ServiceSubscriptionPaymentAdmin(admin.ModelAdmin):
         """
         # Checking only not-deleted Subscriptions
         return bool(ServiceSubscription.objects.count())
+
+
+    def delete_payments(self, request, queryset):
+        """
+        Override admin delete_selected which does not call object delete()
+        """
+
+        for payment in queryset:
+            payment.delete()
+
+
+    delete_payments.short_description = _('Cancel selected service subscription payments ') 
+
+    def get_actions(self, request):
+        """
+        """
+
+        actions = super(ServiceSubscriptionPaymentAdmin, self).get_actions(request)
+        del actions['delete_selected']
+        return actions
 
     class Media:
         css = {
