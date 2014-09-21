@@ -361,7 +361,7 @@ class ServiceSubscriptionPayment(models.Model):
     """
     """
 
-    subscription = models.ForeignKey(ServiceSubscription,verbose_name=_("subscription"))
+    subscription = models.ForeignKey(ServiceSubscription,verbose_name=_("subscription"), blank=True)
 
     amount = CurrencyField(verbose_name=_("cost"))
     vat_percent = PercentageDecimalField( 
@@ -404,7 +404,7 @@ class ServiceSubscriptionPayment(models.Model):
         """
 
         if not self.subscription.is_deleted:
-            self.full_clean()
+            #self.full_clean()
             return super(ServiceSubscriptionPayment, self).save(*args,**kwargs)
 
     def delete(self, *args, **kwargs):
@@ -429,7 +429,6 @@ class ServiceSubscriptionPayment(models.Model):
             last_payment = payments.exclude(pk=self.pk).order_by('paid_on').last()
             self.subscription.last_paid_on = last_payment.paid_on
             self.subscription.last_paid_for = last_payment.paid_for
-            print "LAST: %s" % last_payment
         
         self.subscription.save()
         super(ServiceSubscriptionPayment, self).delete(*args,**kwargs)

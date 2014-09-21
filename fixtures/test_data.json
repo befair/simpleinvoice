@@ -1,0 +1,78 @@
+[
+{
+    "fields": {
+        "name": "Servizio1",
+        "period_unit_raw": "months",
+        "period_deadline_modifier": 0,
+        "period": 12,
+        "period_unit_source": "epoch_now",
+        "abbreviation": "Serv1",
+        "period_unit_display": "months",
+        "amount": "123",
+        "default_vat_percent": "0.21",
+        "description": "gfdhgfbgf"
+    },
+    "model": "services.service",
+    "pk": 1
+},
+{
+    "fields": {
+        "customer": 1,
+        "subscribed_until": null,
+        "last_update_on": "2014-09-16T11:20:48.662Z",
+        "subscribed_from_dt": "2013-03-04T10:00:06Z",
+        "service": 1,
+        "discount": "0",
+        "last_paid_for": "2014-12-31T23:00:00Z",
+        "is_deleted": false,
+        "subscribed_from_value": null,
+        "when_deleted": null,
+        "last_paid_on": "2014-09-16T09:22:25.238Z",
+        "note": "ddfdf",
+        "invoice_period": 1,
+        "created_on": "2014-09-16T09:00:11.825Z",
+        "service_details": "fdfdsf",
+        "vat_percent": "0.21",
+        "subscribed_on": "2013-03-04T10:00:06Z",
+        "howmany": 1
+    },
+    "model": "services.servicesubscription",
+    "pk": 2
+},
+{
+    "fields": {
+        "paid_on": "2014-09-16T09:22:25.238Z",
+        "note": "",
+        "discount": "0",
+        "amount": "123",
+        "vat_percent": "0.21",
+        "paid_for": "2014-12-31T23:00:00Z",
+        "subscription": 2
+    },
+    "model": "services.servicesubscriptionpayment",
+    "pk": 1
+},
+{
+    "fields": {
+        "city": "",
+        "name": "matteo",
+        "notes": "",
+        "zipcode": "",
+        "state": "",
+        "ssn": "sdsadffd",
+        "address": "",
+        "vat": ""
+    },
+    "model": "invoice.customer",
+    "pk": 1
+},
+{
+    "fields": {
+        "customer": 1,
+        "flavour": "email",
+        "value": "kingletti88@gmail.com"
+    },
+    "model": "invoice.customercontact",
+    "pk": 1
+}
+]

@@ -11,12 +11,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterModelOptions(
-            name='service',
-            options={'verbose_name': 'Service', 'verbose_name_plural': 'Services'},
-        ),
-        migrations.AlterModelOptions(
-            name='servicesubscription',
-            options={'verbose_name': 'Service subscription', 'verbose_name_plural': 'Service subscriptions'},
-        ),
     ]
