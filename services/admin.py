@@ -10,7 +10,7 @@ from django.conf import settings
 from django.contrib.auth.models import Group 
 from django.contrib import messages
 from django.utils import timezone
-from django.core.exceptions import MultipleObjectsReturned
+from django.core.exceptions import MultipleObjectsReturned, ValidationError
 
 from invoice.models import Customer
 
@@ -248,6 +248,35 @@ class PaymentForm(forms.ModelForm):
             if self.cleaned_data.get('service'):
                 service = self.cleaned_data['service']
                 self.cleaned_data['paid_for'] = self.set_paid_for(service)
+
+        service = self.cleaned_data.get('service')
+        customer = self.cleaned_data.get('customer')
+
+        if service and customer:
+            try:
+                subscription = ServiceSubscription.objects.get(
+                    service=service,
+                    customer=customer
+                )
+            except MultipleObjectsReturned as e:
+                subscription = ServiceSubscription.objects.filter(
+                    service=service,
+                    customer=customer
+                ).first()
+
+            self.cleaned_data['subscription'] = subscription
+
+            paid_for = self.cleaned_data.get('paid_for')
+            if paid_for:
+                if ServiceSubscriptionPayment.objects.filter(
+                    subscription=subscription, 
+                    paid_for=paid_for
+                ):
+                    raise forms.ValidationError("Payment already exists")
+
+        #it should not be possible from custom manager, kept to prevent post forging   
+        if subscription.is_deleted:
+            raise forms.ValidationError("A payment cannot be done for the subscription since it is deleted") 
         
         cleaned_data=super(PaymentForm, self).clean()
 
@@ -257,19 +286,6 @@ class PaymentForm(forms.ModelForm):
         instance = super(PaymentForm, self).save(commit=False)
         if instance:
 
-            try:
-                subscription = ServiceSubscription.objects.get(
-                    service=self.cleaned_data['service'],
-                    customer=self.cleaned_data['customer']
-                )
-            except MultipleObjectsReturned as e:
-                subscription = ServiceSubscription.objects.filter(
-                    service=self.cleaned_data['service'],
-                    customer=self.cleaned_data['customer']
-                ).first()
-                
-            if subscription.is_deleted:
-                raise forms.ValidationError("A payment cannot be done for the subscription since it is deleted") 
             instance.subscription = subscription 
             instance.save()
 
