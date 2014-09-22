@@ -404,7 +404,7 @@ class ServiceSubscriptionPayment(models.Model):
         """
 
         if not self.subscription.is_deleted:
-            #self.full_clean()
+            self.full_clean()
             return super(ServiceSubscriptionPayment, self).save(*args,**kwargs)
 
     def delete(self, *args, **kwargs):
