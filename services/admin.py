@@ -13,6 +13,7 @@ from django.utils import timezone
 from django.core.exceptions import MultipleObjectsReturned, ValidationError
 
 from invoice.models import Customer
+import datetime
 
 class ServiceSubscriptionForm(forms.ModelForm):
 
@@ -222,9 +223,30 @@ class PaymentForm(forms.ModelForm):
         model = ServiceSubscriptionPayment
         exclude = ('subscription','vat_percent','discount',)
 
+    def nearest_date(self):
+        """ 
+        """
+
+        today = datetime.datetime.now()
+        selection = -1
+        _min = None
+
+        for choice in DATE_CHOICES:
+            date = choice[0]
+            diff = abs((today - date).total_seconds())
+            if not _min:
+                _min = diff
+            else:
+                if _min > diff:
+                    _min = diff
+                else:
+                    return selection
+            selection += 1
+
+
     def __init__(self, *args, **kwargs):
         super(PaymentForm, self).__init__(*args, **kwargs)
-        self.fields['paid_for'].initial = DATE_CHOICES[5][0]
+        self.fields['paid_for'].initial = DATE_CHOICES[self.nearest_date()][0]
 
     def set_paid_for(self,service=None):
         """
