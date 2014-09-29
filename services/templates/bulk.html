@@ -38,7 +38,7 @@
     </select>
 
     <div id="model" style="display: none;" class="model">
-        <label>Cliente</label>
+        <label id="c_label">Cliente</label>
         <select class="customer">
           <option>- scegli -</option>
         </select>
@@ -128,10 +128,13 @@
           nofloat = true;
         }
 
-        if($(this).children('.customer').val() == '- scegli -') {
-          $(this).children('.customer').addClass('error');  
-          errors = true;
-        } 
+        // If there is not a Customer, Subscriptio has been chosen
+        if($(this).children('.customer').length == 0){
+            if($(this).children('.customer').val() == '- scegli -') {
+              $(this).children('.customer').addClass('error');  
+              errors = true;
+            }
+        }
         if(!$(this).children('.cost').val()) {
           $(this).children('.cost').addClass('error');  
           errors = true;
@@ -154,23 +157,54 @@
       }; 
       $('.payment').each(
         function(i, p) {
-          data['payments'].push({
-            'customer': $(this).children('.customer').val(),
-            'cost': $(this).children('.cost').val(),
-            'paid_for': $(this).children('.date').val(),
-            'notes': $(this).children('.notes').val()
-          });  
+            // If there is not a Customer, Subscriptio has been chosen
+            if($(this).children('.customer').length > 0){
+              data['payments'].push({
+                'customer': $(this).children('.customer').val(),
+                'cost': $(this).children('.cost').val(),
+                'paid_for': $(this).children('.date').val(),
+                'notes': $(this).children('.notes').val()
+              });
+            } else {
+              data['payments'].push({
+                'subscription': $(this).children('.subscription').val(),
+                'cost': $(this).children('.cost').val(),
+                'paid_for': $(this).children('.date').val(),
+                'notes': $(this).children('.notes').val()
+              });
+
+            }
         }
       );
       $.post(
           '/api/bulk-payments/',
           data,
-          function(data) {
+          function(result) {
             $('body').empty();
             $('body').append('<h1>Pagamenti inseriti con successo!</h1><p><a href="/">Torna al pannello di controllo.</a></p>');
           }
-      ).error(function() {
-        alert('Stai cercando di inserire un pagamento che già esiste');
+      )
+      .fail(function(xhr, textStatus, errorThrown) {
+        var json = jQuery.parseJSON(xhr.responseText);
+        if (json.status === 'ERROR'){
+            $("p").remove();
+            var message = "<p><font color=\"red\">" + json.message + "</font></p>";
+            $(message).insertAfter("h2")
+            if(json.hasOwnProperty("sub_list")){
+                $('.payment').each(function(i, f){
+
+                  var cost = +($(this).children('.cost').val().replace(/,/,'.'));
+                  var customer_id = $(this).children('.customer').val();
+                  var jcost = +(json.cost.replace(/,/,'.'));
+                  if(cost === jcost && customer_id === json.customer) {
+                    $(this).children('#c_label').remove();
+                    $(this).children('.customer').remove();
+                    var sub_list = "<label>Sottoscrizione:</label><select class=\"subscription\" style=\"width:270px;\">" + json.sub_list + "</select>" 
+                    $(this).append(sub_list);
+                  } 
+                });
+            }
+        }
       });
     }
 
