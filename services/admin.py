@@ -308,7 +308,9 @@ class PaymentForm(forms.ModelForm):
         instance = super(PaymentForm, self).save(commit=False)
         if instance:
 
-            instance.subscription = subscription 
+            subscription = self.cleaned_data['subscription'] 
+
+            instance.subscription = subscription
             instance.save()
 
             subscription.last_paid_on = instance.paid_on
