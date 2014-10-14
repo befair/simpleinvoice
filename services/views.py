@@ -52,17 +52,30 @@ def bulk_payments(request):
         date = qd.pop("payments[%s][%s]" % (i,'paid_for'))[0]
         amount = float(qd.pop("payments[%s][%s]" % (i,'cost'))[0])
         try:
-            if check_date:
+            if check_date(date):
                 paid_for = timezone.datetime(int(date[6:]),int(date[3:5]),int(date[:2]))
             else:
                 raise ValueError
         except ValueError as e:
-            return HttpResponseServerError('{"status":"ERROR", "cost":"%(cost)s","customer":"%(customer_id)s", "message": "Please choose a valid date"}' % {"cost" : amount, "customer_id" : customer_id},content_type="application/json")
+            return HttpResponseServerError('{"status":"ERROR", "date":"%(date)s","customer":"%(customer_id)s", "message": "Please choose a valid date"}' % {"date" : date, "customer_id" : customer_id},content_type="application/json")
             
         if amount < 0:
             return HttpResponseServerError('{"status": "ERROR","cost":"%(cost)s","customer":"%(customer_id)s", "message": "Please insert a non negative amount"}' % {"cost" : amount, "customer_id" : customer_id},content_type="application/json")
 
         notes = qd.pop("payments[%s][%s]" % (i,'notes'))[0]
+
+        pay_with = qd.pop("payments[%s][%s]" % (i,'pay_with'))[0]
+
+        date = qd.pop("payments[%s][%s]" % (i,'when_paid'))[0]
+
+        try:
+            if check_date(date):
+                when_paid = timezone.datetime(int(date[6:]),int(date[3:5]),int(date[:2]))
+            else:
+                raise ValueError
+        except ValueError as e:
+            return HttpResponseServerError('{"status":"ERROR", "date":"%(date)s","customer":"%(customer_id)s", "message": "Please choose a valid date"}' % {"date" : date, "customer_id" : customer_id},content_type="application/json")
+
 
         ss = ServiceSubscriptionPayment()
         try:
@@ -94,6 +107,8 @@ def bulk_payments(request):
         ss.discount = subscription.discount
         ss.paid_for = paid_for
         ss.note = notes
+        ss.when_paid = when_paid
+        ss.pay_with = pay_with
 
         objects.append({"saved":False,"obj":ss})
 
@@ -176,5 +191,5 @@ def check_date(date):
     """
 
     return len(date) == 10 and ( 
-        int(DATE_CHOICES[0][1][6:]) < int(date[6:]) < int(DATE_CHOICES[-1][1][6:])
+        int(DATE_CHOICES[0][1][6:]) <= int(date[6:]) <= int(DATE_CHOICES[-1][1][6:])
         )

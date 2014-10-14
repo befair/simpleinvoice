@@ -222,7 +222,7 @@ class PaymentForm(forms.ModelForm):
 
     class Meta:
         model = ServiceSubscriptionPayment
-        exclude = ('subscription','vat_percent','discount',)
+        exclude = ('subscription','vat_percent','discount','invoice')
 
     def nearest_date(self):
         """ 
@@ -332,13 +332,14 @@ class ServiceSubscriptionPaymentAdmin(admin.ModelAdmin):
             'fields' : (
                 'customer', 
                 'service','amount',
-                'paid_for', 'note'
+                'paid_for', 'note',
+                'pay_with','when_paid'
             )
         }),
     )
     
-    list_display = ('subscription', 'paid_on', 'amount', 'note')
-    search_fields = ['subscription']
+    list_display = ('subscription', 'paid_on','pay_with','when_paid', 'amount', 'note')
+    search_fields = ['subscription','pay_with']
 
     def has_add_permission(self, request):
         """

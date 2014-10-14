@@ -10,7 +10,7 @@ $(document).ready(function(){
      }
      else {
 
-        $('.field-service, .field-amount, .field-vat_percent, .field-discount, .field-paid_for, .field-note').hide();
+        $('.field-service, .field-amount, .field-vat_percent, .field-discount, .field-paid_for, .field-note, .field-pay_with, .field-when_paid').hide();
 
         // trigger when a customer is selected
         $('#id_customer').change(function(e) {
@@ -48,7 +48,7 @@ $(document).ready(function(){
           $('#id_discount').val(s.discount);
           // show hidden fields
           // matteo88: for reesmarche vat_percent and discount are hidden
-          $('.field-amount, .field-paid_for, .field-note').fadeIn();
+          $('.field-amount, .field-paid_for, .field-note, .field-pay_with, .field-when_paid').fadeIn();
         });
     }
   }

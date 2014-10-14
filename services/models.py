@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from invoice.models import Customer
 from services.managers import ServiceSubscriptionManager
 from services.custom_fields import PercentageDecimalField, CurrencyField
+from invoice.models import Invoice
 
 from django.conf import settings
 from decimal import Decimal
@@ -377,6 +378,11 @@ class ServiceSubscriptionPayment(models.Model):
 
     note = models.TextField(blank=True,verbose_name=_("note"))
 
+    invoice = models.ForeignKey(Invoice, verbose_name=_("invoice"), blank=True, null=True)
+    
+    pay_with = models.CharField(_('pay with'), max_length=32, choices=Invoice.PAY_CHOICES, default=Invoice.PAY_CHOICES[0][0],null=True, blank=True)
+    when_paid = models.DateField(_("when paid"), null=True, default=None, blank=True, db_index=True)	
+
     class Meta:
         unique_together = (('subscription', 'paid_for'),)
         verbose_name = _("Service subscription payment")
@@ -432,6 +438,13 @@ class ServiceSubscriptionPayment(models.Model):
         
         self.subscription.save()
         super(ServiceSubscriptionPayment, self).delete(*args,**kwargs)
+
+    def bind_invoice(self, invoice):
+        """
+        Bind the invoice corresponding to this payment.
+        
+        """
+        raise NotImplementedError
 
     @property
     def discounted_price(self):
