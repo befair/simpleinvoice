@@ -297,9 +297,9 @@ class PaymentForm(forms.ModelForm):
                 ):
                     raise forms.ValidationError("Payment already exists")
 
-        #it should not be possible from custom manager, kept to prevent post forging   
-        if subscription.is_deleted:
-            raise forms.ValidationError("A payment cannot be done for the subscription since it is deleted") 
+            #it should not be possible from custom manager, kept to prevent post forging   
+            if subscription.is_deleted:
+                raise forms.ValidationError("A payment cannot be done for the subscription since it is deleted") 
         
         cleaned_data=super(PaymentForm, self).clean()
 
