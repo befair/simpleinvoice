@@ -119,7 +119,7 @@ class TestWithClient(TestCase):
 class TestCaseWithFixtures(TestWithClient):
     ''' '''
 
-    DATE_FMT = '%Y-%m-%d %H:%M:%S%Z'
+    DATE_FMT = '%Y-%m-%d %H:%M:%S+00:00'
 
     def setUp(self):
         """
@@ -192,6 +192,8 @@ class ServiceSubscriptionPaymentTest(TestCaseWithFixtures):
             note = "note",
         )
 
+        print response
+
         if logged_in:
             self._check_for_redirect_response(response,is_ajax=False)
 
@@ -215,8 +217,6 @@ class ServiceSubscriptionPaymentTest(TestCaseWithFixtures):
 
             updated_subscription = ServiceSubscription.objects.get(pk=self.subscription.pk)
             self.assertEqual(self.payment.paid_on,updated_subscription.last_paid_on)
-            diff = self.payment.paid_for.replace(tzinfo=pytz.UTC) - updated_subscription.last_paid_for
-            self.assertEqual(datetime.timedelta(hours=1),diff)
-            #self.assertEqual(self.payment.paid_for.replace(tzinfo=pytz.UTC),updated_subscription.last_paid_for) 
+            self.assertEqual(self.payment.paid_for.replace(tzinfo=pytz.UTC),updated_subscription.last_paid_for) 
         else:
             self._check_for_redirect_response(response)

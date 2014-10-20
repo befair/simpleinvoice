@@ -228,7 +228,7 @@ class PaymentForm(forms.ModelForm):
         """ 
         """
 
-        today = datetime.datetime.now()
+        today = timezone.now()
         selection = -1
         _min = None
 

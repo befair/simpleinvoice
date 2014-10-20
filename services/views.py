@@ -53,7 +53,7 @@ def bulk_payments(request):
         amount = float(qd.pop("payments[%s][%s]" % (i,'cost'))[0])
         try:
             if check_date(date):
-                paid_for = timezone.datetime(int(date[6:]),int(date[3:5]),int(date[:2]))
+                paid_for = timezone.datetime(int(date[6:]),int(date[3:5]),int(date[:2]),tzinfo=pytz.UTC)
             else:
                 raise ValueError
         except ValueError as e:
@@ -70,7 +70,7 @@ def bulk_payments(request):
 
         try:
             if check_date(date):
-                when_paid = timezone.datetime(int(date[6:]),int(date[3:5]),int(date[:2]))
+                when_paid = timezone.datetime(int(date[6:]),int(date[3:5]),int(date[:2]),tzinfo=pytz.UTC)
             else:
                 raise ValueError
         except ValueError as e:
