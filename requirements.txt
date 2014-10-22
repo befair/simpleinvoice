@@ -1,2 +1,2 @@
-https://www.djangoproject.com/download/1.7/tarball/
+Django >=1.7, <1.8
 pytz
