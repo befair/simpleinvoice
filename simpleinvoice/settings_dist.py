@@ -54,3 +54,4 @@ locale.setlocale(locale.LC_ALL, 'it_IT.UTF8')
 #MEDIA_URL = '/' + PREFIX + 'static/'
 #ADMIN_MEDIA_PREFIX = '/' + PREFIX + 'static/admin_media/'
 
+INSTALLED_APPS.append('fromreescsv')
