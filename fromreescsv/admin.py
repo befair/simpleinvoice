@@ -6,12 +6,14 @@ class AnagraficaAdmin(admin.ModelAdmin):
 
     search_fields = ('name','surname')
     list_filter = ('kind', 'state', 'city')
-    list_filter = ('kind', 'address', 'name', 'surname', 'state', 'city')
-    list_display = ('name', 'surname', 'rag_soc', 'address', 'state', 'city')
+    list_editable = ('address', 'state', 'city')
+    list_display = ('__unicode__', 'kind', 'address', 'state', 'city')
     
 class PagamentoAdmin(admin.ModelAdmin):
 
-    list_display = ('anagrafica__name', 'anagrafica__surname', 'amount', 'date_paid')
+    list_display = ('date_paid', 'year', 'anagrafica', 'amount')
+    search_fields = ('date_paid',)
+    list_filter = ('year', 'anagrafica__state', 'anagrafica__city', 'anagrafica__kind')
 
 admin.site.register(Anagrafica, AnagraficaAdmin)
 admin.site.register(Pagamento, PagamentoAdmin)
