@@ -66,6 +66,7 @@ class InvoiceForm(forms.ModelForm):
 
     class Meta:
         model = Invoice
+        fields = "__all__"
 
 class InvoiceAdmin(admin.ModelAdmin):
 
@@ -126,6 +127,7 @@ class CustomerForm(forms.ModelForm):
 
     class Meta:
         model = Customer
+        fields = "__all__"
 
     def clean(self):
 

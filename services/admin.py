@@ -90,6 +90,7 @@ class PayementForm(forms.ModelForm):
 
     class Meta:
         model = ServiceSubscriptionPayments
+        fields = "__all__"
 
 class ServiceSubscriptionPayementsAdmin(admin.ModelAdmin): 
 
