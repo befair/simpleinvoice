@@ -5,6 +5,7 @@ import datetime
 from django.conf import settings
 from decimal import Decimal
 
+
 class Company(object):
 
     name = settings.COMPANY_NAME
@@ -16,6 +17,7 @@ class Company(object):
     iban = settings.COMPANY_IBAN
 
 company = Company()
+
 
 class Customer(models.Model):
     """Customer to emit the invoice to"""
@@ -43,22 +45,23 @@ class Customer(models.Model):
         verbose_name = _('customer')
         verbose_name_plural = _("customers")
 
+
 class CustomerContact(models.Model):
-    """Customer contacts: 
+    """Customer contacts:
     each record holds a contact for a customer,
     along with the corresponding type"""
 
     FLAVOUR_CHOICES = (
         ('phone', _('phone')),
-        ('fax',_('fax')),
-        ('email',_('email')),
-        ('other',_('other')),
+        ('fax', _('fax')),
+        ('email', _('email')),
+        ('other', _('other')),
     )
 
     customer = models.ForeignKey(Customer)
     flavour = models.CharField(max_length=32, choices=FLAVOUR_CHOICES, default=FLAVOUR_CHOICES[0][0])
     value = models.CharField(max_length=512)
-    
+
     def __unicode__(self):
         return u"%s %s: %s" % (self.customer, self.flavour, self.value)
 
@@ -66,9 +69,10 @@ class CustomerContact(models.Model):
         verbose_name = _('customer contact')
         verbose_name_plural = _('customer contacts')
 
+
 class InvoiceSequence(models.Model):
     """This is a sequence used simply to provide a right default value
-    for new invoice id, when an invoice is saved, 
+    for new invoice id, when an invoice is saved,
     its real_id is checked and, if its integer part is equal or greater than next_invoice_id
     this value is updated"""
 
@@ -80,7 +84,7 @@ class InvoiceSequence(models.Model):
         When new year comes, cycle id and start by 1 again"""
         date = invoice.date
         seq = cls.objects.get(pk=1)
-        
+
         try:
             last_invoice_date = Invoice.objects.latest().date
         except Invoice.DoesNotExist:
@@ -113,16 +117,17 @@ class InvoiceSequence(models.Model):
             cls.get(invoice)
 
         return True
-            
+
     def __unicode__(self):
         return _("Next invoice id is %s") % self.next_invoice_id
+
 
 class Invoice(models.Model):
     """Invoice data:
 
-    real_id is the invoice id given by the user. 
+    real_id is the invoice id given by the user.
     If blank given, its default value is get from InvoiceSequence
-    It can be changed to an older id with /A /B etc. 
+    It can be changed to an older id with /A /B etc.
 
     In this way it is possible to fix user mistakes.
     """
@@ -132,14 +137,17 @@ class Invoice(models.Model):
         ('credit card', _('credit card')),
     )
 
-    real_id = models.CharField(_('invoice number'), max_length=16, default='', null=False, blank=True, help_text=_("Set this value only if you need a specific invoice number."), unique_for_year="date", db_index=True)
+    real_id = models.CharField(
+        _('invoice number'), max_length=16, default='', null=False, blank=True,
+        help_text=_("Set this value only if you need a specific invoice number."),
+        unique_for_year="date", db_index=True)
     customer = models.ForeignKey(Customer, db_index=True)
-    date = models.DateField(_("emit date"), default=datetime.date.today, db_index=True)	
+    date = models.DateField(_("emit date"), default=datetime.date.today, db_index=True)
     discount = models.DecimalField(_("discount"), default=0, max_digits=3, decimal_places=2)
     is_valid = models.BooleanField(_('is valid'), default=True, help_text=_("You can invalidate this invoice by unchecking this field."))
     pay_with = models.CharField(_('pay with'), max_length=32, choices=PAY_CHOICES, default=PAY_CHOICES[0][0])
     # redundant.. is_paid = models.BooleanField(_('is paid'), default=False, help_text=_("Check this whenever an invoice is paid"))
-    when_paid = models.DateField(_("when paid"), null=True, default=None, blank=True, db_index=True)	
+    when_paid = models.DateField(_("when paid"), null=True, default=None, blank=True, db_index=True)
 
     class Meta:
         verbose_name = _("invoice")
@@ -160,7 +168,7 @@ class Invoice(models.Model):
 
     @property
     def vat_amount(self):
-        return self.entries.vat_amount()
+        return self.entries.vat_amount()*(1-self.discount)
 
     @property
     def tot_to_pay(self):
@@ -178,11 +186,12 @@ class Invoice(models.Model):
         """
 
         if not self.real_id:
-           self.real_id = str(InvoiceSequence.get(self))
+            self.real_id = str(InvoiceSequence.get(self))
         else:
-           InvoiceSequence.update(self)
-        
+            InvoiceSequence.update(self)
+
         return super(Invoice, self).save()
+
 
 class InvoiceEntryManager(models.Manager):
 
@@ -201,15 +210,16 @@ class InvoiceEntryManager(models.Manager):
             rv += x[0]*x[1]
         return rv
 
+
 class InvoiceEntry(models.Model):
     """Invoice single entry"""
 
     invoice = models.ForeignKey(Invoice, related_name="entries")
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     description = models.TextField()
-    vat_percent = models.DecimalField(max_digits=3, decimal_places=2, 
-        default=Decimal(str(settings.DEFAULT_VAT_PERCENT))
-    )
+    vat_percent = models.DecimalField(
+        max_digits=3, decimal_places=2,
+        default=Decimal(str(settings.DEFAULT_VAT_PERCENT)))
 
     objects = InvoiceEntryManager()
 
