@@ -23,7 +23,7 @@
     </div>
     <hr />
     <div class="invoice-customer">
-        {% trans "Invoice n." %} <strong>{{ invoice.real_id }}</strong> 
+        {% trans "Invoice n." %} <strong>{{ invoice.real_id }}</strong>
         {% trans "of" %} <strong>{{ invoice.date|date:"d M Y" }}</strong>
         <ul style="list-style-type:none;">
             <li>{{ invoice.customer.name }}</li>
@@ -79,6 +79,10 @@
     {% if invoice.vat_amount == 0 %}
     <div style="white-space: nowrap; font-size:small;">
     Esclusione IVA ex art 7-ter D.P.R.633/72</div>
+    {% elif invoice.customer.pk == 57 %}
+    <div style="white-space: nowrap; font-size:small;">
+    Operazione assoggettata a "split payment"  con IVA non incassata dal cedente ai sensi dell'ex art.17-ter del DPR 633/1972
+    </div>
     {% endif %}
     <p><div style="white-space: nowrap; font-size:small;">
         Pagamento con: bonifico<br />
