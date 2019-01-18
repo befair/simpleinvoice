@@ -24,12 +24,22 @@ def do_request(uri, data={}):
     return requests.post(url, json=api_data)
 
 
-def get_customers(customers=None):
-    customers_info = []
-    if not customers:
-        # retrieve all customers info
-        response = do_request('/clienti/lista')
-        customers_info = json.loads(response.content)
+def get_customers(**filters):
+    """
+    Retrieve customers info.
+
+    Example filters:
+    {
+      "filtro": "",
+      "id": "",
+      "nome": "",
+      "cf": "",
+      "piva": "",
+      "pagina": 1
+    }
+    """
+    response = do_request('/clienti/lista', filters)
+    customers_info = json.loads(response.content)
 
     return customers_info
 
@@ -57,4 +67,5 @@ def get_invoices(**filters):
     invoices_info = json.loads(response.content)
 
     return invoices_info
+
 
