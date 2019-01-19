@@ -181,9 +181,6 @@ def upload_invoice(invoice):
     }
     """
 
-    if invoice.discount:
-        raise NotImplementedError("Fattura con sconto (=%s) non implementata (pk=%s)" % (invoice.discount, invoice.pk))
-
     flt_customer = {}
     if invoice.customer.vat:
         flt_customer['piva'] = invoice.customer.vat
@@ -225,6 +222,7 @@ def upload_invoice(invoice):
           "cod_iva": cod_iva,
           "descrizione": x.description,
           "prezzo_netto": amount,
+          "sconto": float(invoice.discount*100),
         })
 
     fields = {
