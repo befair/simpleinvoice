@@ -73,7 +73,7 @@ class InvoiceAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields' : ('real_id', 
+            'fields' : ('real_id',
                         ('customer','date', 'discount'),
                         'is_valid', ('pay_with', 'when_paid')
             )
@@ -84,6 +84,7 @@ class InvoiceAdmin(admin.ModelAdmin):
     list_display_links = ('real_id',)
     list_filter = ['customer','is_valid','when_paid']
     search_fields = ['real_id', 'customer', 'date']
+    date_hierarchy = 'date'
 
     inlines = [InvoiceEntryInline]
     save_on_top = True
@@ -112,7 +113,7 @@ class InvoiceAdmin(admin.ModelAdmin):
             'all' : ('adminstyle.css',),
         }
 
-class CustomerContactInline(admin.TabularInline): 
+class CustomerContactInline(admin.TabularInline):
 	model = CustomerContact
 	extra = 3
 
@@ -159,7 +160,7 @@ class CustomerAdmin(admin.ModelAdmin):
             'all' : ('adminstyle.css',),
         }
 
-admin.site.register(Customer, CustomerAdmin)	
-admin.site.register(Invoice, InvoiceAdmin)	
-#admin.site.register(InvoiceEntry, InvoiceEntryAdmin)	
+admin.site.register(Customer, CustomerAdmin)
+admin.site.register(Invoice, InvoiceAdmin)
+#admin.site.register(InvoiceEntry, InvoiceEntryAdmin)
 

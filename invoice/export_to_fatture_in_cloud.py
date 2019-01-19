@@ -6,6 +6,7 @@ import json
 from decimal import Decimal
 
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from invoice.models import Invoice
 
 
@@ -70,6 +71,19 @@ def get_invoices(**filters):
     invoices_info = json.loads(response.content)
 
     return invoices_info
+
+
+def get_customer_id(**flt_customer):
+
+    customers = get_customers(**flt_customer)["lista_clienti"]
+    if len(customers) == 1:
+        id_customer = customers[0]['id']
+    elif len(customers) > 1:
+        raise MultipleObjectsReturned("troppi clienti %s" % customers)
+    else:
+        raise ObjectDoesNotExist("cliente non trovato (%s)" % flt_customer)
+    return id_customer
+
 
 def upload_invoice(invoice):
     """
@@ -167,19 +181,23 @@ def upload_invoice(invoice):
     }
     """
 
+    if invoice.discount:
+        raise NotImplementedError("Fattura con sconto (=%s) non implementata (pk=%s)" % (invoice.discount, invoice.pk))
+
     flt_customer = {}
     if invoice.customer.vat:
         flt_customer['piva'] = invoice.customer.vat
     elif invoice.customer.ssn:
         flt_customer['cf'] = invoice.customer.ssn
 
-    customers = get_customers(**flt_customer)["lista_clienti"]
-    if len(customers) == 1:
-        id_customer = customers[0]['id']
-    elif len(customers) > 1:
-        raise Exception("troppi clienti %s" % customers)
-    else:
-        raise Exception("cliente non trovato")
+    try:
+        id_customer = get_customer_id(**flt_customer)
+    except ObjectDoesNotExist:
+        if invoice.customer.vat and invoice.customer.ssn:
+            # try again with CF
+            id_customer = get_customer_id(**flt_customer)
+        else:
+            raise
 
     codici_iva = get_codici_iva()['lista_iva']
 
@@ -196,11 +214,15 @@ def upload_invoice(invoice):
         else:
             raise NotImplementedError('Per questo valore di IVA (%s) vedere il codice iva con la API /info/account/ {"campi": ["lista_iva"]}' % x.vat_percent)
 
+        # Patch for ",00"
+        amount = str(x.amount)
+        if amount.endswith(".00"):
+            amount = amount[:-3] + ",00"
+
         entries_details.append({
           "cod_iva": cod_iva,
-          "quantita": str(x.amount),
           "descrizione": x.description,
-          "prezzo_netto": str(x.amount),
+          "prezzo_netto": amount,
         })
 
     fields = {
