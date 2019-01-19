@@ -4,6 +4,7 @@ import copy
 import requests
 import json
 from decimal import Decimal
+import datetime
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
@@ -225,6 +226,21 @@ def upload_invoice(invoice):
           "sconto": float(invoice.discount*100),
         })
 
+    pagamento = {
+        "importo": "auto",
+    }
+    if invoice.when_paid:
+        pagamento.update({
+            "metodo": "aziendale",
+            "data_scadenza": invoice.when_paid.strftime("%d/%m/%Y"),
+            "data_saldo": invoice.when_paid.strftime("%d/%m/%Y"),
+        })
+    else:
+        pagamento.update({
+            "metodo": "not",
+            "data_scadenza": (invoice.date + datetime.timedelta(30)).strftime("%d/%m/%Y"),
+        })
+
     fields = {
         'id_cliente': id_customer,
         'nome': invoice.customer.name,
@@ -234,12 +250,7 @@ def upload_invoice(invoice):
         "metodo_pagamento": "Bonifico",
         "mostra_bottone_bonifico": True,
         "lista_articoli": entries_details,
-        "lista_pagamenti": [{
-            "data_scadenza": invoice.when_paid.strftime("%d/%m/%Y"),
-            "importo": "auto",
-            "metodo": "aziendale",
-            "data_saldo": invoice.when_paid.strftime("%d/%m/%Y"),
-        }]
+        "lista_pagamenti": [pagamento]
     }
 
     response = do_request('/fatture/nuovo', fields)
