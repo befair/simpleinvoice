@@ -235,10 +235,10 @@ def upload_invoice(invoice):
         "mostra_bottone_bonifico": True,
         "lista_articoli": entries_details,
         "lista_pagamenti": [{
-            "data_scadenza": invoice.date.strftime("%d/%m/%Y"),
+            "data_scadenza": invoice.when_paid.strftime("%d/%m/%Y"),
             "importo": "auto",
             "metodo": "aziendale",
-            "data_saldo": invoice.date.strftime("%d/%m/%Y"),
+            "data_saldo": invoice.when_paid.strftime("%d/%m/%Y"),
         }]
     }
 
