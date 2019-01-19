@@ -211,6 +211,8 @@ def upload_invoice(invoice):
             cod_iva = 1
         elif x.vat_percent == Decimal('0.2'):
             cod_iva = 2
+        elif x.vat_percent == Decimal('0'):
+            cod_iva = 44
         else:
             raise NotImplementedError('Per questo valore di IVA (%s) vedere il codice iva con la API /info/account/ {"campi": ["lista_iva"]}' % x.vat_percent)
 
